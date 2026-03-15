@@ -44,10 +44,12 @@ The rules and skills encode everything Claude needs to generate high-quality, sc
 
 ## Phase 4: Polish
 
+- Richer demo composition (drums, effects, more instruments/sections) to exercise full feature set
 - URL parameter loading (`?load=compositions/demo.json`)
-- Loading progress indicators
-- Section looping
-- Chord shorthand expansion in schema
+- Loading progress indicators (per-instrument sample loading feedback)
+- Section looping (loop a single section for practice/review)
+- Chord shorthand expansion in schema (e.g., "Cmaj7" → individual notes)
 - Self-hosted sample upgrades for key instruments
+- Responsive layout for narrower viewports (mixer strip wrapping, timeline scaling)
 
 _Note: Drag-and-drop loading and spacebar play/pause were completed in Phase 1._
