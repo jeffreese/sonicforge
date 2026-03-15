@@ -775,3 +775,91 @@ body {
   border-color: #6366f1;
   color: #e0e0e0;
 }
+
+/* ─── Responsive ─── */
+@media (max-width: 640px) {
+  #app {
+    padding: 1rem 0.5rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .transport-bar {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .transport-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .transport-controls button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .mixer-strip {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .mixer-channel {
+    min-width: unset;
+  }
+
+  .composition-info,
+  .timeline,
+  .mixer,
+  .sample-explorer,
+  .composition-loader {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+  }
+
+  .piano-keys {
+    height: 80px;
+  }
+
+  .sample-picker-panel {
+    width: 90vw;
+    max-height: 70vh;
+  }
+
+  .explorer-search {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .transport-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .explorer-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .explorer-search {
+    min-width: unset;
+  }
+
+  .keyboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .keyboard-status {
+    margin-left: 0;
+  }
+}

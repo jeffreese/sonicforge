@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import type { SonicForgeComposition } from "../schema/composition";
 import { validate } from "../schema/validate";
+import { expandChords } from "../schema/chords";
 import { Transport, type TransportCallbacks } from "./Transport";
 import { TrackPlayer } from "./TrackPlayer";
 import { loadInstruments, type LoadedInstrument, type InstrumentSource } from "./InstrumentLoader";
@@ -39,6 +40,7 @@ export interface EngineCallbacks extends TransportCallbacks {
   onStateChange?: (state: EngineState) => void;
   onLoadProgress?: (loaded: number, total: number) => void;
   onError?: (error: Error) => void;
+  onLoopChange?: (loopIndex: number | null) => void;
 }
 
 export class Engine {
@@ -69,6 +71,7 @@ export class Engine {
         this.setState("ready");
         callbacks.onStop?.();
       },
+      onLoopChange: callbacks.onLoopChange,
     });
   }
 
@@ -78,6 +81,7 @@ export class Engine {
     try {
       const data = JSON.parse(json);
       this.composition = validate(data);
+      expandChords(this.composition);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
       this.callbacks.onError?.(error);
@@ -152,6 +156,10 @@ export class Engine {
 
   seekToSection(index: number): void {
     this.transport.seekToSection(index);
+  }
+
+  setLoopSection(index: number | null): void {
+    this.transport.setLoopSection(index);
   }
 
   getComposition(): SonicForgeComposition | null {

@@ -42,17 +42,16 @@ All music generation logic lives in `.claude/` config — no composition logic i
 ### Key Principle
 The rules and skills encode everything Claude needs to generate high-quality, schema-valid compositions. The application code is purely a playback engine — it takes valid JSON and makes sound.
 
-## Phase 4: Polish
+## Phase 4: Polish (COMPLETE)
 
 - Richer demo composition (drums, effects, more instruments/sections) to exercise full feature set
-- URL parameter loading (`?load=compositions/demo.json`)
+- URL parameter loading (`?load=compositions/demo.json`) — auto-fetches and loads composition from query param
 - Loading progress indicators (per-instrument sample loading feedback)
-- Section looping (loop a single section for practice/review)
-- Chord shorthand expansion in schema (e.g., "Cmaj7" → individual notes)
-- Self-hosted sample upgrades for key instruments
-- Responsive layout for narrower viewports (mixer strip wrapping, timeline scaling)
+- Section looping (double-click a section in the timeline to loop it; double-click again to clear)
+- Chord shorthand expansion in schema (e.g., "Cmaj7" → individual notes C4, E4, G4, B4) — supports triads, 7ths, 9ths, 6ths, sus, aug, dim, power chords
+- Responsive layout for narrower viewports (`@media` breakpoints at 640px and 480px — stacked transport, vertical mixer strips, adapted explorer/keyboard)
 
-_Note: Drag-and-drop loading and spacebar play/pause were completed in Phase 1._
+_Note: Drag-and-drop loading and spacebar play/pause were completed in Phase 1. Self-hosted sample upgrades deferred — CDN samples are sufficient for current needs._
 
 ## Phase 5: Sample Browser & Auditioner (COMPLETE)
 

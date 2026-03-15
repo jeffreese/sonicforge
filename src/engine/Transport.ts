@@ -6,6 +6,7 @@ export interface TransportCallbacks {
   onBeat?: (bar: number, beat: number) => void;
   onSection?: (sectionIndex: number) => void;
   onStop?: () => void;
+  onLoopChange?: (loopIndex: number | null) => void;
 }
 
 export interface SectionOffset {
@@ -21,6 +22,7 @@ export class Transport {
   private beatEventId: number | null = null;
   private totalBars = 0;
   private metadata: Metadata | null = null;
+  private loopSectionIndex: number | null = null;
 
   get position(): string {
     return Tone.getTransport().position as string;
@@ -113,6 +115,33 @@ export class Transport {
     const offset = this.sectionOffsets[index];
     if (!offset) return;
     Tone.getTransport().position = `${offset.startBar}:0:0`;
+  }
+
+  /** Toggle looping on a single section. Pass null to clear the loop. */
+  setLoopSection(index: number | null): void {
+    const transport = Tone.getTransport();
+
+    if (index === null || index === this.loopSectionIndex) {
+      // Clear loop
+      transport.loop = false;
+      this.loopSectionIndex = null;
+      this.callbacks.onLoopChange?.(null);
+      return;
+    }
+
+    const offset = this.sectionOffsets[index];
+    if (!offset) return;
+
+    transport.loop = true;
+    transport.loopStart = `${offset.startBar}:0:0`;
+    transport.loopEnd = `${offset.endBar}:0:0`;
+    transport.position = `${offset.startBar}:0:0`;
+    this.loopSectionIndex = index;
+    this.callbacks.onLoopChange?.(index);
+  }
+
+  getLoopSectionIndex(): number | null {
+    return this.loopSectionIndex;
   }
 
   getSectionOffsets(): SectionOffset[] {

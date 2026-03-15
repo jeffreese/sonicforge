@@ -31,6 +31,9 @@ export class App {
     this.timeline.setOnSeek((index) => {
       this.engine.seekToSection(index);
     });
+    this.timeline.setOnLoop((index) => {
+      this.engine.setLoopSection(index);
+    });
 
     // Mixer
     this.mixer = new Mixer();
@@ -91,6 +94,9 @@ export class App {
       onError: (err) => {
         this.loader.showError(err.message);
       },
+      onLoopChange: (loopIndex) => {
+        this.timeline.setLoopSection(loopIndex);
+      },
     });
 
     // Keyboard shortcut: spacebar = play/pause
@@ -104,6 +110,29 @@ export class App {
         }
       }
     });
+
+    // Auto-load composition from URL parameter: ?load=compositions/demo.json
+    this.autoLoadFromUrl();
+  }
+
+  private async autoLoadFromUrl(): Promise<void> {
+    const params = new URLSearchParams(window.location.search);
+    const loadPath = params.get("load");
+    if (!loadPath) return;
+
+    try {
+      const response = await fetch(loadPath);
+      if (!response.ok) {
+        this.loader.showError(`Failed to load ${loadPath}: ${response.status}`);
+        return;
+      }
+      const json = await response.text();
+      await this.handleLoad(json);
+    } catch (err) {
+      this.loader.showError(
+        `Failed to load ${loadPath}: ${err instanceof Error ? err.message : String(err)}`
+      );
+    }
   }
 
   private async handleLoad(json: string): Promise<void> {

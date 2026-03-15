@@ -22,7 +22,9 @@ export class Timeline {
   private totalBars = 0;
   private playheadBar = 0;
   private playheadBeat = 0;
+  private loopSectionIndex: number | null = null;
   private onSeek?: (sectionIndex: number) => void;
+  private onLoop?: (sectionIndex: number | null) => void;
 
   // Layout constants
   private readonly HEADER_HEIGHT = 28;
@@ -44,6 +46,7 @@ export class Timeline {
     this.el.append(heading, this.canvas);
 
     this.canvas.addEventListener("click", (e) => this.handleClick(e));
+    this.canvas.addEventListener("dblclick", (e) => this.handleDoubleClick(e));
 
     // Resize observer
     const ro = new ResizeObserver(() => this.resize());
@@ -52,6 +55,15 @@ export class Timeline {
 
   setOnSeek(fn: (sectionIndex: number) => void): void {
     this.onSeek = fn;
+  }
+
+  setOnLoop(fn: (sectionIndex: number | null) => void): void {
+    this.onLoop = fn;
+  }
+
+  setLoopSection(index: number | null): void {
+    this.loopSectionIndex = index;
+    this.draw();
   }
 
   load(
@@ -196,6 +208,26 @@ export class Timeline {
       }
     }
 
+    // Draw loop highlight
+    if (this.loopSectionIndex !== null) {
+      const lo = this.sectionOffsets[this.loopSectionIndex];
+      if (lo) {
+        const lx = gridLeft + lo.startBar * barWidth;
+        const lw = (lo.endBar - lo.startBar) * barWidth;
+        ctx.strokeStyle = "#f59e0b";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.strokeRect(lx, 0, lw, h);
+        ctx.setLineDash([]);
+
+        // Loop label
+        ctx.fillStyle = "#f59e0b";
+        ctx.font = "bold 9px -apple-system, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText("LOOP", lx + 4, h - 4);
+      }
+    }
+
     // Draw playhead
     const beatsPerBar = this.composition.metadata.timeSignature[0];
     const playheadPos =
@@ -219,6 +251,35 @@ export class Timeline {
       ctx.closePath();
       ctx.fill();
     }
+  }
+
+  private getSectionAtX(clientX: number): number | null {
+    if (!this.composition || this.totalBars === 0) return null;
+
+    const rect = this.canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const gridLeft = this.LABEL_WIDTH;
+    const gridWidth = rect.width - gridLeft - 8;
+    const barWidth = gridWidth / this.totalBars;
+
+    if (x < gridLeft) return null;
+
+    const clickedBar = (x - gridLeft) / barWidth;
+    for (let i = this.sectionOffsets.length - 1; i >= 0; i--) {
+      if (clickedBar >= this.sectionOffsets[i].startBar) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  private handleDoubleClick(e: MouseEvent): void {
+    const index = this.getSectionAtX(e.clientX);
+    if (index === null) return;
+
+    // Toggle loop: if already looping this section, clear it
+    const newIndex = index === this.loopSectionIndex ? null : index;
+    this.onLoop?.(newIndex);
   }
 
   private handleClick(e: MouseEvent): void {
