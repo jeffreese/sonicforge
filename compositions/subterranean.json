@@ -13,14 +13,14 @@
       "name": "Halfstep Kit",
       "sample": "percussion",
       "category": "drums",
-      "defaultVolume": -4
+      "defaultVolume": 85
     },
     {
       "id": "sub",
       "name": "Sub Bass",
       "sample": "synth_bass_2",
       "category": "bass",
-      "defaultVolume": -2,
+      "defaultVolume": 90,
       "effects": [
         { "type": "compressor", "params": { "threshold": -20, "ratio": 4 } }
       ]
@@ -30,7 +30,7 @@
       "name": "Dark Atmosphere",
       "sample": "pad_7_halo",
       "category": "pad",
-      "defaultVolume": -10,
+      "defaultVolume": 55,
       "effects": [
         { "type": "reverb", "params": { "decay": 6, "wet": 0.6 } }
       ]
@@ -40,7 +40,7 @@
       "name": "Dread Lead",
       "sample": "lead_2_sawtooth",
       "category": "melodic",
-      "defaultVolume": -8,
+      "defaultVolume": 65,
       "effects": [
         { "type": "delay", "params": { "delayTime": 0.375, "feedback": 0.35, "wet": 0.25 } },
         { "type": "reverb", "params": { "decay": 3, "wet": 0.3 } }
@@ -51,7 +51,7 @@
       "name": "Brass Stab",
       "sample": "synth_brass_1",
       "category": "melodic",
-      "defaultVolume": -12,
+      "defaultVolume": 50,
       "effects": [
         { "type": "distortion", "params": { "distortion": 0.3, "wet": 0.4 } },
         { "type": "reverb", "params": { "decay": 2.5, "wet": 0.35 } }
