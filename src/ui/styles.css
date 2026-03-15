@@ -1,0 +1,362 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f0f0f;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-header p {
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+/* Transport Bar */
+.transport-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.transport-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.transport-controls button {
+  background: #2a2a4a;
+  color: #e0e0e0;
+  border: 1px solid #3a3a5a;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.transport-controls button:hover:not(:disabled) {
+  background: #3a3a6a;
+  border-color: #6366f1;
+}
+
+.transport-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.transport-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.transport-position {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.95rem;
+  color: #a78bfa;
+}
+
+.transport-status {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Composition Info */
+.composition-info {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.composition-info:empty {
+  display: none;
+}
+
+.composition-info h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+}
+
+.info-row {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 0.3rem;
+}
+
+.info-label {
+  color: #6366f1;
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
+.info-label:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.info-desc {
+  font-size: 0.85rem;
+  color: #888;
+  margin: 0.4rem 0;
+  font-style: italic;
+}
+
+/* Composition Loader */
+.composition-loader {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+
+.composition-loader.drag-over {
+  border-color: #6366f1;
+  background: #1a1a3e;
+}
+
+.composition-loader h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
+.composition-input {
+  width: 100%;
+  background: #0f0f1a;
+  color: #e0e0e0;
+  border: 1px solid #2a2a4a;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 0.8rem;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+}
+
+.composition-input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.loader-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.loader-buttons button {
+  background: #2a2a4a;
+  color: #e0e0e0;
+  border: 1px solid #3a3a5a;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.loader-buttons button:hover {
+  background: #3a3a6a;
+  border-color: #6366f1;
+}
+
+.btn-primary {
+  background: #4f46e5 !important;
+  border-color: #6366f1 !important;
+}
+
+.btn-primary:hover {
+  background: #6366f1 !important;
+}
+
+/* Timeline */
+.timeline {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.timeline-heading {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-canvas {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* Mixer */
+.mixer {
+  background: #1a1a2e;
+  border: 1px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mixer:empty {
+  display: none;
+}
+
+.mixer-heading {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-bottom: 0.75rem;
+}
+
+.mixer-strip {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.mixer-channel {
+  flex: 1;
+  min-width: 140px;
+  background: #0f0f1a;
+  border: 1px solid #2a2a4a;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.channel-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #a78bfa;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.channel-control {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.control-label {
+  font-size: 0.75rem;
+  color: #666;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.channel-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #2a2a4a;
+  border-radius: 2px;
+  outline: none;
+}
+
+.channel-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #6366f1;
+  cursor: pointer;
+}
+
+.control-value {
+  font-size: 0.7rem;
+  color: #888;
+  width: 28px;
+  text-align: right;
+  font-family: "SF Mono", "Fira Code", monospace;
+  flex-shrink: 0;
+}
+
+.channel-buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.channel-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #3a3a5a;
+  background: #2a2a4a;
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.channel-btn:hover {
+  border-color: #6366f1;
+}
+
+.mute-btn.active {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+}
+
+.solo-btn.active {
+  background: #f59e0b;
+  color: #000;
+  border-color: #f59e0b;
+}
+
+.loader-error {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #2d1b1b;
+  border: 1px solid #5c2626;
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
