@@ -118,16 +118,16 @@ export class DrumKit extends Tone.Gain {
         this.snareBody.triggerAttackRelease("E2", duration, t, vel * 0.5);
         break;
       case "hihat":
-        this.hihat.triggerAttackRelease(0.03, t, vel * 0.6);
+        this.hihat.triggerAttackRelease("C4", 0.03, t, vel * 0.6);
         break;
       case "hihat-open":
-        this.hihatOpen.triggerAttackRelease(0.15, t, vel * 0.6);
+        this.hihatOpen.triggerAttackRelease("C4", 0.15, t, vel * 0.6);
         break;
       case "crash":
-        this.crash.triggerAttackRelease(0.8, t, vel * 0.5);
+        this.crash.triggerAttackRelease("C4", 0.8, t, vel * 0.5);
         break;
       case "ride":
-        this.ride.triggerAttackRelease(0.4, t, vel * 0.5);
+        this.ride.triggerAttackRelease("C4", 0.4, t, vel * 0.5);
         break;
       case "tom-low":
         this.tomLow.triggerAttackRelease("G1", duration, t, vel);

@@ -2,41 +2,7 @@ import * as Tone from "tone";
 import { DrumKit } from "./DrumKit";
 import type { DrumHit } from "../data/gm-instruments";
 import { drumHitToNote } from "../util/music";
-
-const CDN_BASE = "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM";
-
-const SHARP_TO_FLAT: Record<string, string> = {
-  "C#": "Db",
-  "D#": "Eb",
-  "F#": "Gb",
-  "G#": "Ab",
-  "A#": "Bb",
-};
-
-function toCdnNoteName(note: string): string {
-  const match = note.match(/^([A-G]#?)(\d+)$/);
-  if (!match) return note;
-  const [, name, octave] = match;
-  const flat = SHARP_TO_FLAT[name];
-  return flat ? flat + octave : note;
-}
-
-async function fetchSoundfontData(sampleName: string): Promise<Record<string, string>> {
-  const url = `${CDN_BASE}/${sampleName}-ogg.js`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch soundfont: ${url} (${response.status})`);
-  }
-  const text = await response.text();
-  const MIDI: { Soundfont: Record<string, Record<string, string>> } = { Soundfont: {} };
-  const fn = new Function("MIDI", text);
-  fn(MIDI);
-  const keys = Object.keys(MIDI.Soundfont);
-  if (keys.length === 0) {
-    throw new Error(`No soundfont data found for ${sampleName}`);
-  }
-  return MIDI.Soundfont[keys[0]];
-}
+import { loadSampleData, toFlatNoteName } from "./SampleLoader";
 
 export type AuditionerState = "idle" | "loading" | "ready";
 
@@ -81,15 +47,12 @@ export class SampleAuditioner {
     this.setState("loading");
 
     try {
-      const soundfontData = await fetchSoundfontData(sampleName);
-      const urls: Record<string, string> = {};
-      for (const [noteName, dataUri] of Object.entries(soundfontData)) {
-        urls[noteName] = dataUri;
-      }
+      const sampleData = await loadSampleData(sampleName);
 
       await new Promise<void>((resolve, reject) => {
         const sampler = new Tone.Sampler({
-          urls,
+          urls: sampleData.urls,
+          baseUrl: sampleData.baseUrl,
           onload: () => {
             sampler.connect(this.previewChannel);
             this.cache.set(sampleName, sampler);
@@ -118,8 +81,8 @@ export class SampleAuditioner {
     const sampler = this.cache.get(this.currentSample);
     if (!sampler) return;
 
-    const cdnNote = toCdnNoteName(note);
-    sampler.triggerAttackRelease(cdnNote, duration, Tone.now(), velocity);
+    const flatNote = toFlatNoteName(note);
+    sampler.triggerAttackRelease(flatNote, duration, Tone.now(), velocity);
   }
 
   /** Play a drum hit via the synthesized DrumKit. */
