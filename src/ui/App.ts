@@ -3,6 +3,7 @@ import { TransportBar } from "./TransportBar";
 import { CompositionLoader } from "./CompositionLoader";
 import { Timeline } from "./Timeline";
 import { Mixer } from "./Mixer";
+import { SampleExplorer } from "./SampleExplorer";
 
 export class App {
   private engine = new Engine();
@@ -10,6 +11,7 @@ export class App {
   private loader: CompositionLoader;
   private timeline: Timeline;
   private mixer: Mixer;
+  private sampleExplorer: SampleExplorer;
 
   constructor(private root: HTMLElement) {
     // Header
@@ -33,6 +35,17 @@ export class App {
     // Mixer
     this.mixer = new Mixer();
 
+    // Sample Explorer
+    this.sampleExplorer = new SampleExplorer();
+
+    // Wire auditioner into mixer for inline sample picking
+    this.mixer.setAuditioner(this.sampleExplorer.getAuditioner());
+    this.mixer.setCallbacks({
+      onSampleChange: (instrumentId, newSample) => {
+        this.engine.swapSample(instrumentId, newSample);
+      },
+    });
+
     // Loader
     this.loader = new CompositionLoader({
       onLoad: (json) => this.handleLoad(json),
@@ -51,6 +64,7 @@ export class App {
       this.timeline.el,
       compositionInfo,
       this.mixer.el,
+      this.sampleExplorer.el,
       this.loader.el
     );
 
@@ -103,8 +117,8 @@ export class App {
       const transport = this.engine.getTransport();
       this.timeline.load(comp, transport.getSectionOffsets(), transport.getTotalBars());
 
-      // Load mixer
-      this.mixer.load(this.engine.getMixBus());
+      // Load mixer with sample map
+      this.mixer.load(this.engine.getMixBus(), this.engine.getSampleMap());
     } catch {
       // Error already handled via callback
     }

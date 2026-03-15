@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import type { InstrumentDef, Section } from "../schema/composition";
 import { drumHitToNote } from "../util/music";
+import { DrumKit } from "./DrumKit";
 
 const CDN_BASE = "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM";
 
@@ -54,9 +55,14 @@ async function fetchSoundfontData(sampleName: string): Promise<Record<string, st
   return MIDI.Soundfont[keys[0]];
 }
 
+/** Union type for instrument audio sources — Sampler for melodic, DrumKit for drums. */
+export type InstrumentSource = Tone.ToneAudioNode & {
+  triggerAttackRelease(...args: unknown[]): unknown;
+};
+
 export interface LoadedInstrument {
   id: string;
-  sampler: Tone.Sampler;
+  sampler: InstrumentSource;
   isDrum: boolean;
 }
 
@@ -74,11 +80,17 @@ export async function loadInstruments(
 
   for (const inst of instruments) {
     const isDrum = inst.category === "drums";
-    const sampleName = isDrum ? "percussion" : inst.sample;
 
     const promise = (async () => {
       try {
-        const soundfontData = await fetchSoundfontData(sampleName);
+        // Drums use synthesized DrumKit — no soundfont needed
+        if (isDrum) {
+          const drumKit = new DrumKit();
+          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true });
+          return;
+        }
+
+        const soundfontData = await fetchSoundfontData(inst.sample);
 
         // Build urls map: Tone.Sampler accepts data URIs directly
         const urls: Record<string, string> = {};

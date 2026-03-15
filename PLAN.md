@@ -25,7 +25,7 @@
 18. Updated `InstrumentLoader.ts` — Samplers no longer hardwired to destination; routed through effects → mix channels
 19. Updated `Engine.ts` — Integrates MixBus + EffectsChain, exposes `getMixBus()`
 
-## Phase 3: Claude Integration
+## Phase 3: Claude Integration (COMPLETE)
 
 All music generation logic lives in `.claude/` config — no composition logic in application code.
 
@@ -53,3 +53,68 @@ The rules and skills encode everything Claude needs to generate high-quality, sc
 - Responsive layout for narrower viewports (mixer strip wrapping, timeline scaling)
 
 _Note: Drag-and-drop loading and spacebar play/pause were completed in Phase 1._
+
+## Phase 5: Sample Browser & Auditioner (COMPLETE)
+
+A unified feature set for discovering, previewing, and playing all available sounds in the engine.
+
+### Shared Infrastructure
+
+**`SampleAuditioner`** — new engine class (`src/engine/SampleAuditioner.ts`)
+- Loads any GM instrument sample from the CDN on demand (reuses `fetchSoundfontData`)
+- Creates a DrumKit instance for previewing drum hits
+- Caches loaded Tone.Samplers so switching instruments is instant after first load
+- Exposes `play(note, duration, velocity?)` and `stop()` for one-shot previewing
+- Connects through a dedicated preview channel (separate from composition mix bus)
+
+### Feature A: Sample Explorer Panel
+
+New UI section in the main page for browsing all available sounds.
+
+- List all 128 GM instruments grouped by category (Piano/Keys, Guitar, Bass, Strings, Brass, Woodwinds, Synth Lead, Synth Pad, Chromatic Percussion, Organ, Ensemble)
+- Drum Kit section with all 9 named hits (kick, snare, hihat, hihat-open, ride, crash, tom-high, tom-mid, tom-low)
+- Click any instrument → loads sample via SampleAuditioner → plays a demo note (C4 for melodic, hit sound for drums)
+- Adjustable preview controls: pitch (note selector), velocity slider
+- Visual loading state per instrument (spinner while fetching from CDN)
+- Search/filter input to quickly find instruments by name
+
+### Feature B: Keyboard Mode
+
+Interactive keyboard that lets you play any loaded sample with computer keys.
+
+- Toggle button in the Sample Explorer (or floating toolbar)
+- Computer keyboard mapping:
+  - Bottom row (Z-M) or middle row (A-L) = white keys
+  - Row above = black keys (W, E, T, Y, U, O, P)
+  - Configurable octave (shift up/down with arrow keys or +/- buttons)
+- On-screen visual keyboard showing which keys are mapped
+- Highlights keys as they're pressed
+- Works with whatever sample is currently selected in the explorer
+- Velocity controlled by a slider (or could use key press timing if feasible)
+
+### Feature C: Inline Sample Picker
+
+Enhance the mixer to allow swapping instrument samples in a loaded composition.
+
+- Each instrument name in the mixer becomes clickable
+- Opens a dropdown/modal filtered by category (with option to show all)
+- Each option has a preview button (plays demo note with that sample)
+- Selecting a new sample hot-swaps it in the running composition
+- Updates the in-memory composition data (doesn't write to file unless user saves)
+- Shows current sample name and category in the mixer strip
+
+### Implementation Order
+
+1. `SampleAuditioner` engine class (shared foundation)
+2. GM instrument registry in code (`src/data/gm-instruments.ts` — structured list with categories, derived from `gm-samples.md`)
+3. Sample Explorer panel UI
+4. Keyboard Mode (enhances explorer)
+5. Inline Sample Picker (ties into mixer)
+
+### Design Notes
+
+- The explorer panel should match the existing dark theme (indigo/purple)
+- Sample loading is async and can be slow on first load — show clear loading feedback
+- DrumKit synth sounds are instant (no CDN fetch needed) — good UX contrast
+- Keyboard mode should not interfere with existing keyboard shortcuts (spacebar for play/pause)
+- Consider a collapsible panel so it doesn't clutter the main view when not in use

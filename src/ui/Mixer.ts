@@ -1,9 +1,19 @@
 import type { MixBus, ChannelState } from "../engine/MixBus";
+import type { SampleAuditioner } from "../engine/SampleAuditioner";
+import { SamplePicker } from "./SamplePicker";
+import { getBySample } from "../data/gm-instruments";
+
+export interface MixerCallbacks {
+  onSampleChange?: (instrumentId: string, newSample: string) => void;
+}
 
 export class Mixer {
   readonly el: HTMLElement;
   private channelEls = new Map<string, HTMLElement>();
   private mixBus: MixBus | null = null;
+  private samplePicker: SamplePicker | null = null;
+  private sampleMap = new Map<string, string>(); // instrumentId → current sample name
+  private callbacks: MixerCallbacks = {};
 
   constructor() {
     this.el = document.createElement("div");
@@ -15,8 +25,30 @@ export class Mixer {
     this.el.append(heading);
   }
 
-  load(mixBus: MixBus): void {
+  setCallbacks(callbacks: MixerCallbacks): void {
+    this.callbacks = callbacks;
+  }
+
+  /** Provide an auditioner to enable inline sample swapping. */
+  setAuditioner(auditioner: SampleAuditioner): void {
+    this.samplePicker = new SamplePicker(auditioner, {
+      onSelect: (instrumentId, newSample) => {
+        this.sampleMap.set(instrumentId, newSample);
+        // Update the channel name display
+        const ch = this.channelEls.get(instrumentId);
+        if (ch) {
+          const nameEl = ch.querySelector(".channel-name");
+          const gmInst = getBySample(newSample);
+          if (nameEl) nameEl.textContent = gmInst?.name ?? newSample;
+        }
+        this.callbacks.onSampleChange?.(instrumentId, newSample);
+      },
+    });
+  }
+
+  load(mixBus: MixBus, sampleMap?: Map<string, string>): void {
     this.mixBus = mixBus;
+    if (sampleMap) this.sampleMap = new Map(sampleMap);
     this.render();
 
     mixBus.setOnChange(() => this.updateAll());
@@ -25,6 +57,7 @@ export class Mixer {
   reset(): void {
     this.mixBus = null;
     this.channelEls.clear();
+    this.sampleMap.clear();
     // Remove everything except heading
     while (this.el.children.length > 1) {
       this.el.removeChild(this.el.lastChild!);
@@ -57,10 +90,19 @@ export class Mixer {
     ch.className = "mixer-channel";
     ch.dataset.id = state.id;
 
-    // Name
+    // Name (clickable if sample picker available)
     const name = document.createElement("div");
     name.className = "channel-name";
     name.textContent = state.name;
+
+    if (this.samplePicker) {
+      name.classList.add("clickable");
+      name.title = "Click to change sample";
+      name.addEventListener("click", () => {
+        const sample = this.sampleMap.get(state.id) ?? "";
+        this.samplePicker!.open(name, state.id, sample);
+      });
+    }
 
     // Volume slider
     const volRow = document.createElement("div");

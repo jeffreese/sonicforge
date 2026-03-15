@@ -3,9 +3,35 @@ import type { SonicForgeComposition } from "../schema/composition";
 import { validate } from "../schema/validate";
 import { Transport, type TransportCallbacks } from "./Transport";
 import { TrackPlayer } from "./TrackPlayer";
-import { loadInstruments, type LoadedInstrument } from "./InstrumentLoader";
+import { loadInstruments, type LoadedInstrument, type InstrumentSource } from "./InstrumentLoader";
 import { MixBus } from "./MixBus";
 import { EffectsChain } from "./EffectsChain";
+
+const CDN_BASE = "https://gleitz.github.io/midi-js-soundfonts/FluidR3_GM";
+
+const SHARP_TO_FLAT: Record<string, string> = {
+  "C#": "Db", "D#": "Eb", "F#": "Gb", "G#": "Ab", "A#": "Bb",
+};
+
+function toCdnNoteName(note: string): string {
+  const match = note.match(/^([A-G]#?)(\d+)$/);
+  if (!match) return note;
+  const [, name, octave] = match;
+  const flat = SHARP_TO_FLAT[name];
+  return flat ? flat + octave : note;
+}
+
+async function fetchSoundfontData(sampleName: string): Promise<Record<string, string>> {
+  const url = `${CDN_BASE}/${sampleName}-ogg.js`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to fetch soundfont: ${url} (${response.status})`);
+  const text = await response.text();
+  const MIDI: { Soundfont: Record<string, Record<string, string>> } = { Soundfont: {} };
+  new Function("MIDI", text)(MIDI);
+  const keys = Object.keys(MIDI.Soundfont);
+  if (keys.length === 0) throw new Error(`No soundfont data for ${sampleName}`);
+  return MIDI.Soundfont[keys[0]];
+}
 
 export type EngineState = "empty" | "loading" | "ready" | "playing" | "paused";
 
@@ -138,6 +164,70 @@ export class Engine {
 
   getMixBus(): MixBus {
     return this.mixBus;
+  }
+
+  /** Get a map of instrumentId → sample name for the current composition. */
+  getSampleMap(): Map<string, string> {
+    const map = new Map<string, string>();
+    if (this.composition) {
+      for (const inst of this.composition.instruments) {
+        map.set(inst.id, inst.sample);
+      }
+    }
+    return map;
+  }
+
+  /** Hot-swap an instrument's sample in the running composition. */
+  async swapSample(instrumentId: string, newSample: string): Promise<void> {
+    if (!this.composition) return;
+
+    const loaded = this.instruments.get(instrumentId);
+    if (!loaded || loaded.isDrum) return;
+
+    // Find the instrument definition
+    const instDef = this.composition.instruments.find((i) => i.id === instrumentId);
+    if (!instDef) return;
+
+    // Load the new soundfont
+    const soundfontData = await fetchSoundfontData(newSample);
+    const urls: Record<string, string> = {};
+    for (const [noteName, dataUri] of Object.entries(soundfontData)) {
+      urls[noteName] = dataUri;
+    }
+
+    // Create new sampler
+    const newSampler = await new Promise<Tone.Sampler>((resolve, reject) => {
+      const sampler = new Tone.Sampler({
+        urls,
+        onload: () => resolve(sampler),
+        onerror: (err) => reject(err),
+      });
+    });
+
+    // Disconnect old sampler and dispose
+    const oldSampler = loaded.sampler;
+    oldSampler.disconnect();
+
+    // Reconnect new sampler through the existing channel
+    const channel = this.mixBus.getChannel(instrumentId);
+    if (channel) {
+      // Find and rebuild the effects chain for this instrument
+      const chainIndex = this.composition.instruments.indexOf(instDef);
+      if (chainIndex >= 0 && chainIndex < this.effectsChains.length) {
+        this.effectsChains[chainIndex].dispose();
+        const chain = new EffectsChain();
+        chain.connect(newSampler, channel, instDef.effects);
+        this.effectsChains[chainIndex] = chain;
+      } else {
+        newSampler.connect(channel);
+      }
+    }
+
+    oldSampler.dispose();
+
+    // Update references
+    loaded.sampler = newSampler as unknown as InstrumentSource;
+    instDef.sample = newSample;
   }
 
   dispose(): void {
