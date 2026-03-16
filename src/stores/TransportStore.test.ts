@@ -10,6 +10,7 @@ describe('TransportStore', () => {
     const store = createStore()
     expect(store.state).toEqual({
       playbackState: 'stopped',
+      engineState: 'empty',
       bar: 0,
       beat: 0,
       bpm: 120,

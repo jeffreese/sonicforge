@@ -1,9 +1,11 @@
+import type { EngineState } from '../engine/Engine'
 import { Store } from './Store'
 
 export type PlaybackState = 'stopped' | 'playing' | 'paused'
 
 export interface TransportState {
   playbackState: PlaybackState
+  engineState: EngineState
   bar: number
   beat: number
   bpm: number
@@ -14,6 +16,7 @@ export interface TransportState {
 
 const initialState: TransportState = {
   playbackState: 'stopped',
+  engineState: 'empty',
   bar: 0,
   beat: 0,
   bpm: 120,
@@ -49,6 +52,11 @@ export class TransportStore extends Store<TransportState> {
   /** Called when loop region changes. */
   updateLoop(loopSectionIndex: number | null): void {
     this.setState({ loopSectionIndex })
+  }
+
+  /** Called by bridge when raw engine state changes. */
+  updateEngineState(engineState: EngineState): void {
+    this.setState({ engineState })
   }
 
   /** Reset position to zero (on stop). */

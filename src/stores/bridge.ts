@@ -28,6 +28,7 @@ export function bridgeEngineToStores(engine: Engine): void {
   engine.setCallbacks({
     onStateChange: (state) => {
       transportStore.updatePlayback(toPlaybackState(state))
+      transportStore.updateEngineState(state)
     },
     onBeat: (bar, beat) => {
       const transport = engine.getTransport()

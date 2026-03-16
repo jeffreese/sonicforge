@@ -1,4 +1,4 @@
-import { Engine } from '../engine/Engine'
+import { engine } from '../engine/instance'
 import { CompositionLoader } from './CompositionLoader'
 import { Mixer } from './Mixer'
 import { SampleExplorer } from './SampleExplorer'
@@ -6,7 +6,7 @@ import { Timeline } from './Timeline'
 import { TransportBar } from './TransportBar'
 
 export class App {
-  private engine = new Engine()
+  private engine = engine
   private transportBar: TransportBar
   private loader: CompositionLoader
   private timeline: Timeline
