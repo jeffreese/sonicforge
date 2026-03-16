@@ -22,6 +22,17 @@ python scripts/extract-samples.py    # Requires Python, FluidSynth, FFmpeg
 
 Samples live in `public/samples/{instrument}/` with a `manifest.json` per instrument. Once extracted, they're committed and don't need re-extraction unless adding new instruments.
 
+## Git Workflow
+
+All work happens on feature branches, never directly on `main`. The standard flow:
+
+1. `/next` (or manually) — create a branch from `main` (`feat/`, `fix/`, `chore/`, `refactor/`, `docs/`)
+2. Implement the change with commits on the branch
+3. `/ship` — run checks, commit, push, create a PR
+4. User reviews the PR on GitHub and merges to `main`
+
+Do not commit directly to `main`. Do not push to `main`. If you're on `main` and the user asks to start work, create a feature branch first.
+
 ## Architecture
 
 ### Layers
