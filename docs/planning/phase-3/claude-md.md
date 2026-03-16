@@ -1,3 +1,11 @@
+---
+title: "CLAUDE.md"
+phase: 3
+project: sonicforge
+date: 2026-03-15
+status: draft
+---
+
 # SonicForge
 
 SonicForge is a browser-based music composition workbench. Claude generates compositions as structured JSON via skills (`/compose`, `/iterate`); a TypeScript engine renders them with GM-standard instrument samples via Tone.js; and a Lit web component UI provides DAW-style visualization, mixing, and editing. The composition JSON schema is the central data format — both Claude and the user read and write to it.
@@ -22,7 +30,7 @@ python scripts/extract-samples.py    # Requires Python, FluidSynth, FFmpeg
 
 Samples live in `public/samples/{instrument}/` with a `manifest.json` per instrument. Once extracted, they're committed and don't need re-extraction unless adding new instruments.
 
-## Architecture
+## Architecture Overview
 
 ### Layers
 
@@ -40,6 +48,10 @@ Lit Components → Reactive Stores → Engine Layer → Tone.js / WebAudio
 - UI → Engine: only through stores. Components subscribe to store state, dispatch actions.
 - Engine → Tone.js: Engine wraps all Tone.js objects. Nothing else touches Tone.js.
 - Claude → App: Claude writes composition JSON to disk. User loads it via the composition loader. The app works independently of Claude.
+
+### UI Components
+
+@src/ui/README.md
 
 ## Conventions
 
@@ -64,42 +76,19 @@ Lit Components → Reactive Stores → Engine Layer → Tone.js / WebAudio
 ### Testing
 - Co-located test files: `sf-transport-bar.test.ts` next to `sf-transport-bar.ts`
 - Same pattern for stores and engine: `composition-store.test.ts` next to `composition-store.ts`
-- Tests written alongside implementation, not deferred
 
 ### File Organization
-```
-src/ui/         — Lit components
-src/stores/     — Reactive stores
-src/engine/     — Tone.js wrappers
-src/schema/     — Composition types, validation, chord expansion
-src/styles/     — Design tokens and component style maps
-src/util/       — Timing and music theory helpers
-src/data/       — GM instrument definitions
-compositions/   — Example and generated JSON compositions
-scripts/        — Sample extraction tooling (Python + FluidSynth + FFmpeg)
-public/samples/ — Self-hosted instrument samples (gitignored, extracted locally)
-docs/planning/  — Planning documents from Forge (feature spec, tech spec, ADRs, task breakdown)
-```
+- `src/ui/` — Lit components
+- `src/stores/` — Reactive stores
+- `src/engine/` — Tone.js wrappers
+- `src/schema/` — Composition types, validation, chord expansion
+- `src/styles/` — Design tokens and component style maps
 
 ## Behavioral Notes
 
-- **Don't auto-test in the browser.** After making changes, tell the user what to verify and offer to test in the browser if they'd like — don't launch the browser automatically.
+- **Don't auto-test in the browser.** After making changes, tell the user what to verify and offer to test in the browser if they'd like — don't launch the browser automatically. Browser testing is slow and the user can usually check faster.
 - **Audio context requires user gesture.** `Engine.init()` must be called from a user interaction (click, keypress). Don't try to auto-play or initialize audio on page load — browsers will block it.
 - **Tone.js manages its own state.** Don't manage Tone.js object lifecycle from Lit component lifecycle. The engine layer owns creation/destruction of Tone.js objects.
 - **Composition JSON is the source of truth.** When modifying music, update CompositionStore — don't manipulate Tone.js objects directly. The engine re-schedules from the store.
-- **Existing skills are working and valuable.** The `/compose`, `/iterate`, `/explain`, and `/play` skills plus `composition-format` and `music-theory` rules predate the Lit migration. They work with the engine/schema layers which aren't changing.
+- **Existing `.claude/` skills are working and valuable.** The `/compose`, `/iterate`, `/explain`, and `/play` skills plus `composition-format` and `music-theory` rules predate the Lit migration. Preserve them — they work with the engine/schema layers which aren't changing.
 - **This is a migration, not a greenfield.** The engine, schema, and utility layers are stable. Only `src/ui/` is being rewritten. Don't refactor working engine code unless there's a specific reason.
-
-## ADRs
-
-Architectural decisions are documented in `docs/planning/adrs/`. Key decisions:
-
-- **ADR-001**: Lit over React (no virtual DOM, web standards, small footprint)
-- **ADR-002**: Tailwind with design token abstraction (semantic style maps, not raw classes)
-- **ADR-003**: Light DOM for all components (Tailwind needs global stylesheet access)
-- **ADR-004**: Reactive stores (four typed stores bridging engine and UI)
-- **ADR-005**: Integrated timeline/editor (single `<sf-arrangement>` component)
-- **ADR-006**: Command pattern for undo/redo (reversible commands via dispatch)
-- **ADR-007**: WAV + OGG export (browser-native encoding, no external libs)
-
-When making architectural decisions during development, capture them with `/adr`.

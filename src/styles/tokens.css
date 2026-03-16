@@ -1,0 +1,44 @@
+/* Design Tokens — SonicForge
+   Dark theme is default. Light theme swaps values via .theme-light on :root.
+   See docs/planning/phase-2/technical-spec.md for the full token set rationale. */
+
+:root {
+  /* Surface colors */
+  --color-surface: #1a1a2e;
+  --color-surface-elevated: #25253e;
+  --color-surface-hover: #2d2d4a;
+  --color-border: #334155;
+
+  /* Brand / accent */
+  --color-primary: #6366f1;
+  --color-primary-hover: #818cf8;
+  --color-secondary: #a855f7;
+
+  /* Text */
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+
+  /* State */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
+
+/* Light theme — swap values only, no component changes needed */
+:root.theme-light {
+  --color-surface: #f8fafc;
+  --color-surface-elevated: #ffffff;
+  --color-surface-hover: #f1f5f9;
+  --color-border: #e2e8f0;
+
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-secondary: #9333ea;
+
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+}
