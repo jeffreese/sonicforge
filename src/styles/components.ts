@@ -61,6 +61,12 @@ export const state = {
  * Editor note palette — distinct hues per track for visual separation on the grid.
  * Cycles for compositions with many tracks.
  */
+export const loader = {
+  dropzone:
+    'absolute inset-0 border-2 border-dashed border-primary/50 bg-primary/5 rounded-lg flex items-center justify-center pointer-events-none',
+  dropzoneText: 'text-primary font-medium text-lg',
+}
+
 export const notePalette = [
   'bg-indigo-500/70',
   'bg-purple-500/70',
