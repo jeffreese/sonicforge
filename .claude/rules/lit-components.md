@@ -18,4 +18,4 @@ ADR-001: Lit was chosen because Tone.js manages its own audio state and React's 
 - Component tag names use `<sf-*>` prefix: `<sf-transport-bar>`, `<sf-mixer>`
 - Component files named `sf-component-name.ts` in `src/ui/`
 - Use reactive properties (`@property`, `@state`) for component state
-- Use Lit context for cross-component store access
+- Import store singletons directly (e.g., `import { transportStore } from '../stores/TransportStore'`)
