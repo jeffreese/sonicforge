@@ -1,18 +1,18 @@
-import * as Tone from "tone";
-import type { InstrumentDef, Section } from "../schema/composition";
-import { drumHitToNote } from "../util/music";
-import { DrumKit } from "./DrumKit";
-import { loadSampleData } from "./SampleLoader";
+import * as Tone from 'tone'
+import type { InstrumentDef, Section } from '../schema/composition'
+import { drumHitToNote } from '../util/music'
+import { DrumKit } from './DrumKit'
+import { loadSampleData } from './SampleLoader'
 
 /** Union type for instrument audio sources — Sampler for melodic, DrumKit for drums. */
 export type InstrumentSource = Tone.ToneAudioNode & {
-  triggerAttackRelease(...args: unknown[]): unknown;
-};
+  triggerAttackRelease(...args: unknown[]): unknown
+}
 
 export interface LoadedInstrument {
-  id: string;
-  sampler: InstrumentSource;
-  isDrum: boolean;
+  id: string
+  sampler: InstrumentSource
+  isDrum: boolean
 }
 
 /**
@@ -22,24 +22,24 @@ export interface LoadedInstrument {
  */
 export async function loadInstruments(
   instruments: InstrumentDef[],
-  _sections: Section[]
+  _sections: Section[],
 ): Promise<Map<string, LoadedInstrument>> {
-  const loaded = new Map<string, LoadedInstrument>();
-  const promises: Promise<void>[] = [];
+  const loaded = new Map<string, LoadedInstrument>()
+  const promises: Promise<void>[] = []
 
   for (const inst of instruments) {
-    const isDrum = inst.category === "drums";
+    const isDrum = inst.category === 'drums'
 
     const promise = (async () => {
       try {
         // Drums use synthesized DrumKit — no soundfont needed
         if (isDrum) {
-          const drumKit = new DrumKit();
-          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true });
-          return;
+          const drumKit = new DrumKit()
+          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true })
+          return
         }
 
-        const sampleData = await loadSampleData(inst.sample);
+        const sampleData = await loadSampleData(inst.sample)
 
         // Create sampler and wait for it to load (not connected to anything yet)
         await new Promise<void>((resolve, reject) => {
@@ -47,30 +47,30 @@ export async function loadInstruments(
             urls: sampleData.urls,
             baseUrl: sampleData.baseUrl,
             onload: () => {
-              loaded.set(inst.id, { id: inst.id, sampler, isDrum });
-              resolve();
+              loaded.set(inst.id, { id: inst.id, sampler, isDrum })
+              resolve()
             },
             onerror: (err) => {
-              console.warn(`Failed to decode samples for ${inst.id}`, err);
-              reject(err);
+              console.warn(`Failed to decode samples for ${inst.id}`, err)
+              reject(err)
             },
-          });
-        });
+          })
+        })
       } catch (err) {
-        console.warn(`Failed to load instrument ${inst.id}:`, err);
+        console.warn(`Failed to load instrument ${inst.id}:`, err)
       }
-    })();
+    })()
 
-    promises.push(promise);
+    promises.push(promise)
   }
 
-  await Promise.all(promises);
-  return loaded;
+  await Promise.all(promises)
+  return loaded
 }
 
 /**
  * Map a drum hit name to its MIDI note representation for Tone.Sampler.
  */
 export function getDrumNote(hit: string): string | null {
-  return drumHitToNote(hit);
+  return drumHitToNote(hit)
 }

@@ -3,13 +3,13 @@
 ## Foundation
 
 - [x] Add Lit, Tailwind, PostCSS to project — update `vite.config.ts` for Lit + Tailwind
-- [ ] Add Biome config — add `pnpm lint` and `pnpm format` scripts
-- [ ] Add Vitest config — add `pnpm test` script, write one smoke test to verify setup
-- [ ] Switch package manager from npm to pnpm (remove `package-lock.json`, generate `pnpm-lock.yaml`)
-- [ ] Create design token layer: `src/styles/tokens.css` (CSS custom properties) + `src/styles/components.ts` (semantic style maps) — carry forward existing indigo/purple dark theme
+- [x] Add Biome config — add `pnpm lint` and `pnpm format` scripts
+- [x] Add Vitest config — add `pnpm test` script, write one smoke test to verify setup
+- [x] Switch package manager from npm to pnpm (remove `package-lock.json`, generate `pnpm-lock.yaml`)
+- [x] Create design token layer: `src/styles/tokens.css` (CSS custom properties) + `src/styles/components.ts` (semantic style maps) — carry forward existing indigo/purple dark theme
 - [ ] Create store infrastructure: base `Store` class with subscribe/notify pattern in `src/stores/`
 - [ ] Create `<sf-app>` shell component — register as custom element, wire into `main.ts` alongside existing code
-- [ ] Add husky + lint-staged — pre-commit hook runs Biome check and Vitest on staged files
+- [x] Add husky + lint-staged — pre-commit hook runs Biome check and Vitest on staged files
 
 ## Reactive Stores
 

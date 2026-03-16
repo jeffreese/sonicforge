@@ -1,5 +1,5 @@
-import type { SonicForgeComposition, Note } from "./composition";
-import { expandChord } from "../util/music";
+import { expandChord } from '../util/music'
+import type { Note, SonicForgeComposition } from './composition'
 
 /**
  * Walk all notes in a composition and expand chord shorthand pitches
@@ -10,19 +10,19 @@ import { expandChord } from "../util/music";
 export function expandChords(composition: SonicForgeComposition): void {
   for (const section of composition.sections) {
     for (const track of section.tracks) {
-      const expanded: Note[] = [];
+      const expanded: Note[] = []
       for (const note of track.notes) {
-        const notes = expandChord(note.pitch);
+        const notes = expandChord(note.pitch)
         if (notes) {
           // Expand chord into individual notes with the same timing
           for (const pitch of notes) {
-            expanded.push({ ...note, pitch });
+            expanded.push({ ...note, pitch })
           }
         } else {
-          expanded.push(note);
+          expanded.push(note)
         }
       }
-      track.notes = expanded;
+      track.notes = expanded
     }
   }
 }

@@ -1,31 +1,31 @@
-import * as Tone from "tone";
-import type { InstrumentDef } from "../schema/composition";
+import * as Tone from 'tone'
+import type { InstrumentDef } from '../schema/composition'
 
 export interface ChannelState {
-  id: string;
-  name: string;
-  volume: number; // 0–100
-  pan: number; // -1 to 1
-  muted: boolean;
-  soloed: boolean;
+  id: string
+  name: string
+  volume: number // 0–100
+  pan: number // -1 to 1
+  muted: boolean
+  soloed: boolean
 }
 
 export class MixBus {
-  private channels = new Map<string, Tone.Channel>();
-  private master = new Tone.Channel(0, 0).toDestination();
-  private states = new Map<string, ChannelState>();
-  private onChange?: () => void;
+  private channels = new Map<string, Tone.Channel>()
+  private master = new Tone.Channel(0, 0).toDestination()
+  private states = new Map<string, ChannelState>()
+  private onChange?: () => void
 
   setOnChange(fn: () => void): void {
-    this.onChange = fn;
+    this.onChange = fn
   }
 
   createChannel(instrument: InstrumentDef): Tone.Channel {
-    const vol = this.volumeToDb(instrument.defaultVolume ?? 80);
-    const pan = instrument.defaultPan ?? 0;
+    const vol = this.volumeToDb(instrument.defaultVolume ?? 80)
+    const pan = instrument.defaultPan ?? 0
 
-    const channel = new Tone.Channel(vol, pan).connect(this.master);
-    this.channels.set(instrument.id, channel);
+    const channel = new Tone.Channel(vol, pan).connect(this.master)
+    this.channels.set(instrument.id, channel)
 
     this.states.set(instrument.id, {
       id: instrument.id,
@@ -34,94 +34,95 @@ export class MixBus {
       pan,
       muted: false,
       soloed: false,
-    });
+    })
 
-    return channel;
+    return channel
   }
 
   getChannel(id: string): Tone.Channel | undefined {
-    return this.channels.get(id);
+    return this.channels.get(id)
   }
 
   getStates(): ChannelState[] {
-    return Array.from(this.states.values());
+    return Array.from(this.states.values())
   }
 
   getState(id: string): ChannelState | undefined {
-    return this.states.get(id);
+    return this.states.get(id)
   }
 
   setVolume(id: string, volume: number): void {
-    const channel = this.channels.get(id);
-    const state = this.states.get(id);
-    if (!channel || !state) return;
+    const channel = this.channels.get(id)
+    const state = this.states.get(id)
+    if (!channel || !state) return
 
-    state.volume = volume;
+    state.volume = volume
     if (!state.muted) {
-      channel.volume.value = this.volumeToDb(volume);
+      channel.volume.value = this.volumeToDb(volume)
     }
-    this.onChange?.();
+    this.onChange?.()
   }
 
   setPan(id: string, pan: number): void {
-    const channel = this.channels.get(id);
-    const state = this.states.get(id);
-    if (!channel || !state) return;
+    const channel = this.channels.get(id)
+    const state = this.states.get(id)
+    if (!channel || !state) return
 
-    state.pan = pan;
-    channel.pan.value = pan;
-    this.onChange?.();
+    state.pan = pan
+    channel.pan.value = pan
+    this.onChange?.()
   }
 
   setMuted(id: string, muted: boolean): void {
-    const state = this.states.get(id);
-    if (!state) return;
+    const state = this.states.get(id)
+    if (!state) return
 
-    state.muted = muted;
-    this.applySoloMuteLogic();
-    this.onChange?.();
+    state.muted = muted
+    this.applySoloMuteLogic()
+    this.onChange?.()
   }
 
   setSoloed(id: string, soloed: boolean): void {
-    const state = this.states.get(id);
-    if (!state) return;
+    const state = this.states.get(id)
+    if (!state) return
 
-    state.soloed = soloed;
-    this.applySoloMuteLogic();
-    this.onChange?.();
+    state.soloed = soloed
+    this.applySoloMuteLogic()
+    this.onChange?.()
   }
 
   private applySoloMuteLogic(): void {
-    const anySoloed = Array.from(this.states.values()).some((s) => s.soloed);
+    const anySoloed = Array.from(this.states.values()).some((s) => s.soloed)
 
     for (const [id, state] of this.states) {
-      const channel = this.channels.get(id)!;
+      const channel = this.channels.get(id)
+      if (!channel) continue
       if (anySoloed) {
         // When any track is soloed: mute everything except soloed tracks
-        channel.mute = !state.soloed || state.muted;
+        channel.mute = !state.soloed || state.muted
       } else {
-        channel.mute = state.muted;
+        channel.mute = state.muted
       }
     }
   }
 
   setMasterVolume(volume: number): void {
-    this.master.volume.value = this.volumeToDb(volume);
+    this.master.volume.value = this.volumeToDb(volume)
   }
 
   private volumeToDb(volume: number): number {
-    if (volume <= 0) return -Infinity;
+    if (volume <= 0) return Number.NEGATIVE_INFINITY
     // Map 0–100 to -60dB–0dB with a curve
-    return 20 * Math.log10(volume / 100);
+    return 20 * Math.log10(volume / 100)
   }
 
   dispose(): void {
     for (const [, channel] of this.channels) {
-      channel.dispose();
+      channel.dispose()
     }
-    this.channels.clear();
-    this.states.clear();
-    this.master.dispose();
-    this.master = new Tone.Channel(0, 0).toDestination();
+    this.channels.clear()
+    this.states.clear()
+    this.master.dispose()
+    this.master = new Tone.Channel(0, 0).toDestination()
   }
 }
