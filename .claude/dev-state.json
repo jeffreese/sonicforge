@@ -1,7 +1,7 @@
 {
   "current_plan": "migration",
-  "current_task": "Add Lit, Tailwind, PostCSS to project — update vite.config.ts for Lit + Tailwind",
+  "current_task": null,
   "branch": "feat/lit-tailwind-setup",
-  "status": "in-progress",
+  "status": "idle",
   "pending": null
 }

@@ -2,7 +2,7 @@
 
 ## Foundation
 
-- [ ] Add Lit, Tailwind, PostCSS to project — update `vite.config.ts` for Lit + Tailwind
+- [x] Add Lit, Tailwind, PostCSS to project — update `vite.config.ts` for Lit + Tailwind
 - [ ] Add Biome config — add `pnpm lint` and `pnpm format` scripts
 - [ ] Add Vitest config — add `pnpm test` script, write one smoke test to verify setup
 - [ ] Switch package manager from npm to pnpm (remove `package-lock.json`, generate `pnpm-lock.yaml`)
