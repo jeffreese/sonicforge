@@ -8,7 +8,7 @@
 - [x] Switch package manager from npm to pnpm (remove `package-lock.json`, generate `pnpm-lock.yaml`)
 - [x] Create design token layer: `src/styles/tokens.css` (CSS custom properties) + `src/styles/components.ts` (semantic style maps) — carry forward existing indigo/purple dark theme
 - [x] Create store infrastructure: base `Store` class with subscribe/notify pattern in `src/stores/`
-- [ ] Create `<sf-app>` shell component — register as custom element, wire into `main.ts` alongside existing code
+- [x] Create `<sf-app>` shell component — register as custom element, wire into `main.ts` alongside existing code
 - [x] Add husky + lint-staged — pre-commit hook runs Biome check and Vitest on staged files
 
 ## Reactive Stores

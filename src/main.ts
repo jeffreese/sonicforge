@@ -1,3 +1,4 @@
+import './ui/sf-app'
 import { App } from './ui/App'
 
 const root = document.getElementById('app')
