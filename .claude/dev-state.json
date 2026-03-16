@@ -1,7 +1,7 @@
 {
   "current_plan": "migration",
-  "current_task": null,
-  "branch": "feat/lit-tailwind-setup",
-  "status": "idle",
+  "current_task": "Foundation cleanup: Biome fixes, Vitest jsdom, remove package-lock.json, smoke test",
+  "branch": "chore/foundation-cleanup",
+  "status": "in-progress",
   "pending": null
 }
