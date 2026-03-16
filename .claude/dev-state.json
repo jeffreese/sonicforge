@@ -1,7 +1,7 @@
 {
   "current_plan": "migration",
-  "current_task": "<sf-transport-bar> + tests — play/pause/stop buttons, position display (bar:beat), BPM display; subscribes to TransportStore",
-  "branch": "feat/sf-transport-bar",
-  "status": "in-progress",
+  "current_task": null,
+  "branch": null,
+  "status": "idle",
   "pending": null
 }
