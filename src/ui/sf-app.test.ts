@@ -1,4 +1,13 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../engine/instance', () => ({
+  engine: {
+    play: vi.fn().mockResolvedValue(undefined),
+    pause: vi.fn(),
+    stop: vi.fn(),
+  },
+}))
+
 import './sf-app'
 import { SfApp } from './sf-app'
 

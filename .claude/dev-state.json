@@ -1,7 +1,7 @@
 {
   "current_plan": "migration",
-  "current_task": "<sf-composition-loader> + tests — paste JSON, upload file, drag-and-drop, schema validation, writes to CompositionStore",
-  "branch": "feat/sf-composition-loader",
-  "status": "in-progress",
+  "current_task": null,
+  "branch": null,
+  "status": "idle",
   "pending": null
 }

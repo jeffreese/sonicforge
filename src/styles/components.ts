@@ -14,7 +14,7 @@ export const btn = {
     'bg-primary text-on-primary hover:bg-primary-hover px-4 py-2 rounded-lg font-medium transition-colors',
   ghost:
     'text-muted hover:text-on-surface hover:bg-surface-hover px-3 py-1.5 rounded transition-colors',
-  icon: 'text-muted hover:text-on-surface hover:bg-surface-hover p-2 rounded transition-colors',
+  icon: 'text-muted hover:text-on-surface hover:bg-surface-hover p-2 rounded transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
   danger:
     'bg-error text-on-primary hover:bg-error/80 px-4 py-2 rounded-lg font-medium transition-colors',
 }

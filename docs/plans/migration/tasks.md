@@ -21,8 +21,8 @@
 
 ## Component Migration
 
-- [ ] `<sf-composition-loader>` + tests — paste JSON, upload file, drag-and-drop, schema validation, writes to CompositionStore
-- [ ] `<sf-transport-bar>` + tests — play/pause/stop buttons, position display (bar:beat), BPM display; subscribes to TransportStore
+- [x] `<sf-composition-loader>` + tests — paste JSON, upload file, drag-and-drop, schema validation, writes to CompositionStore
+- [x] `<sf-transport-bar>` + tests — play/pause/stop buttons, position display (bar:beat), BPM display; subscribes to TransportStore
 - [ ] `<sf-mixer>` + `<sf-channel-strip>` + tests — container with per-instrument channel strips, volume slider, pan knob, mute/solo; bidirectional binding to MixerStore
 - [ ] `<sf-sample-explorer>` + `<sf-keyboard>` + tests — browse GM instruments by category, preview via SampleAuditioner, computer keyboard play mode
 - [ ] `<sf-sample-picker>` + tests — modal/dropdown for inline instrument swap from mixer, category-filtered with preview, hot-swaps in CompositionStore and Engine
