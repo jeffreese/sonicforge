@@ -6,7 +6,7 @@ paths:
 
 # All Composition Mutations Through dispatch()
 
-Never modify CompositionStore state directly. All mutations must go through `CompositionStore.dispatch(command)` where `command` is a reversible command object with `do()`, `undo()`, and `description`.
+Never modify CompositionStore state directly. All mutations must go through `CompositionStore.dispatch(command)` where `command` is a reversible command object with `execute()`, `undo()`, and `description`.
 
 ## Why
 
@@ -17,8 +17,8 @@ ADR-004 + ADR-006: The reactive store pattern with command dispatch enables undo
 ```ts
 compositionStore.dispatch({
   description: 'Add note C4 at 0:0:0',
-  do: () => { /* add note */ },
-  undo: () => { /* remove note */ },
+  execute(comp) { /* add note to comp */ },
+  undo(comp) { /* remove note from comp */ },
 });
 ```
 
