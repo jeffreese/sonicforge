@@ -15,7 +15,7 @@
 
 - [x] Implement `TransportStore` + tests — playback state, position, BPM, time signature, loop region; wire to Engine transport callbacks
 - [x] Implement `MixerStore` + tests — per-channel volume, pan, mute, solo; bidirectional binding with MixBus
-- [ ] Implement `UIStore` + tests — active panel, selected instrument, keyboard octave, zoom, snap; pure UI state
+- [x] Implement `UIStore` + tests — active panel, selected instrument, keyboard octave, zoom, snap; pure UI state
 - [ ] Implement `CompositionStore` + tests — loaded composition JSON, metadata, instruments, sections, tracks, notes; wire to Engine load/schedule; implement `dispatch(command)` pattern for mutations
 - [ ] Integration verification — console-log all store state changes, verify correct flow with existing engine during playback
 
