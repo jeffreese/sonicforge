@@ -49,6 +49,17 @@ export class UIStore extends Store<UIState> {
   setSnap(enabled: boolean): void {
     this.setState({ snapEnabled: enabled })
   }
+
+  clear(): void {
+    this.setState({
+      activePanel: 'mixer',
+      selectedInstrumentId: null,
+      keyboardOctave: 4,
+      explorerCollapsed: true,
+      zoom: 1,
+      snapEnabled: true,
+    })
+  }
 }
 
 export const uiStore = new UIStore()
