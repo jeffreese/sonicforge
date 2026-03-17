@@ -83,6 +83,85 @@ export const loader = {
   dropzoneText: 'text-primary font-medium text-lg',
 }
 
+export const explorer = {
+  container: 'bg-surface border-t border-border',
+  header:
+    'flex items-center justify-between px-4 py-2 cursor-pointer select-none hover:bg-surface-hover transition-colors',
+  heading: 'text-on-surface text-sm font-medium uppercase tracking-wider',
+  toggle: 'text-muted text-xs hover:text-on-surface transition-colors px-2 py-0.5 rounded',
+  content: 'px-4 pb-3',
+  controls: 'flex items-center gap-3 mb-3',
+  search:
+    'bg-surface-elevated text-on-surface border border-border rounded px-2 py-1 text-sm flex-1 focus:border-primary focus:outline-none',
+  velRow: 'flex items-center gap-2',
+  velLabel: 'text-muted text-xs uppercase tracking-wider',
+  velSlider: 'accent-primary w-20',
+  velValue: 'font-mono text-xs text-muted tabular-nums w-6 text-right',
+  grid: 'max-h-64 overflow-y-auto space-y-3',
+  category: '',
+  categoryHeading:
+    'text-muted text-xs font-medium uppercase tracking-wider mb-1 sticky top-0 bg-surface py-1',
+  instrumentList: 'flex flex-wrap gap-1',
+  instrumentBtn:
+    'px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted hover:text-on-surface hover:bg-surface-hover',
+  instrumentBtnActive: 'px-2 py-1 rounded text-xs transition-colors bg-primary text-on-primary',
+  instrumentBtnLoading:
+    'px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted opacity-60 animate-pulse',
+  drumBtn:
+    'px-2 py-1 rounded text-xs transition-colors bg-secondary/20 text-secondary hover:bg-secondary/30',
+  drumBtnActive: 'px-2 py-1 rounded text-xs transition-colors bg-secondary text-on-primary',
+}
+
+export const keyboard = {
+  section: 'mt-3 opacity-50 transition-opacity',
+  sectionEnabled: 'mt-3 opacity-100 transition-opacity',
+  header: 'flex items-center gap-3 mb-2',
+  label: 'text-muted text-xs uppercase tracking-wider',
+  octaveControls: 'flex items-center gap-1',
+  octaveBtn:
+    'text-muted hover:text-on-surface hover:bg-surface-hover w-6 h-6 rounded text-sm flex items-center justify-center transition-colors',
+  octaveDisplay: 'font-mono text-xs text-on-surface w-6 text-center',
+  status: 'text-muted text-xs ml-auto',
+  statusActive: 'text-primary text-xs ml-auto font-medium',
+  piano: 'relative h-24 flex',
+  whiteKey:
+    'relative flex-1 bg-white border border-border rounded-b flex flex-col items-center justify-end pb-1 cursor-pointer transition-colors',
+  whiteKeyPressed:
+    'relative flex-1 bg-primary/30 border border-primary rounded-b flex flex-col items-center justify-end pb-1 cursor-pointer transition-colors',
+  blackKey:
+    'absolute top-0 w-[6%] h-[60%] bg-gray-800 border border-gray-700 rounded-b z-10 flex items-end justify-center pb-1 cursor-pointer transition-colors',
+  blackKeyPressed:
+    'absolute top-0 w-[6%] h-[60%] bg-primary border border-primary rounded-b z-10 flex items-end justify-center pb-1 cursor-pointer transition-colors',
+  keyLabel: 'text-[10px] text-gray-400',
+  keyNote: 'text-[9px] text-gray-500',
+}
+
+export const picker = {
+  overlay: 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center',
+  panel:
+    'bg-surface-elevated border border-border rounded-lg shadow-lg w-80 max-h-[70vh] flex flex-col',
+  header: 'flex items-center justify-between px-4 py-3 border-b border-border',
+  heading: 'text-on-surface text-sm font-medium',
+  closeBtn:
+    'text-muted hover:text-on-surface hover:bg-surface-hover w-6 h-6 rounded flex items-center justify-center transition-colors',
+  search:
+    'bg-surface text-on-surface border border-border rounded px-3 py-1.5 text-sm mx-4 mt-3 focus:border-primary focus:outline-none',
+  list: 'overflow-y-auto flex-1 px-4 py-2',
+  category: '',
+  categoryLabel: 'text-muted text-xs font-medium uppercase tracking-wider mt-3 mb-1 first:mt-0',
+  item: 'flex items-center justify-between px-2 py-1.5 rounded cursor-pointer text-sm text-on-surface hover:bg-surface-hover transition-colors',
+  itemCurrent:
+    'flex items-center justify-between px-2 py-1.5 rounded cursor-pointer text-sm text-primary bg-primary/10 font-medium',
+  previewBtn:
+    'text-muted hover:text-on-surface text-xs px-1.5 py-0.5 rounded hover:bg-surface-hover transition-colors',
+}
+
+export const arrangement = {
+  container: 'bg-surface border border-border rounded-lg p-4',
+  heading: 'text-on-surface text-sm font-medium mb-2',
+  canvas: 'block w-full cursor-pointer rounded-md',
+}
+
 export const notePalette = [
   'bg-indigo-500/70',
   'bg-purple-500/70',

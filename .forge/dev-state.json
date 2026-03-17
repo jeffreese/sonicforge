@@ -1,7 +1,8 @@
 {
   "current_plan": "migration",
-  "current_task": "<sf-mixer> + <sf-channel-strip> + tests",
-  "branch": "feat/sf-mixer",
+  "current_task": "Cleanup epic complete",
+  "branch": "feat/sf-sample-explorer",
   "status": "complete",
+  "mode": "epic",
   "pending": null
 }
