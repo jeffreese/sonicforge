@@ -2,6 +2,6 @@
   "current_plan": "migration",
   "current_task": "<sf-mixer> + <sf-channel-strip> + tests",
   "branch": "feat/sf-mixer",
-  "status": "in-progress",
+  "status": "complete",
   "pending": null
 }
