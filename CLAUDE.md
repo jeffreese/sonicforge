@@ -26,9 +26,9 @@ Samples live in `public/samples/{instrument}/` with a `manifest.json` per instru
 
 All work happens on feature branches, never directly on `main`. The standard flow:
 
-1. `/next` (or manually) — create a branch from `main` (`feat/`, `fix/`, `chore/`, `refactor/`, `docs/`)
+1. `/forge:next` (or manually) — create a branch from `main` (`feat/`, `fix/`, `chore/`, `refactor/`, `docs/`)
 2. Implement the change with commits on the branch
-3. `/ship` — run checks, commit, push, create a PR
+3. `/forge:ship` — run checks, commit, push, create a PR
 4. User reviews the PR on GitHub and merges to `main`
 
 Do not commit directly to `main`. Do not push to `main`. If you're on `main` and the user asks to start work, create a feature branch first.
@@ -89,7 +89,9 @@ src/data/       — GM instrument definitions
 compositions/   — Example and generated JSON compositions
 scripts/        — Sample extraction tooling (Python + FluidSynth + FFmpeg)
 public/samples/ — Self-hosted instrument samples (gitignored, extracted locally)
-docs/planning/  — Planning documents from Forge (feature spec, tech spec, ADRs, task breakdown)
+docs/spec/      — Planning documents from Forge (feature spec, tech spec, task breakdown)
+docs/adrs/      — Architectural decision records (from planning and development)
+docs/plans/     — Development plans, backlog, and task breakdowns
 ```
 
 ## Behavioral Notes
@@ -103,7 +105,7 @@ docs/planning/  — Planning documents from Forge (feature spec, tech spec, ADRs
 
 ## ADRs
 
-Architectural decisions are documented in `docs/planning/adrs/`. Key decisions:
+Architectural decisions are documented in `docs/adrs/`. Key decisions:
 
 - **ADR-001**: Lit over React (no virtual DOM, web standards, small footprint)
 - **ADR-002**: Tailwind with design token abstraction (semantic style maps, not raw classes)
@@ -113,4 +115,16 @@ Architectural decisions are documented in `docs/planning/adrs/`. Key decisions:
 - **ADR-006**: Command pattern for undo/redo (reversible commands via dispatch)
 - **ADR-007**: WAV + OGG export (browser-native encoding, no external libs)
 
-When making architectural decisions during development, capture them with `/adr`.
+When making architectural decisions during development, capture them with `/forge:adr`.
+
+## Forge Plugin
+
+Development workflow skills are provided by the forge plugin (`/forge:*` namespace). Key commands:
+- `/forge:next` — find next task, create branch, implement
+- `/forge:ship` — test, review, commit, push, PR
+- `/forge:new-feature` — structured feature request interview
+- `/forge:retro` — end-of-session retrospective
+- `/forge:friction-log` — quick friction capture
+- `/forge:adr` — capture architectural decisions
+
+Runtime state lives in `.forge/` (dev-state.json, config.json, friction.md).

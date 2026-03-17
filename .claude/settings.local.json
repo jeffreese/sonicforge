@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:gleitz.github.io)",
+      "Bash(timeout:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(fluidsynth:*)",
+      "Read(//private/tmp/**)",
+      "Bash(ffmpeg:*)",
+      "Skill(compose)",
+      "Skill(forge:run-checks)",
+      "Skill(forge:review)",
+      "Skill(forge:retro)",
+      "Skill(forge:session-break)",
+      "Skill(forge:scaffold-feature)",
+      "Skill(forge:friction-log)",
+      "Skill(forge:adr)",
+      "Skill(forge:audit-docs)",
+      "Skill(forge:next)",
+      "Skill(forge:new-feature)",
+      "Skill(forge:ship)",
+      "Skill(forge:capture-feedback)",
+      "Skill(forge:forge-status)",
+      "Bash(npm run:*)",
+      "Skill(reset-to-main)"
+    ]
+  }
+}
