@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { surface } from '../styles/components'
+import './sf-mixer'
 import './sf-transport-bar'
 
 @customElement('sf-app')
@@ -14,6 +15,7 @@ export class SfApp extends LitElement {
       <div class="${surface.base} min-h-screen">
         <sf-transport-bar></sf-transport-bar>
         <slot></slot>
+        <sf-mixer></sf-mixer>
       </div>
     `
   }

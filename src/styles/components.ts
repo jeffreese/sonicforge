@@ -26,9 +26,25 @@ export const input = {
 }
 
 export const mixer = {
-  channel: 'bg-surface-elevated border border-border rounded-lg p-3',
-  slider: 'accent-primary',
-  label: 'text-muted text-xs uppercase tracking-wider',
+  container: 'bg-surface border-t border-border px-4 py-3',
+  strip: 'flex gap-3 overflow-x-auto',
+  channel: 'bg-surface-elevated border border-border rounded-lg p-3 min-w-[160px]',
+  channelName: 'text-on-surface text-sm font-medium truncate',
+  value: 'font-mono text-xs text-muted tabular-nums w-8 text-right',
+  controlRow: 'flex items-center gap-2',
+  buttonRow: 'flex gap-1 mt-2',
+  slider: 'accent-primary flex-1 min-w-0',
+  label: 'text-muted text-xs uppercase tracking-wider w-6',
+  muteBtn:
+    'px-2 py-0.5 rounded text-xs font-medium transition-colors text-muted hover:text-on-surface hover:bg-surface-hover',
+  muteBtnActive:
+    'px-2 py-0.5 rounded text-xs font-medium transition-colors bg-error text-on-primary',
+  soloBtn:
+    'px-2 py-0.5 rounded text-xs font-medium transition-colors text-muted hover:text-on-surface hover:bg-surface-hover',
+  soloBtnActive:
+    'px-2 py-0.5 rounded text-xs font-medium transition-colors bg-warning text-on-primary',
+  master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 min-w-[160px]',
+  masterLabel: 'text-primary text-sm font-medium',
 }
 
 export const transport = {
