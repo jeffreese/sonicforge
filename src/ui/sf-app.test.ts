@@ -2,12 +2,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('../engine/instance', () => ({
   engine: {
+    state: 'empty',
     play: vi.fn().mockResolvedValue(undefined),
     pause: vi.fn(),
     stop: vi.fn(),
     seekToSection: vi.fn(),
     setLoopSection: vi.fn(),
     swapSample: vi.fn().mockResolvedValue(undefined),
+    load: vi.fn().mockResolvedValue(undefined),
+    getComposition: vi.fn().mockReturnValue(null),
+    getMixBus: vi.fn().mockReturnValue({ getStates: () => [], setMasterVolume: vi.fn() }),
+    getTransport: vi.fn().mockReturnValue({
+      getSectionOffsets: () => [],
+      getTotalBars: () => 0,
+    }),
   },
 }))
 
@@ -57,6 +65,7 @@ describe('sf-app', () => {
     expect(el.querySelector('sf-mixer')).not.toBeNull()
     expect(el.querySelector('sf-sample-explorer')).not.toBeNull()
     expect(el.querySelector('sf-sample-picker')).not.toBeNull()
+    expect(el.querySelector('sf-composition-loader')).not.toBeNull()
   })
 
   it('handles arrangement-seek event', async () => {
@@ -95,10 +104,20 @@ describe('sf-app', () => {
     expect(engine.swapSample).toHaveBeenCalledWith('piano', 'violin')
   })
 
-  it('has a slot for composition loader content', async () => {
+  it('handles composition-load event by calling engine.load', async () => {
     const el = createElement()
     await el.updateComplete
-    const slot = el.querySelector('slot')
-    expect(slot).not.toBeNull()
+
+    const loader = el.querySelector('sf-composition-loader') as HTMLElement
+    loader.dispatchEvent(
+      new CustomEvent('composition-load', {
+        bubbles: true,
+        detail: { json: '{"version":"1.0"}' },
+      }),
+    )
+
+    // Give async handler time to run
+    await new Promise((r) => setTimeout(r, 10))
+    expect(engine.load).toHaveBeenCalledWith('{"version":"1.0"}')
   })
 })
