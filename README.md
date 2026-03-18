@@ -6,7 +6,7 @@ SonicForge pairs Claude's generative capabilities with a TypeScript audio engine
 
 The project was built using Forge, the author's AI meta-generator tool, as a practical demonstration of AI-assisted full-stack development — from architecture decisions through implementation.
 
-<!-- TODO: Add screenshot/demo GIF -->
+![SonicForge — DAW-style timeline with mixer channels](docs/screenshot.png)
 
 ---
 
