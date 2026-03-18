@@ -1,7 +1,5 @@
 import { LitElement, html, nothing } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { ValidationError, validate } from '../schema/validate'
-import { compositionStore } from '../stores/CompositionStore'
 import { btn, input, loader, panel, state as stateStyles } from '../styles/components'
 
 @customElement('sf-composition-loader')
@@ -61,14 +59,16 @@ export class SfCompositionLoader extends LitElement {
 
   private parseAndLoad(json: string): void {
     try {
-      const data = JSON.parse(json)
-      const composition = validate(data)
-      compositionStore.load(composition)
+      JSON.parse(json) // Validate it's valid JSON first
       this.error = null
+      this.dispatchEvent(
+        new CustomEvent('composition-load', {
+          bubbles: true,
+          detail: { json },
+        }),
+      )
     } catch (e) {
-      if (e instanceof ValidationError) {
-        this.error = e.errors.join('\n')
-      } else if (e instanceof SyntaxError) {
+      if (e instanceof SyntaxError) {
         this.error = `Invalid JSON: ${e.message}`
       } else {
         this.error = 'An unexpected error occurred'

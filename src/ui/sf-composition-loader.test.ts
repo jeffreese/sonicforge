@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { SonicForgeComposition } from '../schema/composition'
-import { compositionStore } from '../stores/CompositionStore'
 import './sf-composition-loader'
 import { SfCompositionLoader } from './sf-composition-loader'
 
@@ -31,7 +30,6 @@ function createElement(): SfCompositionLoader {
   return el
 }
 
-/** Query helpers that assert existence so Biome doesn't complain about non-null assertions. */
 function getTextarea(el: SfCompositionLoader): HTMLTextAreaElement {
   const ta = el.querySelector('textarea')
   expect(ta).not.toBeNull()
@@ -46,7 +44,6 @@ function getLoadButton(el: SfCompositionLoader): HTMLButtonElement {
 
 afterEach(() => {
   document.body.innerHTML = ''
-  compositionStore.clear()
 })
 
 describe('sf-composition-loader', () => {
@@ -70,19 +67,20 @@ describe('sf-composition-loader', () => {
     expect(buttons[1].textContent).toBe('Upload File')
   })
 
-  it('loads valid JSON into compositionStore', async () => {
-    const loadSpy = vi.spyOn(compositionStore, 'load')
+  it('dispatches composition-load event with valid JSON', async () => {
     const el = createElement()
     await el.updateComplete
+
+    const handler = vi.fn()
+    el.addEventListener('composition-load', handler)
 
     getTextarea(el).value = JSON.stringify(validComposition)
     getLoadButton(el).click()
 
-    expect(loadSpy).toHaveBeenCalledOnce()
-    expect(loadSpy.mock.calls[0][0]).toEqual(validComposition)
+    expect(handler).toHaveBeenCalledOnce()
+    const detail = handler.mock.calls[0][0].detail
+    expect(JSON.parse(detail.json)).toEqual(validComposition)
     expect(el.querySelector('pre')).toBeNull()
-
-    loadSpy.mockRestore()
   })
 
   it('shows parse error for invalid JSON', async () => {
@@ -98,19 +96,6 @@ describe('sf-composition-loader', () => {
     expect(errorEl?.textContent).toContain('Invalid JSON')
   })
 
-  it('shows validation errors for invalid composition', async () => {
-    const el = createElement()
-    await el.updateComplete
-
-    getTextarea(el).value = JSON.stringify({ version: '2.0' })
-    getLoadButton(el).click()
-
-    await el.updateComplete
-    const errorEl = el.querySelector('pre')
-    expect(errorEl).not.toBeNull()
-    expect(errorEl?.textContent).toContain('version must be "1.0"')
-  })
-
   it('shows error for empty textarea', async () => {
     const el = createElement()
     await el.updateComplete
@@ -124,10 +109,12 @@ describe('sf-composition-loader', () => {
     expect(errorEl?.textContent).toBe('Please paste a composition JSON')
   })
 
-  it('loads file via upload', async () => {
-    const loadSpy = vi.spyOn(compositionStore, 'load')
+  it('dispatches composition-load event via file upload', async () => {
     const el = createElement()
     await el.updateComplete
+
+    const handler = vi.fn()
+    el.addEventListener('composition-load', handler)
 
     const jsonStr = JSON.stringify(validComposition)
     const file = new File([jsonStr], 'test.json', { type: 'application/json' })
@@ -138,12 +125,9 @@ describe('sf-composition-loader', () => {
 
     // Wait for FileReader async callback
     await new Promise((r) => setTimeout(r, 50))
-    await el.updateComplete
 
-    expect(loadSpy).toHaveBeenCalledOnce()
-    expect(loadSpy.mock.calls[0][0]).toEqual(validComposition)
-
-    loadSpy.mockRestore()
+    expect(handler).toHaveBeenCalledOnce()
+    expect(JSON.parse(handler.mock.calls[0][0].detail.json)).toEqual(validComposition)
   })
 
   it('clears error on successful load', async () => {
