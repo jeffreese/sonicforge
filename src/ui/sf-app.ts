@@ -12,6 +12,7 @@ import './sf-sample-explorer'
 import './sf-sample-picker'
 import './sf-transport-bar'
 import type { SfArrangement } from './sf-arrangement'
+import type { SfTransportBar } from './sf-transport-bar'
 
 @customElement('sf-app')
 export class SfApp extends LitElement {
@@ -35,12 +36,18 @@ export class SfApp extends LitElement {
   }
 
   private handleKeyDown(e: KeyboardEvent): void {
-    if (e.code !== 'Space' || e.target !== document.body) return
-    e.preventDefault()
-    if (engine.state === 'playing') {
-      engine.pause()
-    } else if (engine.state === 'ready' || engine.state === 'paused') {
-      engine.play()
+    if (e.target !== document.body) return
+
+    if (e.code === 'Space') {
+      e.preventDefault()
+      if (engine.state === 'playing') {
+        engine.pause()
+      } else if (engine.state === 'ready' || engine.state === 'paused') {
+        engine.play()
+      }
+    } else if (e.code === 'KeyF') {
+      const arr = this.querySelector('sf-arrangement') as SfArrangement | null
+      arr?.scrollToPlayhead()
     }
   }
 
@@ -76,10 +83,11 @@ export class SfApp extends LitElement {
       // Wire mixer store actions back to engine
       mixerStore.setSink(createMixerSink(engine.getMixBus()))
 
-      // Load arrangement with section data
+      // Load arrangement with section data and position source
       const transport = engine.getTransport()
       const arrangement = this.querySelector('sf-arrangement') as SfArrangement | null
       arrangement?.loadSections(transport.getSectionOffsets(), transport.getTotalBars())
+      arrangement?.setPositionSource(() => engine.getPositionBeats())
 
       this.compositionInfo = composition
     } catch {
@@ -93,6 +101,15 @@ export class SfApp extends LitElement {
 
   private handleSeekBeat(e: CustomEvent<{ beat: number }>): void {
     engine.seekToBeat(e.detail.beat)
+  }
+
+  private handleFollowToggle(): void {
+    const arr = this.querySelector('sf-arrangement') as SfArrangement | null
+    const tb = this.querySelector('sf-transport-bar') as SfTransportBar | null
+    if (arr) {
+      const newState = arr.toggleFollow()
+      tb?.setFollow(newState)
+    }
   }
 
   private handleLoop(e: CustomEvent<{ sectionIndex: number | null }>): void {
@@ -123,6 +140,7 @@ export class SfApp extends LitElement {
         @arrangement-loop=${this.handleLoop}
         @sample-select=${this.handleSampleSelect}
         @sample-preview=${this.handleSamplePreview}
+        @transport-follow-toggle=${this.handleFollowToggle}
       >
         <div class="${app.header}">
           <sf-transport-bar></sf-transport-bar>
@@ -150,6 +168,7 @@ export class SfApp extends LitElement {
         <span><span class="${key}">⇧+scroll</span> zoom pitch</span>
         <span><span class="${key}">Click</span> seek</span>
         <span><span class="${key}">Dbl-click</span> loop section</span>
+        <span><span class="${key}">F</span> go to playhead</span>
       </div>
     `
   }

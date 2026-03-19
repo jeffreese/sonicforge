@@ -21,6 +21,7 @@ export class SfTransportBar extends LitElement {
   @state() private beat = 0
   @state() private bpm = 120
   @state() private sectionName: string | null = null
+  @state() private follow = true
 
   private unsubscribe?: Unsubscribe
 
@@ -63,6 +64,15 @@ export class SfTransportBar extends LitElement {
     engine.stop()
   }
 
+  private handleFollowToggle(): void {
+    this.dispatchEvent(new CustomEvent('transport-follow-toggle', { bubbles: true }))
+  }
+
+  /** Called by parent to sync follow state after arrangement toggles it. */
+  setFollow(value: boolean): void {
+    this.follow = value
+  }
+
   private get positionText(): string {
     const text = `Bar ${this.bar + 1} | Beat ${this.beat + 1}`
     return this.sectionName ? `${this.sectionName} | ${text}` : text
@@ -95,6 +105,13 @@ export class SfTransportBar extends LitElement {
             @click=${this.handleStop}
             aria-label="Stop"
           >⏹</button>
+          <button
+            class="${btn.icon}"
+            @click=${this.handleFollowToggle}
+            aria-label="Toggle follow playhead"
+            title="Follow playhead"
+            style="opacity: ${this.follow ? '1' : '0.4'}"
+          >⤵</button>
         </div>
         <span class="${transport.position}">${this.positionText}</span>
         <span class="${transport.status}">${statusLabels[s]} | ${this.bpm} BPM</span>

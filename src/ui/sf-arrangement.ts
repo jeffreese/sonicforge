@@ -33,6 +33,8 @@ const DEFAULT_BEAT_PX = 24
 const MIN_NOTE_ROW_PX = 4
 const MAX_NOTE_ROW_PX = 20
 const BLACK_KEY_INDICES = new Set([1, 3, 6, 8, 10])
+const FOLLOW_THRESHOLD = 0.75 // scroll when playhead reaches 75% of viewport width
+const FOLLOW_TARGET = 0.2 // scroll to put playhead at 20% from left
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -69,6 +71,13 @@ export class SfArrangement extends LitElement {
   private scrollX = 0
   private scrollY = 0
 
+  // Playhead interpolation & follow
+  private interpolatedBeat = 0
+  private followMode = true
+  private isPlaying = false
+  private rafId: number | null = null
+  private getPositionBeats: (() => number) | null = null
+
   private canvas?: HTMLCanvasElement
   private ctx?: CanvasRenderingContext2D
   private resizeObserver?: ResizeObserver
@@ -98,6 +107,19 @@ export class SfArrangement extends LitElement {
       this.playheadBar = s.bar
       this.playheadBeat = s.beat
       this.loopSectionIndex = s.loopSectionIndex
+
+      const wasPlaying = this.isPlaying
+      this.isPlaying = s.playbackState === 'playing'
+
+      if (this.isPlaying && !wasPlaying) {
+        this.followMode = true
+        this.startPlayheadAnimation()
+      } else if (!this.isPlaying && wasPlaying) {
+        this.stopPlayheadAnimation()
+        if (s.playbackState === 'stopped') {
+          this.followMode = true
+        }
+      }
     })
   }
 
@@ -106,6 +128,7 @@ export class SfArrangement extends LitElement {
     this.unsubComposition?.()
     this.unsubTransport?.()
     this.resizeObserver?.disconnect()
+    this.stopPlayheadAnimation()
   }
 
   /** Load section offset data (provided by engine after composition load). */
@@ -117,6 +140,78 @@ export class SfArrangement extends LitElement {
   /** Set the focused track index (null = show all). Exposed for track selector. */
   setFocusedTrack(index: number | null): void {
     this.focusedTrack = index
+  }
+
+  /** Provide a function that returns the current playback position in beats (for smooth interpolation). */
+  setPositionSource(fn: () => number): void {
+    this.getPositionBeats = fn
+  }
+
+  /** Snap the viewport so the playhead is visible. */
+  scrollToPlayhead(): void {
+    const grid = this.gridRect()
+    const visibleBeats = grid.width / this.beatPx
+    this.scrollX = Math.max(0, this.interpolatedBeat - visibleBeats * FOLLOW_TARGET)
+    this.clampScroll()
+    this.resize()
+  }
+
+  /** Toggle follow mode. Returns the new state. */
+  toggleFollow(): boolean {
+    this.followMode = !this.followMode
+    if (this.followMode && this.isPlaying) {
+      this.scrollToPlayhead()
+    }
+    return this.followMode
+  }
+
+  get isFollowing(): boolean {
+    return this.followMode
+  }
+
+  // ── Playhead animation ─────────────────────────────────────────────
+
+  private startPlayheadAnimation(): void {
+    if (this.rafId !== null) return
+    const tick = () => {
+      if (this.getPositionBeats) {
+        this.interpolatedBeat = this.getPositionBeats()
+      } else {
+        this.interpolatedBeat = this.playheadBar * this.beatsPerBar + this.playheadBeat
+      }
+
+      if (this.followMode) {
+        this.autoScroll()
+      }
+
+      this.resize()
+      this.rafId = requestAnimationFrame(tick)
+    }
+    this.rafId = requestAnimationFrame(tick)
+  }
+
+  private stopPlayheadAnimation(): void {
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId)
+      this.rafId = null
+    }
+    // Final position sync from store
+    this.interpolatedBeat = this.playheadBar * this.beatsPerBar + this.playheadBeat
+    this.resize()
+  }
+
+  private autoScroll(): void {
+    const grid = this.gridRect()
+    if (grid.width === 0) return
+
+    const visibleBeats = grid.width / this.beatPx
+    const playheadViewBeat = this.interpolatedBeat - this.scrollX
+    const threshold = visibleBeats * FOLLOW_THRESHOLD
+
+    if (playheadViewBeat > threshold || playheadViewBeat < 0) {
+      this.scrollX = Math.max(0, this.interpolatedBeat - visibleBeats * FOLLOW_TARGET)
+      this.clampScroll()
+    }
   }
 
   protected willUpdate(): void {
@@ -469,7 +564,10 @@ export class SfArrangement extends LitElement {
 
   private drawPlayhead(ctx: CanvasRenderingContext2D, h: number): void {
     if (!this.composition) return
-    const playheadBeatPos = this.playheadBar * this.beatsPerBar + this.playheadBeat
+    // Use interpolated position during playback, store position when stopped
+    const playheadBeatPos = this.isPlaying
+      ? this.interpolatedBeat
+      : this.playheadBar * this.beatsPerBar + this.playheadBeat
     const x = this.beatToX(playheadBeatPos)
 
     const grid = this.gridRect()
@@ -598,6 +696,10 @@ export class SfArrangement extends LitElement {
       this.scrollX += e.deltaX / this.beatPx
       this.scrollY += e.deltaY / this.noteRowPx
       this.clampScroll()
+      // Disengage follow when user scrolls manually during playback
+      if (this.isPlaying && Math.abs(e.deltaX) > 0) {
+        this.followMode = false
+      }
     }
 
     this.resize()
