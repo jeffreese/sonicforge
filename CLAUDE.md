@@ -105,17 +105,7 @@ docs/plans/     — Development plans, backlog, and task breakdowns
 
 ## ADRs
 
-Architectural decisions are documented in `docs/adrs/`. Key decisions:
-
-- **ADR-001**: Lit over React (no virtual DOM, web standards, small footprint)
-- **ADR-002**: Tailwind with design token abstraction (semantic style maps, not raw classes)
-- **ADR-003**: Light DOM for all components (Tailwind needs global stylesheet access)
-- **ADR-004**: Reactive stores (four typed stores bridging engine and UI)
-- **ADR-005**: Integrated timeline/editor (single `<sf-arrangement>` component)
-- **ADR-006**: Command pattern for undo/redo (reversible commands via dispatch)
-- **ADR-007**: WAV + OGG export (browser-native encoding, no external libs)
-
-When making architectural decisions during development, capture them with `/forge:adr`.
+Architectural decisions are documented in `docs/adrs/`. Read them when making related architectural choices. Capture new decisions with `/forge:adr`.
 
 ## Forge Plugin
 

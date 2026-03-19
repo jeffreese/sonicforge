@@ -19,3 +19,4 @@ ADR-001: Lit was chosen because Tone.js manages its own audio state and React's 
 - Component files named `sf-component-name.ts` in `src/ui/`
 - Use reactive properties (`@property`, `@state`) for component state
 - Import store singletons directly (e.g., `import { transportStore } from '../stores/TransportStore'`)
+- Compute derived state in `willUpdate()`, not `updated()` — values set in `updated()` aren't available during `render()` on the same cycle, causing stale templates
