@@ -160,6 +160,15 @@ export const arrangement = {
   container: 'bg-surface border border-border rounded-lg p-4',
   heading: 'text-on-surface text-sm font-medium mb-2',
   canvas: 'block w-full cursor-pointer rounded-md',
+  trackSelector: 'flex gap-1 mt-2 overflow-x-auto py-1',
+  trackBtn:
+    'px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted hover:text-on-surface hover:bg-surface-hover whitespace-nowrap',
+  trackBtnActive:
+    'px-2 py-1 rounded text-xs transition-colors bg-primary text-on-primary whitespace-nowrap',
+  trackBtnAll:
+    'px-2 py-1 rounded text-xs transition-colors text-muted hover:text-on-surface hover:bg-surface-hover border border-border whitespace-nowrap',
+  trackBtnAllActive:
+    'px-2 py-1 rounded text-xs transition-colors text-on-surface bg-surface-hover border border-border whitespace-nowrap',
 }
 
 export const notePalette = [

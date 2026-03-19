@@ -72,6 +72,63 @@ export function durationToSeconds(duration: string, bpm: number): number {
 }
 
 /**
+ * Convert bar:beat:sixteenth to absolute beat position (float).
+ * A "beat" here is one beat of the time signature numerator.
+ * barOffset shifts the bar origin (for placing notes within a section that starts at a given bar).
+ */
+export function timeToBeats(time: string, beatsPerBar: number, barOffset = 0): number {
+  const { bar, beat, sixteenth } = parseTime(time)
+  return (bar + barOffset) * beatsPerBar + beat + sixteenth / 4
+}
+
+/**
+ * Convert a duration notation to beats.
+ * Supports: "1n", "2n", "4n", "8n", "16n", "32n" and dotted variants ("4n."),
+ * as well as "bar:beat:sixteenth" format.
+ */
+export function durationToBeats(duration: string, beatsPerBar: number): number {
+  // Handle bar:beat:sixteenth format
+  if (duration.includes(':')) {
+    const { bar, beat, sixteenth } = parseTime(duration)
+    return bar * beatsPerBar + beat + sixteenth / 4
+  }
+
+  const dotted = duration.endsWith('.')
+  const base = dotted ? duration.slice(0, -1) : duration
+
+  // Note values relative to a quarter note (1 beat in 4/4)
+  let beats: number
+  switch (base) {
+    case '1n':
+      beats = 4
+      break
+    case '2n':
+      beats = 2
+      break
+    case '4n':
+      beats = 1
+      break
+    case '8n':
+      beats = 0.5
+      break
+    case '16n':
+      beats = 0.25
+      break
+    case '32n':
+      beats = 0.125
+      break
+    default:
+      beats = 1 // fallback to quarter note
+  }
+
+  if (dotted) {
+    beats *= 1.5
+  }
+
+  return beats
+}
+
+/**
  * Compute total bars for a section, including repeats.
  */
 export function sectionTotalBars(bars: number, repeat?: number): number {
