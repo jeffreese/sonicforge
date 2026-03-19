@@ -7,6 +7,7 @@ vi.mock('../engine/instance', () => ({
     pause: vi.fn(),
     stop: vi.fn(),
     seekToSection: vi.fn(),
+    seekToBeat: vi.fn(),
     setLoopSection: vi.fn(),
     swapSample: vi.fn().mockResolvedValue(undefined),
     load: vi.fn().mockResolvedValue(undefined),
@@ -77,6 +78,17 @@ describe('sf-app', () => {
       new CustomEvent('arrangement-seek', { bubbles: true, detail: { sectionIndex: 2 } }),
     )
     expect(engine.seekToSection).toHaveBeenCalledWith(2)
+  })
+
+  it('handles arrangement-seek-beat event', async () => {
+    const el = createElement()
+    await el.updateComplete
+
+    const arr = el.querySelector('sf-arrangement') as HTMLElement
+    arr.dispatchEvent(
+      new CustomEvent('arrangement-seek-beat', { bubbles: true, detail: { beat: 8.5 } }),
+    )
+    expect(engine.seekToBeat).toHaveBeenCalledWith(8.5)
   })
 
   it('handles arrangement-loop event', async () => {

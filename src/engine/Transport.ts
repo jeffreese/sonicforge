@@ -117,6 +117,15 @@ export class Transport {
     Tone.getTransport().position = `${offset.startBar}:0:0`
   }
 
+  seekToBeat(beat: number): void {
+    const beatsPerBar = this.metadata?.timeSignature[0] ?? 4
+    const bar = Math.floor(beat / beatsPerBar)
+    const remainder = beat - bar * beatsPerBar
+    const beatPart = Math.floor(remainder)
+    const sixteenth = Math.round((remainder - beatPart) * 4)
+    Tone.getTransport().position = `${bar}:${beatPart}:${sixteenth}`
+  }
+
   /** Toggle looping on a single section. Pass null to clear the loop. */
   setLoopSection(index: number | null): void {
     const transport = Tone.getTransport()

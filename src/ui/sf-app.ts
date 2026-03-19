@@ -4,7 +4,7 @@ import { engine } from '../engine/instance'
 import type { SonicForgeComposition } from '../schema/composition'
 import { mixerStore } from '../stores/MixerStore'
 import { bridgeCompositionToStores, createMixerSink } from '../stores/bridge'
-import { surface, text } from '../styles/components'
+import { app, text } from '../styles/components'
 import './sf-arrangement'
 import './sf-composition-loader'
 import './sf-mixer'
@@ -91,6 +91,10 @@ export class SfApp extends LitElement {
     engine.seekToSection(e.detail.sectionIndex)
   }
 
+  private handleSeekBeat(e: CustomEvent<{ beat: number }>): void {
+    engine.seekToBeat(e.detail.beat)
+  }
+
   private handleLoop(e: CustomEvent<{ sectionIndex: number | null }>): void {
     engine.setLoopSection(e.detail.sectionIndex)
   }
@@ -112,20 +116,40 @@ export class SfApp extends LitElement {
   render() {
     return html`
       <div
-        class="${surface.base} min-h-screen"
+        class="${app.shell}"
         @composition-load=${this.handleCompositionLoad}
         @arrangement-seek=${this.handleSeek}
+        @arrangement-seek-beat=${this.handleSeekBeat}
         @arrangement-loop=${this.handleLoop}
         @sample-select=${this.handleSampleSelect}
         @sample-preview=${this.handleSamplePreview}
       >
-        <sf-transport-bar></sf-transport-bar>
+        <div class="${app.header}">
+          <sf-transport-bar></sf-transport-bar>
+          ${this.renderCompositionInfo()}
+        </div>
         <sf-arrangement></sf-arrangement>
-        ${this.renderCompositionInfo()}
-        <sf-mixer></sf-mixer>
-        <sf-sample-explorer></sf-sample-explorer>
-        <sf-composition-loader></sf-composition-loader>
+        <div class="${app.footer}">
+          <sf-mixer></sf-mixer>
+          <sf-sample-explorer></sf-sample-explorer>
+          <sf-composition-loader></sf-composition-loader>
+          ${this.renderControlsLegend()}
+        </div>
         <sf-sample-picker></sf-sample-picker>
+      </div>
+    `
+  }
+
+  private renderControlsLegend() {
+    const key = app.controlsKey
+    return html`
+      <div class="${app.controlsLegend}">
+        <span><span class="${key}">Space</span> play/pause</span>
+        <span><span class="${key}">Scroll</span> pan</span>
+        <span><span class="${key}">⌘+scroll</span> zoom time</span>
+        <span><span class="${key}">⇧+scroll</span> zoom pitch</span>
+        <span><span class="${key}">Click</span> seek</span>
+        <span><span class="${key}">Dbl-click</span> loop section</span>
       </div>
     `
   }

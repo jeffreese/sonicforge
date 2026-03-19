@@ -133,6 +133,10 @@ export class Engine {
     this.transport.seekToSection(index)
   }
 
+  seekToBeat(beat: number): void {
+    this.transport.seekToBeat(beat)
+  }
+
   setLoopSection(index: number | null): void {
     this.transport.setLoopSection(index)
   }

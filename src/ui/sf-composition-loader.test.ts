@@ -30,6 +30,20 @@ function createElement(): SfCompositionLoader {
   return el
 }
 
+function getToggle(el: SfCompositionLoader): HTMLElement {
+  const spans = el.querySelectorAll('span')
+  for (const span of spans) {
+    const text = span.textContent?.trim()
+    if (text === 'Show' || text === 'Hide') return span
+  }
+  throw new Error('Toggle span not found')
+}
+
+async function expand(el: SfCompositionLoader): Promise<void> {
+  getToggle(el).click()
+  await el.updateComplete
+}
+
 function getTextarea(el: SfCompositionLoader): HTMLTextAreaElement {
   const ta = el.querySelector('textarea')
   expect(ta).not.toBeNull()
@@ -37,9 +51,19 @@ function getTextarea(el: SfCompositionLoader): HTMLTextAreaElement {
 }
 
 function getLoadButton(el: SfCompositionLoader): HTMLButtonElement {
-  const btn = el.querySelector('button')
-  expect(btn).not.toBeNull()
-  return btn as HTMLButtonElement
+  const buttons = el.querySelectorAll('button')
+  for (const b of buttons) {
+    if (b.textContent?.trim() === 'Load & Play') return b
+  }
+  throw new Error('Load & Play button not found')
+}
+
+function getUploadButton(el: SfCompositionLoader): HTMLButtonElement {
+  const buttons = el.querySelectorAll('button')
+  for (const b of buttons) {
+    if (b.textContent?.trim() === 'Upload File') return b
+  }
+  throw new Error('Upload File button not found')
 }
 
 afterEach(() => {
@@ -56,20 +80,38 @@ describe('sf-composition-loader', () => {
     expect(el.shadowRoot).toBeNull()
   })
 
-  it('renders textarea and buttons after update', async () => {
+  it('starts collapsed with header and upload button visible', async () => {
     const el = createElement()
     await el.updateComplete
+    expect(el.querySelector('h2')?.textContent).toBe('Load Composition')
+    expect(getUploadButton(el)).not.toBeNull()
+    expect(el.querySelector('textarea')).toBeNull()
+  })
+
+  it('expands popover on toggle click to show textarea', async () => {
+    const el = createElement()
+    await el.updateComplete
+    await expand(el)
+
     expect(el.querySelector('textarea')).not.toBeNull()
-    expect(el.querySelector('button')).not.toBeNull()
-    const buttons = el.querySelectorAll('button')
-    expect(buttons.length).toBe(2)
-    expect(buttons[0].textContent).toBe('Load & Play')
-    expect(buttons[1].textContent).toBe('Upload File')
+    expect(getLoadButton(el)).not.toBeNull()
+  })
+
+  it('collapses on second toggle click', async () => {
+    const el = createElement()
+    await el.updateComplete
+    await expand(el)
+    expect(el.querySelector('textarea')).not.toBeNull()
+
+    getToggle(el).click()
+    await el.updateComplete
+    expect(el.querySelector('textarea')).toBeNull()
   })
 
   it('dispatches composition-load event with valid JSON', async () => {
     const el = createElement()
     await el.updateComplete
+    await expand(el)
 
     const handler = vi.fn()
     el.addEventListener('composition-load', handler)
@@ -80,12 +122,24 @@ describe('sf-composition-loader', () => {
     expect(handler).toHaveBeenCalledOnce()
     const detail = handler.mock.calls[0][0].detail
     expect(JSON.parse(detail.json)).toEqual(validComposition)
-    expect(el.querySelector('pre')).toBeNull()
+  })
+
+  it('collapses popover on successful load', async () => {
+    const el = createElement()
+    await el.updateComplete
+    await expand(el)
+
+    getTextarea(el).value = JSON.stringify(validComposition)
+    getLoadButton(el).click()
+    await el.updateComplete
+
+    expect(el.querySelector('textarea')).toBeNull()
   })
 
   it('shows parse error for invalid JSON', async () => {
     const el = createElement()
     await el.updateComplete
+    await expand(el)
 
     getTextarea(el).value = '{ not valid json'
     getLoadButton(el).click()
@@ -99,6 +153,7 @@ describe('sf-composition-loader', () => {
   it('shows error for empty textarea', async () => {
     const el = createElement()
     await el.updateComplete
+    await expand(el)
 
     getTextarea(el).value = ''
     getLoadButton(el).click()
@@ -133,6 +188,7 @@ describe('sf-composition-loader', () => {
   it('clears error on successful load', async () => {
     const el = createElement()
     await el.updateComplete
+    await expand(el)
 
     // First trigger an error
     getTextarea(el).value = ''

@@ -156,10 +156,20 @@ export const picker = {
     'text-muted hover:text-on-surface text-xs px-1.5 py-0.5 rounded hover:bg-surface-hover transition-colors',
 }
 
+export const app = {
+  shell: 'bg-surface text-on-surface h-screen flex flex-col overflow-hidden',
+  header: 'flex-shrink-0',
+  center: 'flex-1 min-h-0 overflow-hidden flex flex-col',
+  footer: 'flex-shrink-0',
+  controlsLegend:
+    'flex items-center justify-center gap-4 px-4 py-1.5 border-t border-border text-muted text-[11px]',
+  controlsKey: 'text-on-surface/70 font-medium',
+}
+
 export const arrangement = {
-  container: 'bg-surface border border-border rounded-lg p-4',
-  heading: 'text-on-surface text-sm font-medium mb-2',
-  canvas: 'block w-full cursor-pointer rounded-md',
+  container: 'flex-1 min-h-0 flex flex-col bg-surface border-y border-border px-4 py-2',
+  heading: 'text-on-surface text-sm font-medium mb-1 flex-shrink-0',
+  canvas: 'block w-full flex-1 min-h-0 cursor-pointer',
   trackSelector: 'flex gap-1 mt-2 overflow-x-auto py-1',
   trackBtn:
     'px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted hover:text-on-surface hover:bg-surface-hover whitespace-nowrap',
