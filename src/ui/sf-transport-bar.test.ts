@@ -41,11 +41,11 @@ describe('sf-transport-bar', () => {
     expect(el.shadowRoot).toBeNull()
   })
 
-  it('renders three buttons', async () => {
+  it('renders four buttons (play, pause, stop, follow)', async () => {
     const el = createElement()
     await el.updateComplete
     const buttons = el.querySelectorAll('button')
-    expect(buttons.length).toBe(3)
+    expect(buttons.length).toBe(4)
   })
 
   it('all buttons disabled when engineState is empty', async () => {

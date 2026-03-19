@@ -32,6 +32,14 @@ export class Transport {
     return Tone.getTransport().state === 'started'
   }
 
+  /** Current playback position as an absolute beat number (float). */
+  getPositionBeats(): number {
+    const beatsPerBar = this.metadata?.timeSignature[0] ?? 4
+    const pos = Tone.getTransport().position as string
+    const parts = pos.split(':').map(Number)
+    return (parts[0] ?? 0) * beatsPerBar + (parts[1] ?? 0) + (parts[2] ?? 0) / 4
+  }
+
   configure(metadata: Metadata, sections: Section[]): void {
     this.metadata = metadata
     const transport = Tone.getTransport()

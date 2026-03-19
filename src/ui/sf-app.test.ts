@@ -12,6 +12,7 @@ vi.mock('../engine/instance', () => ({
     swapSample: vi.fn().mockResolvedValue(undefined),
     load: vi.fn().mockResolvedValue(undefined),
     getComposition: vi.fn().mockReturnValue(null),
+    getPositionBeats: vi.fn().mockReturnValue(0),
     getMixBus: vi.fn().mockReturnValue({ getStates: () => [], setMasterVolume: vi.fn() }),
     getTransport: vi.fn().mockReturnValue({
       getSectionOffsets: () => [],

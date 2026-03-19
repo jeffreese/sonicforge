@@ -141,6 +141,11 @@ export class Engine {
     this.transport.setLoopSection(index)
   }
 
+  /** Current playback position as absolute beat number (float), for smooth playhead rendering. */
+  getPositionBeats(): number {
+    return this.transport.getPositionBeats()
+  }
+
   getComposition(): SonicForgeComposition | null {
     return this.composition
   }
