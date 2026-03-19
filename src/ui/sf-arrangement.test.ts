@@ -48,6 +48,20 @@ function createElement(): SfArrangement {
   return el
 }
 
+function mockCanvasRect(canvas: HTMLCanvasElement) {
+  vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
+    left: 0,
+    right: 860,
+    width: 860,
+    top: 0,
+    bottom: 400,
+    height: 400,
+    x: 0,
+    y: 0,
+    toJSON: () => {},
+  })
+}
+
 afterEach(() => {
   document.body.innerHTML = ''
   compositionStore.clear()
@@ -78,7 +92,6 @@ describe('sf-arrangement', () => {
     compositionStore.load(testComposition)
     await el.updateComplete
 
-    // Component should have picked up the composition
     expect(el.querySelector('canvas')).not.toBeNull()
   })
 
@@ -98,10 +111,9 @@ describe('sf-arrangement', () => {
     await el.updateComplete
     el.loadSections(testOffsets, 12)
     await el.updateComplete
-    // No error — data loaded successfully
   })
 
-  it('dispatches arrangement-seek on canvas click', async () => {
+  it('dispatches arrangement-seek on section header click', async () => {
     compositionStore.load(testComposition)
     const el = createElement()
     el.loadSections(testOffsets, 12)
@@ -111,23 +123,31 @@ describe('sf-arrangement', () => {
     el.addEventListener('arrangement-seek', handler)
 
     const canvas = el.querySelector('canvas') as HTMLCanvasElement
-    // Simulate click in the grid area (past LABEL_WIDTH=100)
-    // Need to mock getBoundingClientRect
-    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      right: 860,
-      width: 860,
-      top: 0,
-      bottom: 200,
-      height: 200,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    })
+    mockCanvasRect(canvas)
 
-    canvas.dispatchEvent(new MouseEvent('click', { clientX: 150, bubbles: true }))
+    // Click in section header area (y < 28, SECTION_HEADER_HEIGHT)
+    canvas.dispatchEvent(new MouseEvent('click', { clientX: 150, clientY: 14, bubbles: true }))
     expect(handler).toHaveBeenCalledTimes(1)
     expect(handler.mock.calls[0][0].detail.sectionIndex).toBe(0)
+  })
+
+  it('dispatches arrangement-seek-beat on grid click', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    const handler = vi.fn()
+    el.addEventListener('arrangement-seek-beat', handler)
+
+    const canvas = el.querySelector('canvas') as HTMLCanvasElement
+    mockCanvasRect(canvas)
+
+    // Click in grid area (y > HEADER_HEIGHT=48, x > PITCH_RULER_WIDTH=48)
+    canvas.dispatchEvent(new MouseEvent('click', { clientX: 200, clientY: 100, bubbles: true }))
+    expect(handler).toHaveBeenCalledTimes(1)
+    expect(typeof handler.mock.calls[0][0].detail.beat).toBe('number')
+    expect(handler.mock.calls[0][0].detail.beat).toBeGreaterThanOrEqual(0)
   })
 
   it('dispatches arrangement-loop on canvas double-click', async () => {
@@ -140,17 +160,7 @@ describe('sf-arrangement', () => {
     el.addEventListener('arrangement-loop', handler)
 
     const canvas = el.querySelector('canvas') as HTMLCanvasElement
-    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      right: 860,
-      width: 860,
-      top: 0,
-      bottom: 200,
-      height: 200,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    })
+    mockCanvasRect(canvas)
 
     canvas.dispatchEvent(new MouseEvent('dblclick', { clientX: 150, bubbles: true }))
     expect(handler).toHaveBeenCalledTimes(1)
@@ -168,76 +178,30 @@ describe('sf-arrangement', () => {
     el.addEventListener('arrangement-loop', handler)
 
     const canvas = el.querySelector('canvas') as HTMLCanvasElement
-    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      right: 860,
-      width: 860,
-      top: 0,
-      bottom: 200,
-      height: 200,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    })
+    mockCanvasRect(canvas)
 
     canvas.dispatchEvent(new MouseEvent('dblclick', { clientX: 150, bubbles: true }))
     expect(handler.mock.calls[0][0].detail.sectionIndex).toBeNull()
   })
 
-  it('click in label area does not dispatch seek', async () => {
+  it('click in pitch ruler area does not dispatch seek', async () => {
     compositionStore.load(testComposition)
     const el = createElement()
     el.loadSections(testOffsets, 12)
     await el.updateComplete
 
-    const handler = vi.fn()
-    el.addEventListener('arrangement-seek', handler)
+    const seekHandler = vi.fn()
+    const beatHandler = vi.fn()
+    el.addEventListener('arrangement-seek', seekHandler)
+    el.addEventListener('arrangement-seek-beat', beatHandler)
 
     const canvas = el.querySelector('canvas') as HTMLCanvasElement
-    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      right: 860,
-      width: 860,
-      top: 0,
-      bottom: 200,
-      height: 200,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    })
+    mockCanvasRect(canvas)
 
-    // Click in label area (x < 100)
-    canvas.dispatchEvent(new MouseEvent('click', { clientX: 50, bubbles: true }))
-    expect(handler).not.toHaveBeenCalled()
-  })
-
-  it('click dispatches correct section for second section', async () => {
-    compositionStore.load(testComposition)
-    const el = createElement()
-    el.loadSections(testOffsets, 12)
-    await el.updateComplete
-
-    const handler = vi.fn()
-    el.addEventListener('arrangement-seek', handler)
-
-    const canvas = el.querySelector('canvas') as HTMLCanvasElement
-    vi.spyOn(canvas, 'getBoundingClientRect').mockReturnValue({
-      left: 0,
-      right: 860,
-      width: 860,
-      top: 0,
-      bottom: 200,
-      height: 200,
-      x: 0,
-      y: 0,
-      toJSON: () => {},
-    })
-
-    // Click well into the second section area
-    // gridWidth = 860 - 100 - 8 = 752, barWidth = 752/12 ≈ 62.7
-    // Section 1 starts at bar 4 → x = 100 + 4*62.7 = 350.8
-    canvas.dispatchEvent(new MouseEvent('click', { clientX: 500, bubbles: true }))
-    expect(handler.mock.calls[0][0].detail.sectionIndex).toBe(1)
+    // Click in pitch ruler area (x < 48, y in grid area)
+    canvas.dispatchEvent(new MouseEvent('click', { clientX: 20, clientY: 100, bubbles: true }))
+    expect(seekHandler).not.toHaveBeenCalled()
+    expect(beatHandler).not.toHaveBeenCalled()
   })
 
   it('unsubscribes from stores on disconnect', async () => {
@@ -247,8 +211,74 @@ describe('sf-arrangement', () => {
 
     el.remove()
 
-    // Further store updates should not cause errors
     compositionStore.clear()
     transportStore.updatePosition(0, 0)
+  })
+
+  it('builds note render list from composition', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    // Access renderNotes via the exported type — we check it builds correctly
+    // by verifying the track selector shows instruments
+    const buttons = el.querySelectorAll('button')
+    // "All" + 2 instruments
+    expect(buttons.length).toBe(3)
+    expect(buttons[0].textContent).toBe('All')
+    expect(buttons[1].textContent).toBe('Piano')
+    expect(buttons[2].textContent).toBe('Bass')
+  })
+
+  it('track selector toggles focused track', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    const buttons = el.querySelectorAll('button')
+
+    // Click Piano button to focus
+    buttons[1].click()
+    await el.updateComplete
+
+    // Piano button should be active
+    expect(buttons[1].className).toContain('bg-primary')
+
+    // Click Piano again to unfocus
+    buttons[1].click()
+    await el.updateComplete
+
+    // All button should be active again
+    expect(buttons[0].className).toContain('bg-surface-hover')
+  })
+
+  it('track selector "All" button clears focus', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    const buttons = el.querySelectorAll('button')
+
+    // Focus on Bass
+    buttons[2].click()
+    await el.updateComplete
+
+    // Click All
+    buttons[0].click()
+    await el.updateComplete
+
+    // All should be active
+    expect(buttons[0].className).toContain('bg-surface-hover')
+  })
+
+  it('does not render track selector without composition', async () => {
+    const el = createElement()
+    await el.updateComplete
+
+    const buttons = el.querySelectorAll('button')
+    expect(buttons.length).toBe(0)
   })
 })

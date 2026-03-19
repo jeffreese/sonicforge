@@ -1,14 +1,31 @@
 import { LitElement, html, nothing } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { btn, input, loader, panel, state as stateStyles } from '../styles/components'
+import { btn, explorer, input, loader, state as stateStyles } from '../styles/components'
 
 @customElement('sf-composition-loader')
 export class SfCompositionLoader extends LitElement {
   @state() private error: string | null = null
   @state() private dragging = false
+  @state() private expanded = false
 
   createRenderRoot() {
     return this
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.boundCloseOnOutsideClick = this.closeOnOutsideClick.bind(this)
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    document.removeEventListener('mousedown', this.boundCloseOnOutsideClick)
+    document.removeEventListener('keydown', this.boundCloseOnEscape)
+  }
+
+  private boundCloseOnOutsideClick: (e: MouseEvent) => void = () => {}
+  private boundCloseOnEscape: (e: KeyboardEvent) => void = (e) => {
+    if (e.key === 'Escape') this.collapse()
   }
 
   private get textarea(): HTMLTextAreaElement | null {
@@ -17,6 +34,28 @@ export class SfCompositionLoader extends LitElement {
 
   private get fileInput(): HTMLInputElement | null {
     return this.querySelector<HTMLInputElement>('input[type="file"]')
+  }
+
+  private toggleExpanded(): void {
+    if (this.expanded) {
+      this.collapse()
+    } else {
+      this.expanded = true
+      document.addEventListener('mousedown', this.boundCloseOnOutsideClick)
+      document.addEventListener('keydown', this.boundCloseOnEscape)
+    }
+  }
+
+  private collapse(): void {
+    this.expanded = false
+    document.removeEventListener('mousedown', this.boundCloseOnOutsideClick)
+    document.removeEventListener('keydown', this.boundCloseOnEscape)
+  }
+
+  private closeOnOutsideClick(e: MouseEvent): void {
+    if (!this.contains(e.target as Node)) {
+      this.collapse()
+    }
   }
 
   private handleLoad(): void {
@@ -61,6 +100,7 @@ export class SfCompositionLoader extends LitElement {
     try {
       JSON.parse(json) // Validate it's valid JSON first
       this.error = null
+      this.collapse()
       this.dispatchEvent(
         new CustomEvent('composition-load', {
           bubbles: true,
@@ -79,21 +119,18 @@ export class SfCompositionLoader extends LitElement {
   render() {
     return html`
       <div
-        class="${panel.base} relative"
+        class="${explorer.container} relative"
         @dragover=${this.handleDragOver}
         @dragleave=${this.handleDragLeave}
         @drop=${this.handleDrop}
       >
-        <div class="${panel.header}">Load Composition</div>
-        <div class="${panel.body}">
-          <textarea
-            class="${input.textarea} w-full mb-3"
-            rows="12"
-            placeholder="Paste composition JSON here..."
-          ></textarea>
-          <div class="flex gap-2 mb-3">
-            <button class=${btn.primary} @click=${this.handleLoad}>Load & Play</button>
-            <button class=${btn.ghost} @click=${() => this.fileInput?.click()}>Upload File</button>
+        <div class="${explorer.header}">
+          <h2 class="${explorer.heading}">Load Composition</h2>
+          <div class="flex items-center gap-2">
+            <button class=${btn.ghost} @click=${(e: Event) => {
+              e.stopPropagation()
+              this.fileInput?.click()
+            }}>Upload File</button>
             <input
               type="file"
               accept=".json"
@@ -103,18 +140,39 @@ export class SfCompositionLoader extends LitElement {
                 if (file) this.handleFile(file)
               }}
             />
+            <span class="${explorer.toggle}" @click=${this.toggleExpanded}>
+              ${this.expanded ? 'Hide' : 'Show'}
+            </span>
           </div>
-          ${
-            this.error
-              ? html`<pre class="${stateStyles.error} text-sm whitespace-pre-wrap">${this.error}</pre>`
-              : nothing
-          }
         </div>
+        ${this.expanded ? this.renderPopover() : nothing}
         ${
           this.dragging
             ? html`<div class=${loader.dropzone}>
               <span class=${loader.dropzoneText}>Drop JSON file here</span>
             </div>`
+            : nothing
+        }
+      </div>
+    `
+  }
+
+  private renderPopover() {
+    return html`
+      <div class="absolute bottom-full left-0 right-0 mb-1 bg-surface-elevated border border-border rounded-lg shadow-lg p-4 z-40"
+        @mousedown=${(e: Event) => e.stopPropagation()}
+      >
+        <textarea
+          class="${input.textarea} w-full mb-3"
+          rows="8"
+          placeholder="Paste composition JSON here..."
+        ></textarea>
+        <div class="flex gap-2">
+          <button class=${btn.primary} @click=${this.handleLoad}>Load & Play</button>
+        </div>
+        ${
+          this.error
+            ? html`<pre class="${stateStyles.error} text-sm whitespace-pre-wrap mt-3">${this.error}</pre>`
             : nothing
         }
       </div>
