@@ -14,11 +14,20 @@ import './sf-transport-bar'
 import type { SfArrangement } from './sf-arrangement'
 import type { SfTransportBar } from './sf-transport-bar'
 
+const FOOTER_MIN = 180
+const ARRANGEMENT_MIN = 150
+const HANDLE_HEIGHT = 6
+const STORAGE_KEY = 'sf-footer-height'
+
 @customElement('sf-app')
 export class SfApp extends LitElement {
   @state() private compositionInfo: SonicForgeComposition | null = null
+  @state() private footerHeight = Number(localStorage.getItem(STORAGE_KEY)) || 240
+  @state() private isDragging = false
 
   private boundKeyDown = (e: KeyboardEvent) => this.handleKeyDown(e)
+  private boundMouseMove = (e: MouseEvent) => this.handleResizeMove(e)
+  private boundMouseUp = () => this.handleResizeEnd()
 
   createRenderRoot() {
     return this
@@ -33,6 +42,40 @@ export class SfApp extends LitElement {
   disconnectedCallback(): void {
     super.disconnectedCallback()
     document.removeEventListener('keydown', this.boundKeyDown)
+    if (this.isDragging) {
+      this.isDragging = false
+      document.body.style.userSelect = ''
+      document.body.style.cursor = ''
+      document.removeEventListener('mousemove', this.boundMouseMove)
+      document.removeEventListener('mouseup', this.boundMouseUp)
+    }
+  }
+
+  private handleResizeStart(e: MouseEvent): void {
+    e.preventDefault()
+    this.isDragging = true
+    document.body.style.userSelect = 'none'
+    document.body.style.cursor = 'row-resize'
+    document.addEventListener('mousemove', this.boundMouseMove)
+    document.addEventListener('mouseup', this.boundMouseUp)
+  }
+
+  private handleResizeMove(e: MouseEvent): void {
+    if (!this.isDragging) return
+    const header = this.querySelector(`.${app.header.split(' ')[0]}`) as HTMLElement | null
+    const headerHeight = header?.offsetHeight ?? 0
+    const maxFooter = window.innerHeight - headerHeight - HANDLE_HEIGHT - ARRANGEMENT_MIN
+    const newHeight = window.innerHeight - e.clientY
+    this.footerHeight = Math.max(FOOTER_MIN, Math.min(maxFooter, newHeight))
+  }
+
+  private handleResizeEnd(): void {
+    this.isDragging = false
+    document.body.style.userSelect = ''
+    document.body.style.cursor = ''
+    document.removeEventListener('mousemove', this.boundMouseMove)
+    document.removeEventListener('mouseup', this.boundMouseUp)
+    localStorage.setItem(STORAGE_KEY, String(Math.round(this.footerHeight)))
   }
 
   private handleKeyDown(e: KeyboardEvent): void {
@@ -146,8 +189,12 @@ export class SfApp extends LitElement {
           <sf-transport-bar></sf-transport-bar>
           ${this.renderCompositionInfo()}
         </div>
-        <sf-arrangement></sf-arrangement>
-        <div class="${app.footer}">
+        <sf-arrangement class="flex-1 min-h-0 flex flex-col" style="min-height:${ARRANGEMENT_MIN}px"></sf-arrangement>
+        <div
+          class="${this.isDragging ? app.resizeHandleActive : app.resizeHandle}"
+          @mousedown=${this.handleResizeStart}
+        ></div>
+        <div class="${app.footer}" style="height:${this.footerHeight}px">
           <sf-mixer></sf-mixer>
           <sf-sample-explorer></sf-sample-explorer>
           <sf-composition-loader></sf-composition-loader>
