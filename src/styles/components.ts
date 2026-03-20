@@ -160,14 +160,17 @@ export const app = {
   shell: 'bg-surface text-on-surface h-screen flex flex-col overflow-hidden',
   header: 'flex-shrink-0',
   center: 'flex-1 min-h-0 overflow-hidden flex flex-col',
-  footer: 'flex-shrink-0',
+  footer: 'flex-shrink-0 overflow-y-auto',
+  resizeHandle:
+    'flex-shrink-0 h-1.5 cursor-row-resize bg-border/50 hover:bg-primary/50 transition-colors relative group',
+  resizeHandleActive: 'flex-shrink-0 h-1.5 cursor-row-resize bg-primary/70 relative group',
   controlsLegend:
     'flex items-center justify-center gap-4 px-4 py-1.5 border-t border-border text-muted text-[11px]',
   controlsKey: 'text-on-surface/70 font-medium',
 }
 
 export const arrangement = {
-  container: 'flex-1 min-h-0 flex flex-col bg-surface border-y border-border px-4 py-2',
+  container: 'h-full flex flex-col bg-surface border-y border-border px-4 py-2',
   heading: 'text-on-surface text-sm font-medium mb-1 flex-shrink-0',
   canvas: 'block w-full flex-1 min-h-0 cursor-pointer',
   trackSelector: 'flex gap-1 mt-2 overflow-x-auto py-1',
