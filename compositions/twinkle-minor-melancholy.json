@@ -1,0 +1,478 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "title": "Twinkle, Twinkle (A Minor Lament)",
+    "bpm": 66,
+    "timeSignature": [4, 4],
+    "key": "Am",
+    "description": "A melancholy reimagining of Twinkle Twinkle Little Star in A minor. Sparse music box and piano, with cello and strings building quiet despair."
+  },
+  "instruments": [
+    {
+      "id": "music-box",
+      "name": "Music Box",
+      "sample": "music_box",
+      "category": "melodic",
+      "defaultVolume": 55,
+      "defaultPan": 0.1,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 4.0, "wet": 0.5 } },
+        { "type": "delay", "params": { "delayTime": 0.4, "feedback": 0.25, "wet": 0.2 } }
+      ]
+    },
+    {
+      "id": "piano",
+      "name": "Piano",
+      "sample": "acoustic_grand_piano",
+      "category": "melodic",
+      "defaultVolume": 70,
+      "defaultPan": -0.05,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 3.5, "wet": 0.35 } }
+      ]
+    },
+    {
+      "id": "cello",
+      "name": "Cello",
+      "sample": "cello",
+      "category": "melodic",
+      "defaultVolume": 65,
+      "defaultPan": -0.15,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 3.0, "wet": 0.3 } }
+      ]
+    },
+    {
+      "id": "strings",
+      "name": "String Ensemble",
+      "sample": "string_ensemble_1",
+      "category": "pad",
+      "defaultVolume": 45,
+      "defaultPan": 0,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 5.0, "wet": 0.5 } }
+      ]
+    },
+    {
+      "id": "bass",
+      "name": "Contrabass",
+      "sample": "contrabass",
+      "category": "bass",
+      "defaultVolume": 60,
+      "defaultPan": 0,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 2.0, "wet": 0.2 } }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "name": "Intro",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "music-box",
+          "notes": [
+            { "pitch": "A4", "time": "0:0:0", "duration": "4n", "velocity": 50 },
+            { "pitch": "A4", "time": "0:1:0", "duration": "4n", "velocity": 45 },
+            { "pitch": "E5", "time": "0:2:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "E5", "time": "0:3:0", "duration": "4n", "velocity": 48 },
+            { "pitch": "F5", "time": "1:0:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "F5", "time": "1:1:0", "duration": "4n", "velocity": 50 },
+            { "pitch": "E5", "time": "1:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "D5", "time": "2:0:0", "duration": "4n", "velocity": 48 },
+            { "pitch": "D5", "time": "2:1:0", "duration": "4n", "velocity": 44 },
+            { "pitch": "C5", "time": "2:2:0", "duration": "4n", "velocity": 50 },
+            { "pitch": "C5", "time": "2:3:0", "duration": "4n", "velocity": 45 },
+            { "pitch": "B4", "time": "3:0:0", "duration": "4n", "velocity": 52 },
+            { "pitch": "B4", "time": "3:1:0", "duration": "4n", "velocity": 46 },
+            { "pitch": "A4", "time": "3:2:0", "duration": "2n", "velocity": 38 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "pp", "type": "sudden" },
+            { "time": "2:0:0", "level": "ppp", "type": "decrescendo", "duration": "2n" }
+          ]
+        },
+        {
+          "instrumentId": "strings",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n+1n", "velocity": 25 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n+1n", "velocity": 22 },
+            { "pitch": "D4", "time": "2:0:0", "duration": "1n+1n", "velocity": 28 },
+            { "pitch": "F4", "time": "2:0:0", "duration": "1n+1n", "velocity": 25 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "ppp", "type": "sudden" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "verse-1",
+      "name": "Verse 1 — Twinkle, Twinkle",
+      "bars": 12,
+      "tracks": [
+        {
+          "instrumentId": "piano",
+          "notes": [
+            { "pitch": "A4", "time": "0:0:0", "duration": "4n", "velocity": 62 },
+            { "pitch": "A4", "time": "0:1:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "E5", "time": "0:2:0", "duration": "4n", "velocity": 68 },
+            { "pitch": "E5", "time": "0:3:0", "duration": "4n", "velocity": 60 },
+            { "pitch": "F5", "time": "1:0:0", "duration": "4n", "velocity": 72 },
+            { "pitch": "F5", "time": "1:1:0", "duration": "4n", "velocity": 64 },
+            { "pitch": "E5", "time": "1:2:0", "duration": "2n", "velocity": 55, "articulation": "tenuto" },
+            { "pitch": "D5", "time": "2:0:0", "duration": "4n", "velocity": 65 },
+            { "pitch": "D5", "time": "2:1:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "C5", "time": "2:2:0", "duration": "4n", "velocity": 62 },
+            { "pitch": "C5", "time": "2:3:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "B4", "time": "3:0:0", "duration": "4n", "velocity": 60 },
+            { "pitch": "B4", "time": "3:1:0", "duration": "4n", "velocity": 52 },
+            { "pitch": "A4", "time": "3:2:0", "duration": "2n", "velocity": 48, "articulation": "tenuto" },
+
+            { "pitch": "E5", "time": "4:0:0", "duration": "4n", "velocity": 60 },
+            { "pitch": "E5", "time": "4:1:0", "duration": "4n", "velocity": 54 },
+            { "pitch": "D5", "time": "4:2:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "D5", "time": "4:3:0", "duration": "4n", "velocity": 52 },
+            { "pitch": "C5", "time": "5:0:0", "duration": "4n", "velocity": 56 },
+            { "pitch": "C5", "time": "5:1:0", "duration": "4n", "velocity": 50 },
+            { "pitch": "B4", "time": "5:2:0", "duration": "2n", "velocity": 45, "articulation": "tenuto" },
+
+            { "pitch": "E5", "time": "6:0:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "E5", "time": "6:1:0", "duration": "4n", "velocity": 52 },
+            { "pitch": "D5", "time": "6:2:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "D5", "time": "6:3:0", "duration": "4n", "velocity": 50 },
+            { "pitch": "C5", "time": "7:0:0", "duration": "4n", "velocity": 54 },
+            { "pitch": "C5", "time": "7:1:0", "duration": "4n", "velocity": 48 },
+            { "pitch": "B4", "time": "7:2:0", "duration": "2n", "velocity": 42, "articulation": "tenuto" },
+
+            { "pitch": "A4", "time": "8:0:0", "duration": "4n", "velocity": 65 },
+            { "pitch": "A4", "time": "8:1:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "E5", "time": "8:2:0", "duration": "4n", "velocity": 70 },
+            { "pitch": "E5", "time": "8:3:0", "duration": "4n", "velocity": 62 },
+            { "pitch": "F5", "time": "9:0:0", "duration": "4n", "velocity": 74 },
+            { "pitch": "F5", "time": "9:1:0", "duration": "4n", "velocity": 66 },
+            { "pitch": "E5", "time": "9:2:0", "duration": "2n", "velocity": 58, "articulation": "tenuto" },
+            { "pitch": "D5", "time": "10:0:0", "duration": "4n", "velocity": 62 },
+            { "pitch": "D5", "time": "10:1:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "C5", "time": "10:2:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "C5", "time": "10:3:0", "duration": "4n", "velocity": 52 },
+            { "pitch": "B4", "time": "11:0:0", "duration": "4n", "velocity": 56 },
+            { "pitch": "B4", "time": "11:1:0", "duration": "4n", "velocity": 48 },
+            { "pitch": "A4", "time": "11:2:0", "duration": "2n", "velocity": 42, "articulation": "tenuto" }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "mp", "type": "sudden" },
+            { "time": "4:0:0", "level": "p", "type": "decrescendo", "duration": "1n" },
+            { "time": "8:0:0", "level": "mp", "type": "crescendo", "duration": "2n" },
+            { "time": "10:0:0", "level": "p", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "piano",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "E3", "time": "0:2:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "F3", "time": "1:0:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "C4", "time": "1:0:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "E3", "time": "1:2:0", "duration": "2n", "velocity": 45 },
+            { "pitch": "B3", "time": "1:2:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "D3", "time": "2:0:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "F3", "time": "2:0:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "C3", "time": "2:2:0", "duration": "2n", "velocity": 45 },
+            { "pitch": "E3", "time": "2:2:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "E3", "time": "3:0:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "G#3", "time": "3:0:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "A2", "time": "3:2:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "E3", "time": "3:2:0", "duration": "2n", "velocity": 38 },
+
+            { "pitch": "C3", "time": "4:0:0", "duration": "2n", "velocity": 45 },
+            { "pitch": "G3", "time": "4:0:0", "duration": "2n", "velocity": 38 },
+            { "pitch": "G3", "time": "4:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "B3", "time": "4:2:0", "duration": "2n", "velocity": 36 },
+            { "pitch": "F3", "time": "5:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "A3", "time": "5:0:0", "duration": "2n", "velocity": 38 },
+            { "pitch": "E3", "time": "5:2:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "G#3", "time": "5:2:0", "duration": "2n", "velocity": 35 },
+
+            { "pitch": "C3", "time": "6:0:0", "duration": "2n", "velocity": 43 },
+            { "pitch": "G3", "time": "6:0:0", "duration": "2n", "velocity": 36 },
+            { "pitch": "G3", "time": "6:2:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "B3", "time": "6:2:0", "duration": "2n", "velocity": 34 },
+            { "pitch": "F3", "time": "7:0:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "A3", "time": "7:0:0", "duration": "2n", "velocity": 36 },
+            { "pitch": "E3", "time": "7:2:0", "duration": "2n", "velocity": 38 },
+            { "pitch": "G#3", "time": "7:2:0", "duration": "2n", "velocity": 33 },
+
+            { "pitch": "A3", "time": "8:0:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "E3", "time": "8:2:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "F3", "time": "9:0:0", "duration": "2n", "velocity": 54 },
+            { "pitch": "C4", "time": "9:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "E3", "time": "9:2:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "B3", "time": "9:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "D3", "time": "10:0:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "F3", "time": "10:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "C3", "time": "10:2:0", "duration": "2n", "velocity": 46 },
+            { "pitch": "E3", "time": "10:2:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "E3", "time": "11:0:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "G#3", "time": "11:0:0", "duration": "2n", "velocity": 40 },
+            { "pitch": "A2", "time": "11:2:0", "duration": "2n", "velocity": 38 },
+            { "pitch": "E3", "time": "11:2:0", "duration": "2n", "velocity": 34 }
+          ]
+        },
+        {
+          "instrumentId": "cello",
+          "notes": [
+            { "pitch": "A3", "time": "4:0:0", "duration": "1n", "velocity": 50, "articulation": "legato" },
+            { "pitch": "F3", "time": "5:0:0", "duration": "1n", "velocity": 52, "articulation": "legato" },
+            { "pitch": "C3", "time": "6:0:0", "duration": "1n", "velocity": 48, "articulation": "legato" },
+            { "pitch": "E3", "time": "7:0:0", "duration": "1n", "velocity": 55, "articulation": "legato" },
+            { "pitch": "A3", "time": "8:0:0", "duration": "1n", "velocity": 58, "articulation": "legato" },
+            { "pitch": "F3", "time": "9:0:0", "duration": "1n", "velocity": 60, "articulation": "legato" },
+            { "pitch": "D3", "time": "10:0:0", "duration": "1n", "velocity": 55, "articulation": "legato" },
+            { "pitch": "E3", "time": "11:0:0", "duration": "2n", "velocity": 50, "articulation": "legato" },
+            { "pitch": "A2", "time": "11:2:0", "duration": "2n", "velocity": 42, "articulation": "tenuto" }
+          ],
+          "dynamics": [
+            { "time": "4:0:0", "level": "p", "type": "sudden" },
+            { "time": "8:0:0", "level": "mp", "type": "crescendo", "duration": "1n" },
+            { "time": "10:0:0", "level": "p", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "strings",
+          "notes": [
+            { "pitch": "A3", "time": "4:0:0", "duration": "1n+1n", "velocity": 30 },
+            { "pitch": "C4", "time": "4:0:0", "duration": "1n+1n", "velocity": 28 },
+            { "pitch": "F3", "time": "6:0:0", "duration": "1n+1n", "velocity": 32 },
+            { "pitch": "A3", "time": "6:0:0", "duration": "1n+1n", "velocity": 30 },
+            { "pitch": "A3", "time": "8:0:0", "duration": "1n+1n", "velocity": 38 },
+            { "pitch": "C4", "time": "8:0:0", "duration": "1n+1n", "velocity": 35 },
+            { "pitch": "E4", "time": "8:0:0", "duration": "1n+1n", "velocity": 32 },
+            { "pitch": "D4", "time": "10:0:0", "duration": "1n+1n", "velocity": 34 },
+            { "pitch": "F4", "time": "10:0:0", "duration": "1n+1n", "velocity": 30 },
+            { "pitch": "A3", "time": "10:0:0", "duration": "1n+1n", "velocity": 28 }
+          ],
+          "dynamics": [
+            { "time": "4:0:0", "level": "pp", "type": "sudden" },
+            { "time": "8:0:0", "level": "p", "type": "crescendo", "duration": "1n" },
+            { "time": "10:0:0", "level": "pp", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "bass",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:0", "duration": "1n", "velocity": 45 },
+            { "pitch": "F2", "time": "1:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "D2", "time": "2:0:0", "duration": "1n", "velocity": 44 },
+            { "pitch": "E2", "time": "3:0:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "A1", "time": "3:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "C2", "time": "4:0:0", "duration": "1n", "velocity": 44 },
+            { "pitch": "F2", "time": "5:0:0", "duration": "1n", "velocity": 46 },
+            { "pitch": "C2", "time": "6:0:0", "duration": "1n", "velocity": 42 },
+            { "pitch": "E2", "time": "7:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "A1", "time": "8:0:0", "duration": "1n", "velocity": 50 },
+            { "pitch": "F2", "time": "9:0:0", "duration": "1n", "velocity": 52 },
+            { "pitch": "D2", "time": "10:0:0", "duration": "1n", "velocity": 46 },
+            { "pitch": "E2", "time": "11:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "A1", "time": "11:2:0", "duration": "2n", "velocity": 38 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge — How I Wonder",
+      "bars": 8,
+      "tracks": [
+        {
+          "instrumentId": "piano",
+          "notes": [
+            { "pitch": "E5", "time": "0:0:0", "duration": "4n.", "velocity": 70 },
+            { "pitch": "D5", "time": "0:1:2", "duration": "4n", "velocity": 62 },
+            { "pitch": "C5", "time": "0:3:0", "duration": "4n", "velocity": 65 },
+            { "pitch": "B4", "time": "1:0:0", "duration": "4n.", "velocity": 72 },
+            { "pitch": "A4", "time": "1:1:2", "duration": "4n", "velocity": 60 },
+            { "pitch": "G#4", "time": "1:3:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "A4", "time": "2:0:0", "duration": "2n.", "velocity": 75 },
+            { "pitch": "E4", "time": "2:3:0", "duration": "4n", "velocity": 58 },
+            { "pitch": "F4", "time": "3:0:0", "duration": "2n", "velocity": 68 },
+            { "pitch": "E4", "time": "3:2:0", "duration": "2n", "velocity": 55, "articulation": "tenuto" },
+
+            { "pitch": "D5", "time": "4:0:0", "duration": "4n.", "velocity": 74 },
+            { "pitch": "C5", "time": "4:1:2", "duration": "4n", "velocity": 66 },
+            { "pitch": "B4", "time": "4:3:0", "duration": "4n", "velocity": 68 },
+            { "pitch": "A4", "time": "5:0:0", "duration": "4n.", "velocity": 76 },
+            { "pitch": "G#4", "time": "5:1:2", "duration": "8n", "velocity": 60 },
+            { "pitch": "A4", "time": "5:2:0", "duration": "4n", "velocity": 65 },
+            { "pitch": "E4", "time": "5:3:0", "duration": "4n", "velocity": 55 },
+            { "pitch": "F4", "time": "6:0:0", "duration": "2n", "velocity": 70 },
+            { "pitch": "E4", "time": "6:2:0", "duration": "2n", "velocity": 58 },
+            { "pitch": "D4", "time": "7:0:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "E4", "time": "7:2:0", "duration": "4n", "velocity": 48 },
+            { "pitch": "A3", "time": "7:3:0", "duration": "4n", "velocity": 40 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "mf", "type": "sudden" },
+            { "time": "4:0:0", "level": "f", "type": "crescendo", "duration": "1n" },
+            { "time": "6:0:0", "level": "mp", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "piano",
+          "notes": [
+            { "pitch": "C3", "time": "0:0:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "E3", "time": "0:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "G3", "time": "0:2:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "B3", "time": "0:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "E3", "time": "1:0:0", "duration": "2n", "velocity": 55 },
+            { "pitch": "G#3", "time": "1:0:0", "duration": "2n", "velocity": 46 },
+            { "pitch": "A2", "time": "1:2:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "C3", "time": "1:2:0", "duration": "2n", "velocity": 42 },
+            { "pitch": "A2", "time": "2:0:0", "duration": "1n", "velocity": 55 },
+            { "pitch": "E3", "time": "2:0:0", "duration": "1n", "velocity": 46 },
+            { "pitch": "D3", "time": "3:0:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "F3", "time": "3:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "E3", "time": "3:2:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "G#3", "time": "3:2:0", "duration": "2n", "velocity": 40 },
+
+            { "pitch": "D3", "time": "4:0:0", "duration": "2n", "velocity": 56 },
+            { "pitch": "F3", "time": "4:0:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "C3", "time": "4:2:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "E3", "time": "4:2:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "A2", "time": "5:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "E3", "time": "5:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "D3", "time": "6:0:0", "duration": "2n", "velocity": 52 },
+            { "pitch": "F3", "time": "6:0:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "E3", "time": "6:2:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "G#3", "time": "6:2:0", "duration": "2n", "velocity": 38 },
+            { "pitch": "A2", "time": "7:0:0", "duration": "1n", "velocity": 42 },
+            { "pitch": "E3", "time": "7:0:0", "duration": "1n", "velocity": 36 }
+          ]
+        },
+        {
+          "instrumentId": "cello",
+          "notes": [
+            { "pitch": "C3", "time": "0:0:0", "duration": "1n", "velocity": 60, "articulation": "legato" },
+            { "pitch": "E3", "time": "1:0:0", "duration": "1n", "velocity": 65, "articulation": "legato" },
+            { "pitch": "A2", "time": "2:0:0", "duration": "1n", "velocity": 62, "articulation": "legato" },
+            { "pitch": "D3", "time": "3:0:0", "duration": "2n", "velocity": 58, "articulation": "legato" },
+            { "pitch": "E3", "time": "3:2:0", "duration": "2n", "velocity": 64, "articulation": "legato" },
+            { "pitch": "D3", "time": "4:0:0", "duration": "1n", "velocity": 68, "articulation": "legato" },
+            { "pitch": "A2", "time": "5:0:0", "duration": "1n", "velocity": 70, "articulation": "legato" },
+            { "pitch": "D3", "time": "6:0:0", "duration": "2n", "velocity": 62, "articulation": "legato" },
+            { "pitch": "E3", "time": "6:2:0", "duration": "2n", "velocity": 55, "articulation": "legato" },
+            { "pitch": "A2", "time": "7:0:0", "duration": "1n", "velocity": 45, "articulation": "tenuto" }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "mp", "type": "sudden" },
+            { "time": "4:0:0", "level": "mf", "type": "crescendo", "duration": "1n" },
+            { "time": "6:0:0", "level": "p", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "strings",
+          "notes": [
+            { "pitch": "C4", "time": "0:0:0", "duration": "1n+1n", "velocity": 38 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n+1n", "velocity": 35 },
+            { "pitch": "G4", "time": "0:0:0", "duration": "1n+1n", "velocity": 32 },
+            { "pitch": "A3", "time": "2:0:0", "duration": "1n+1n", "velocity": 40 },
+            { "pitch": "C4", "time": "2:0:0", "duration": "1n+1n", "velocity": 38 },
+            { "pitch": "E4", "time": "2:0:0", "duration": "1n+1n", "velocity": 35 },
+            { "pitch": "D4", "time": "4:0:0", "duration": "1n+1n", "velocity": 45 },
+            { "pitch": "F4", "time": "4:0:0", "duration": "1n+1n", "velocity": 42 },
+            { "pitch": "A4", "time": "4:0:0", "duration": "1n+1n", "velocity": 38 },
+            { "pitch": "A3", "time": "6:0:0", "duration": "1n+1n", "velocity": 35 },
+            { "pitch": "C4", "time": "6:0:0", "duration": "1n+1n", "velocity": 32 },
+            { "pitch": "E4", "time": "6:0:0", "duration": "1n+1n", "velocity": 28 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "p", "type": "sudden" },
+            { "time": "4:0:0", "level": "mf", "type": "crescendo", "duration": "1n" },
+            { "time": "6:0:0", "level": "pp", "type": "decrescendo", "duration": "1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "bass",
+          "notes": [
+            { "pitch": "C2", "time": "0:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "E2", "time": "1:0:0", "duration": "1n", "velocity": 52 },
+            { "pitch": "A1", "time": "2:0:0", "duration": "1n", "velocity": 50 },
+            { "pitch": "D2", "time": "3:0:0", "duration": "2n", "velocity": 46 },
+            { "pitch": "E2", "time": "3:2:0", "duration": "2n", "velocity": 50 },
+            { "pitch": "D2", "time": "4:0:0", "duration": "1n", "velocity": 54 },
+            { "pitch": "A1", "time": "5:0:0", "duration": "1n", "velocity": 56 },
+            { "pitch": "D2", "time": "6:0:0", "duration": "2n", "velocity": 48 },
+            { "pitch": "E2", "time": "6:2:0", "duration": "2n", "velocity": 44 },
+            { "pitch": "A1", "time": "7:0:0", "duration": "1n", "velocity": 38 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "name": "Outro — Fading Star",
+      "bars": 8,
+      "tracks": [
+        {
+          "instrumentId": "music-box",
+          "notes": [
+            { "pitch": "A4", "time": "0:0:0", "duration": "4n", "velocity": 42 },
+            { "pitch": "A4", "time": "0:2:0", "duration": "4n", "velocity": 38 },
+            { "pitch": "E5", "time": "1:0:0", "duration": "4n", "velocity": 44 },
+            { "pitch": "E5", "time": "1:2:0", "duration": "4n", "velocity": 36 },
+            { "pitch": "F5", "time": "2:0:0", "duration": "4n", "velocity": 40 },
+            { "pitch": "E5", "time": "2:2:0", "duration": "2n", "velocity": 32 },
+            { "pitch": "D5", "time": "3:0:0", "duration": "4n", "velocity": 35 },
+            { "pitch": "C5", "time": "3:2:0", "duration": "4n", "velocity": 30 },
+            { "pitch": "B4", "time": "4:0:0", "duration": "4n", "velocity": 32 },
+            { "pitch": "A4", "time": "4:2:0", "duration": "2n", "velocity": 28 },
+            { "pitch": "E4", "time": "5:0:0", "duration": "2n", "velocity": 25 },
+            { "pitch": "A4", "time": "6:0:0", "duration": "1n", "velocity": 22 },
+            { "pitch": "A4", "time": "7:0:0", "duration": "1n", "velocity": 18 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "p", "type": "sudden" },
+            { "time": "3:0:0", "level": "ppp", "type": "decrescendo", "duration": "1n+1n+1n+1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "piano",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n", "velocity": 38 },
+            { "pitch": "E3", "time": "0:0:0", "duration": "1n", "velocity": 32 },
+            { "pitch": "C3", "time": "1:0:0", "duration": "1n", "velocity": 35 },
+            { "pitch": "E3", "time": "1:0:0", "duration": "1n", "velocity": 30 },
+            { "pitch": "F3", "time": "2:0:0", "duration": "1n", "velocity": 34 },
+            { "pitch": "A3", "time": "2:0:0", "duration": "1n", "velocity": 28 },
+            { "pitch": "E3", "time": "3:0:0", "duration": "1n", "velocity": 30 },
+            { "pitch": "G#3", "time": "3:0:0", "duration": "1n", "velocity": 25 },
+            { "pitch": "A2", "time": "4:0:0", "duration": "1n+1n", "velocity": 28 },
+            { "pitch": "E3", "time": "4:0:0", "duration": "1n+1n", "velocity": 22 },
+            { "pitch": "A3", "time": "6:0:0", "duration": "1n+1n", "velocity": 20 },
+            { "pitch": "C4", "time": "6:0:0", "duration": "1n+1n", "velocity": 18 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "p", "type": "sudden" },
+            { "time": "2:0:0", "level": "ppp", "type": "decrescendo", "duration": "1n+1n+1n+1n+1n+1n" }
+          ]
+        },
+        {
+          "instrumentId": "strings",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n+1n+1n+1n", "velocity": 22 },
+            { "pitch": "C4", "time": "0:0:0", "duration": "1n+1n+1n+1n", "velocity": 20 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n+1n+1n+1n", "velocity": 18 },
+            { "pitch": "A3", "time": "4:0:0", "duration": "1n+1n+1n+1n", "velocity": 15 },
+            { "pitch": "E4", "time": "4:0:0", "duration": "1n+1n+1n+1n", "velocity": 12 }
+          ],
+          "dynamics": [
+            { "time": "0:0:0", "level": "pp", "type": "sudden" },
+            { "time": "0:0:0", "level": "ppp", "type": "decrescendo", "duration": "1n+1n+1n+1n+1n+1n+1n+1n" }
+          ]
+        }
+      ]
+    }
+  ]
+}
