@@ -221,17 +221,31 @@ describe('sf-arrangement', () => {
     el.loadSections(testOffsets, 12)
     await el.updateComplete
 
-    // Access renderNotes via the exported type — we check it builds correctly
-    // by verifying the track selector shows instruments
+    // Verify the track headers show one row per instrument plus the "All Tracks" row.
     const buttons = el.querySelectorAll('button')
-    // "All" + 2 instruments
+    // "All Tracks" + 2 instruments
     expect(buttons.length).toBe(3)
-    expect(buttons[0].textContent).toBe('All')
-    expect(buttons[1].textContent).toBe('Piano')
-    expect(buttons[2].textContent).toBe('Bass')
+    expect(buttons[0].textContent?.trim()).toBe('All Tracks')
+    expect(buttons[1].textContent?.trim()).toContain('Piano')
+    expect(buttons[2].textContent?.trim()).toContain('Bass')
   })
 
-  it('track selector toggles focused track', async () => {
+  it('track headers render a color swatch per instrument', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    // Each instrument row has a swatch with an inline background-color style.
+    const swatches = el.querySelectorAll('button > span[style*="background-color"]')
+    expect(swatches.length).toBe(2)
+    // First swatch should match INSTRUMENT_COLORS[0] (#6366f1)
+    const firstStyle = (swatches[0] as HTMLElement).style.backgroundColor
+    // Browsers normalize hex to rgb(); accept either form.
+    expect(firstStyle === 'rgb(99, 102, 241)' || firstStyle === '#6366f1').toBe(true)
+  })
+
+  it('track header click toggles focused track', async () => {
     compositionStore.load(testComposition)
     const el = createElement()
     el.loadSections(testOffsets, 12)
@@ -239,22 +253,22 @@ describe('sf-arrangement', () => {
 
     const buttons = el.querySelectorAll('button')
 
-    // Click Piano button to focus
-    buttons[1].click()
+    // Click Piano header to focus
+    ;(buttons[1] as HTMLButtonElement).click()
     await el.updateComplete
 
-    // Piano button should be active
+    // Piano button should be active (uses trackHeaderActive which contains bg-primary)
     expect(buttons[1].className).toContain('bg-primary')
 
     // Click Piano again to unfocus
-    buttons[1].click()
+    ;(buttons[1] as HTMLButtonElement).click()
     await el.updateComplete
 
-    // All button should be active again
+    // "All Tracks" should be active again (uses trackHeaderAllActive which contains bg-surface-hover)
     expect(buttons[0].className).toContain('bg-surface-hover')
   })
 
-  it('track selector "All" button clears focus', async () => {
+  it('"All Tracks" header clears focus', async () => {
     compositionStore.load(testComposition)
     const el = createElement()
     el.loadSections(testOffsets, 12)
@@ -263,22 +277,25 @@ describe('sf-arrangement', () => {
     const buttons = el.querySelectorAll('button')
 
     // Focus on Bass
-    buttons[2].click()
+    ;(buttons[2] as HTMLButtonElement).click()
     await el.updateComplete
 
-    // Click All
-    buttons[0].click()
+    // Click "All Tracks"
+    ;(buttons[0] as HTMLButtonElement).click()
     await el.updateComplete
 
-    // All should be active
+    // "All Tracks" should now be active
     expect(buttons[0].className).toContain('bg-surface-hover')
   })
 
-  it('does not render track selector without composition', async () => {
+  it('renders only the "All Tracks" header when no composition is loaded', async () => {
     const el = createElement()
     await el.updateComplete
 
+    // The sidebar always shows the "All Tracks" row; instrument rows are
+    // added per-instrument when a composition is loaded.
     const buttons = el.querySelectorAll('button')
-    expect(buttons.length).toBe(0)
+    expect(buttons.length).toBe(1)
+    expect(buttons[0].textContent?.trim()).toBe('All Tracks')
   })
 })
