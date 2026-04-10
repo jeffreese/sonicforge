@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import type { EffectDef } from '../schema/composition'
+import type { EffectConfig } from '../schema/composition'
 
 type ToneEffect =
   | Tone.Reverb
@@ -9,44 +9,50 @@ type ToneEffect =
   | Tone.EQ3
   | Tone.Compressor
 
-function createEffect(def: EffectDef): ToneEffect | null {
+function createEffect(def: EffectConfig): ToneEffect | null {
+  // This engine only handles numeric params. Sub-epic #2 will replace this with a
+  // full effect-factory that supports the broader Tone.js vocabulary and handles
+  // string params (e.g., note-value frequencies like "4n").
+  const p = def.params as Record<string, number>
   switch (def.type) {
     case 'reverb':
       return new Tone.Reverb({
-        decay: def.params.decay ?? 2.5,
-        wet: def.params.wet ?? 0.3,
+        decay: p.decay ?? 2.5,
+        wet: p.wet ?? 0.3,
       })
     case 'delay':
       return new Tone.FeedbackDelay({
-        delayTime: def.params.delayTime ?? 0.25,
-        feedback: def.params.feedback ?? 0.3,
-        wet: def.params.wet ?? 0.2,
+        delayTime: p.delayTime ?? 0.25,
+        feedback: p.feedback ?? 0.3,
+        wet: p.wet ?? 0.2,
       })
     case 'chorus':
       return new Tone.Chorus({
-        frequency: def.params.frequency ?? 1.5,
-        depth: def.params.depth ?? 0.7,
-        wet: def.params.wet ?? 0.3,
+        frequency: p.frequency ?? 1.5,
+        depth: p.depth ?? 0.7,
+        wet: p.wet ?? 0.3,
       }).start()
     case 'distortion':
       return new Tone.Distortion({
-        distortion: def.params.distortion ?? 0.4,
-        wet: def.params.wet ?? 0.5,
+        distortion: p.distortion ?? 0.4,
+        wet: p.wet ?? 0.5,
       })
-    case 'eq':
+    case 'eq3':
       return new Tone.EQ3({
-        low: def.params.low ?? 0,
-        mid: def.params.mid ?? 0,
-        high: def.params.high ?? 0,
+        low: p.low ?? 0,
+        mid: p.mid ?? 0,
+        high: p.high ?? 0,
       })
     case 'compressor':
       return new Tone.Compressor({
-        threshold: def.params.threshold ?? -24,
-        ratio: def.params.ratio ?? 4,
-        attack: def.params.attack ?? 0.003,
-        release: def.params.release ?? 0.25,
+        threshold: p.threshold ?? -24,
+        ratio: p.ratio ?? 4,
+        attack: p.attack ?? 0.003,
+        release: p.release ?? 0.25,
       })
     default:
+      // Unknown effect types (e.g., bitcrusher, phaser) are silently skipped here.
+      // Sub-epic #2 will expand this factory to support the full vocabulary.
       return null
   }
 }
@@ -61,7 +67,7 @@ export class EffectsChain {
   connect(
     source: Tone.ToneAudioNode,
     destination: Tone.ToneAudioNode,
-    effectDefs?: EffectDef[],
+    effectDefs?: EffectConfig[],
   ): void {
     if (!effectDefs || effectDefs.length === 0) {
       source.connect(destination)

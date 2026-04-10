@@ -181,7 +181,9 @@ export class Engine {
     const map = new Map<string, string>()
     if (this.composition) {
       for (const inst of this.composition.instruments) {
-        map.set(inst.id, inst.sample)
+        if (inst.sample) {
+          map.set(inst.id, inst.sample)
+        }
       }
     }
     return map

@@ -40,6 +40,14 @@ export async function loadInstruments(
           return
         }
 
+        // Sub-epic #1 only supports 'sampled' instruments at runtime.
+        // Synth support ships in sub-epic #2; one-shot support in sub-epic #5.
+        if (!inst.sample) {
+          throw new Error(
+            `Instrument "${inst.id}": source "${inst.source ?? 'unknown'}" is not yet supported at runtime. Synth instruments ship in sub-epic #2; one-shot instruments in sub-epic #5.`,
+          )
+        }
+
         const sampleData = await loadSampleData(inst.sample)
 
         if (sampleData.layers.length === 1 && sampleData.layers[0].velocity === 0) {

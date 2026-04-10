@@ -3,6 +3,11 @@ export interface SonicForgeComposition {
   metadata: Metadata
   instruments: InstrumentDef[]
   sections: Section[]
+  masterEffects?: EffectConfig[]
+  automation?: AutomationLane[]
+  sidechain?: SidechainConfig[]
+  lfos?: LFOConfig[]
+  modulation?: ModulationRoute[]
 }
 
 export interface Metadata {
@@ -13,19 +18,109 @@ export interface Metadata {
   description?: string
 }
 
+export type InstrumentSourceKind = 'sampled' | 'synth' | 'oneshot' | 'drums'
+
 export interface InstrumentDef {
   id: string
   name: string
-  sample: string
   category: 'melodic' | 'bass' | 'pad' | 'drums' | 'fx'
+  source?: InstrumentSourceKind
+  sample?: string
+  synth?: SynthPatch | string
+  oneshots?: Record<string, string>
   defaultVolume?: number
   defaultPan?: number
-  effects?: EffectDef[]
+  effects?: EffectConfig[]
 }
 
-export interface EffectDef {
-  type: 'reverb' | 'delay' | 'chorus' | 'distortion' | 'eq' | 'compressor'
-  params: Record<string, number>
+export type SynthType = 'mono' | 'poly' | 'fm' | 'am' | 'duo' | 'pluck'
+
+export interface SynthPatch {
+  type: SynthType
+  oscillator?: {
+    type?: string
+    detune?: number
+    count?: number
+    spread?: number
+  }
+  envelope?: {
+    attack: number
+    decay: number
+    sustain: number
+    release: number
+  }
+  filter?: {
+    type?: 'lowpass' | 'highpass' | 'bandpass'
+    frequency?: number
+    Q?: number
+    rolloff?: -12 | -24 | -48
+  }
+  filterEnvelope?: {
+    attack: number
+    decay: number
+    sustain: number
+    release: number
+    baseFrequency: number
+    octaves: number
+  }
+  modulationIndex?: number
+  harmonicity?: number
+}
+
+export const EFFECT_TYPES = [
+  'reverb',
+  'delay',
+  'pingpong',
+  'chorus',
+  'phaser',
+  'distortion',
+  'bitcrusher',
+  'autofilter',
+  'compressor',
+  'limiter',
+  'eq3',
+  'stereowidener',
+] as const
+
+export type EffectType = (typeof EFFECT_TYPES)[number]
+
+export interface EffectConfig {
+  type: EffectType
+  params: Record<string, number | string>
+  bypass?: boolean
+}
+
+export interface AutomationPoint {
+  time: string | number
+  value: number
+  curve?: 'step' | 'linear' | 'exponential'
+}
+
+export interface AutomationLane {
+  target: string
+  points: AutomationPoint[]
+}
+
+export interface LFOConfig {
+  id: string
+  frequency: number | string
+  type?: 'sine' | 'square' | 'sawtooth' | 'triangle'
+  min: number
+  max: number
+}
+
+export interface ModulationRoute {
+  source: string
+  target: string
+  amount?: number
+}
+
+export interface SidechainConfig {
+  source: string
+  target: string
+  amount: number
+  attack?: number
+  release?: number
 }
 
 export interface Section {
