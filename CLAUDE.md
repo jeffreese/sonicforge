@@ -22,6 +22,8 @@ python scripts/extract-samples.py    # Requires Python, FluidSynth, FFmpeg
 
 Samples live in `public/samples/{instrument}/` with a `manifest.json` per instrument. Once extracted, they're committed and don't need re-extraction unless adding new instruments.
 
+**Restart `pnpm dev` after extraction.** Vite's dev server caches the `public/` listing at startup and won't serve files added while it's running — the browser will get the SPA fallback HTML instead of the `.ogg` files and decode will fail with `EncodingError: Unable to decode audio data`.
+
 ## Git Workflow
 
 All work happens on feature branches, never directly on `main`. The standard flow:
@@ -66,6 +68,8 @@ Lit Components → Reactive Stores → Engine Layer → Tone.js / WebAudio
 
 ### Schema
 - Composition JSON schema is defined in `src/schema/composition.ts` — this is the single source of truth. Claude skills, validation, and the engine all reference this file. When generating or modifying composition JSON, read this file for the current structure.
+- **Instrument sources** dispatch via `InstrumentDef.source`: `'sampled'` (default, GM samples), `'synth'` (Tone.js synth via preset name or inline `SynthPatch`), `'oneshot'` (fixed-pitch percussion/FX via hit name → URL map), `'drums'` (synthesized `DrumKit`). Engine routes each type through its own `InstrumentSource` class. See ADR-009 for the design rationale.
+- **Composition-level EDM fields** (all optional, backwards-compatible): `masterEffects[]`, `automation[]`, `lfos[]` + `modulation[]`, `sidechain[]`. Reference docs for Claude generation live at `.claude/skills/compose/{synth-presets,effects-reference,modulation-patterns,oneshot-hits}.md`.
 
 ### State
 - All composition mutations go through `CompositionStore.dispatch(command)` — never modify state directly

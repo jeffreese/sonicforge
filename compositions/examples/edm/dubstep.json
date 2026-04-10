@@ -1,0 +1,125 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "title": "Dubstep Example",
+    "bpm": 140,
+    "timeSignature": [4, 4],
+    "key": "E minor",
+    "description": "Minimal dubstep at 140 BPM (half-time feel, kick on 1, snare on 3). Wobble bass via LFO at 8n rate → bass.filter.frequency between 150 Hz and 2.5 kHz. Mono wobble bass (required for LFO modulation), trap-style hat rolls, minimal melody."
+  },
+  "instruments": [
+    {
+      "id": "drums",
+      "name": "Dubstep Kit",
+      "category": "drums",
+      "source": "oneshot",
+      "oneshots": {
+        "kick": "samples/oneshots/kicks/265328__xkpl_klawz__big-room-kick-punchy.wav",
+        "snare": "samples/oneshots/snares/673516__theendofacycle__flat-fat-snare-drum-hit.wav",
+        "hat": "samples/oneshots/hats/811628__m0nsterhd__closed-hi-hat.wav",
+        "clap": "samples/oneshots/claps/199266__stumber__diamond_clap_05.wav"
+      },
+      "defaultVolume": 92,
+      "effects": [
+        { "type": "compressor", "params": { "threshold": -12, "ratio": 4 } }
+      ]
+    },
+    {
+      "id": "bass",
+      "name": "Wobble Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": {
+        "type": "mono",
+        "oscillator": { "type": "sawtooth" },
+        "envelope": { "attack": 0.005, "decay": 0.3, "sustain": 0.95, "release": 0.15 },
+        "filter": { "type": "lowpass", "frequency": 400, "Q": 8, "rolloff": -24 },
+        "filterEnvelope": {
+          "attack": 0.005,
+          "decay": 0.1,
+          "sustain": 1,
+          "release": 0.1,
+          "baseFrequency": 100,
+          "octaves": 3
+        }
+      },
+      "defaultVolume": 85
+    }
+  ],
+  "masterEffects": [
+    { "type": "eq3", "params": { "low": 2, "mid": 0, "high": 0 } },
+    { "type": "limiter", "params": { "threshold": -1 } }
+  ],
+  "lfos": [
+    { "id": "wobble", "frequency": "8n", "type": "sine", "min": 150, "max": 2500 }
+  ],
+  "modulation": [
+    { "source": "wobble", "target": "bass.filter.frequency" }
+  ],
+  "sections": [
+    {
+      "name": "drop",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "hat", "time": "0:0:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "hat", "time": "0:1:2", "duration": "16n", "velocity": 55 },
+            { "pitch": "snare", "time": "0:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "clap", "time": "0:2:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat", "time": "0:2:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "hat", "time": "0:3:0", "duration": "16n", "velocity": 65 },
+            { "pitch": "hat", "time": "0:3:1", "duration": "32n", "velocity": 80 },
+            { "pitch": "hat", "time": "0:3:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "hat", "time": "0:3:3", "duration": "32n", "velocity": 85 },
+
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "hat", "time": "1:0:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "hat", "time": "1:1:2", "duration": "16n", "velocity": 55 },
+            { "pitch": "snare", "time": "1:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "clap", "time": "1:2:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat", "time": "1:2:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "hat", "time": "1:3:0", "duration": "16n", "velocity": 65 },
+            { "pitch": "hat", "time": "1:3:2", "duration": "16n", "velocity": 70 },
+
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat", "time": "2:0:2", "duration": "16n", "velocity": 62 },
+            { "pitch": "hat", "time": "2:1:2", "duration": "16n", "velocity": 58 },
+            { "pitch": "snare", "time": "2:2:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "clap", "time": "2:2:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "hat", "time": "2:2:2", "duration": "16n", "velocity": 62 },
+            { "pitch": "hat", "time": "2:3:0", "duration": "16n", "velocity": 68 },
+            { "pitch": "hat", "time": "2:3:2", "duration": "16n", "velocity": 70 },
+
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 115 },
+            { "pitch": "hat", "time": "3:0:2", "duration": "16n", "velocity": 65 },
+            { "pitch": "hat", "time": "3:1:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "snare", "time": "3:2:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "clap", "time": "3:2:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "hat", "time": "3:2:2", "duration": "16n", "velocity": 65 },
+            { "pitch": "hat", "time": "3:3:0", "duration": "32n", "velocity": 90 },
+            { "pitch": "hat", "time": "3:3:1", "duration": "32n", "velocity": 80 },
+            { "pitch": "hat", "time": "3:3:2", "duration": "32n", "velocity": 95 },
+            { "pitch": "hat", "time": "3:3:3", "duration": "32n", "velocity": 100 }
+          ]
+        },
+        {
+          "instrumentId": "bass",
+          "notes": [
+            { "pitch": "E1", "time": "0:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "E1", "time": "0:2:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "E1", "time": "1:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "G1", "time": "1:2:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "D1", "time": "2:0:0", "duration": "2n", "velocity": 98 },
+            { "pitch": "D1", "time": "2:2:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "C1", "time": "3:0:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "B1", "time": "3:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "E1", "time": "3:2:0", "duration": "2n", "velocity": 105 }
+          ]
+        }
+      ]
+    }
+  ]
+}
