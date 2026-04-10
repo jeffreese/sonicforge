@@ -51,7 +51,14 @@ export const mixer = {
   meterGreen: 'bg-success',
   meterYellow: 'bg-warning',
   meterRed: 'bg-error',
+  // Peak hold indicator — thin horizontal line tracking the recent peak.
+  meterPeak:
+    'absolute left-0 right-0 h-[2px] bg-on-surface/80 transition-[bottom] duration-100 ease-out',
   meterRow: 'flex gap-2 items-stretch',
+  // Column that wraps the meter bar + numeric dB readout below it.
+  meterColumn: 'flex flex-col items-center gap-1',
+  // Small monospace text under the meter showing current dB level.
+  meterReadout: 'font-mono text-[10px] text-muted tabular-nums leading-none',
 }
 
 export const transport = {

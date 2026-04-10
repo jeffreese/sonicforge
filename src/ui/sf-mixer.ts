@@ -7,6 +7,20 @@ import type { Unsubscribe } from '../stores/Store'
 import { mixer } from '../styles/components'
 import './sf-channel-strip'
 
+/** How long peak holds at its high point before decaying, in milliseconds. */
+const PEAK_HOLD_MS = 1000
+/** Peak decay rate after the hold expires, in dB per millisecond. */
+const PEAK_DECAY_DB_PER_MS = 0.02
+
+interface PeakState {
+  /** The value to render — updated each tick during decay. */
+  level: number
+  /** The original peak when it was set — used to compute decay from a stable base. */
+  peakLevel: number
+  /** Timestamp when `peakLevel` was set (used for hold + decay timing). */
+  heldSince: number
+}
+
 @customElement('sf-mixer')
 export class SfMixer extends LitElement {
   @state() private channels: ChannelState[] = []
@@ -15,6 +29,19 @@ export class SfMixer extends LitElement {
   @state() private levels: Record<string, number> = {}
   /** Current master bus meter level in dB. Updated via rAF. */
   @state() private masterLevel = Number.NEGATIVE_INFINITY
+  /** Peak-hold levels per channel, updated each rAF tick. */
+  @state() private peakLevels: Record<string, number> = {}
+  /** Peak-hold level for the master bus. */
+  @state() private masterPeakLevel = Number.NEGATIVE_INFINITY
+
+  // Internal tracking for peak decay — not reactive state to avoid
+  // re-rendering every time we bump heldSince.
+  private channelPeaks = new Map<string, PeakState>()
+  private masterPeak: PeakState = {
+    level: Number.NEGATIVE_INFINITY,
+    peakLevel: Number.NEGATIVE_INFINITY,
+    heldSince: 0,
+  }
 
   private unsubscribe?: Unsubscribe
   private rafId: number | null = null
@@ -48,9 +75,10 @@ export class SfMixer extends LitElement {
   }
 
   /**
-   * rAF loop that polls the engine's MixBus for current channel levels
-   * and updates the mixer state. The property bindings to each
-   * `<sf-channel-strip>` propagate the new levels as Lit reactive props.
+   * rAF loop that polls the engine's MixBus for current channel levels,
+   * computes peak-hold values, and updates the mixer state. The property
+   * bindings to each `<sf-channel-strip>` propagate the new levels and
+   * peaks as Lit reactive props.
    *
    * We read a fresh channels list each tick (rather than relying on the
    * closure-captured one at loop start) so that channels added or
@@ -58,16 +86,69 @@ export class SfMixer extends LitElement {
    */
   private startMeterLoop(): void {
     const tick = () => {
+      const now = performance.now()
       const mixBus = engine.getMixBus()
       const nextLevels: Record<string, number> = {}
+      const nextPeaks: Record<string, number> = {}
       for (const ch of this.channels) {
-        nextLevels[ch.id] = mixBus.getChannelLevel(ch.id)
+        const current = mixBus.getChannelLevel(ch.id)
+        nextLevels[ch.id] = current
+        nextPeaks[ch.id] = this.updatePeak(this.channelPeaks, ch.id, current, now)
       }
       this.levels = nextLevels
-      this.masterLevel = mixBus.getMasterLevel()
+      this.peakLevels = nextPeaks
+      const masterCurrent = mixBus.getMasterLevel()
+      this.masterLevel = masterCurrent
+      this.masterPeak = this.advancePeakState(this.masterPeak, masterCurrent, now)
+      this.masterPeakLevel = this.masterPeak.level
       this.rafId = requestAnimationFrame(tick)
     }
     this.rafId = requestAnimationFrame(tick)
+  }
+
+  /**
+   * Update a per-channel peak state entry and return the current peak dB.
+   * Rises immediately to any new high; holds for PEAK_HOLD_MS, then decays
+   * linearly at PEAK_DECAY_DB_PER_MS toward the current level.
+   */
+  private updatePeak(
+    store: Map<string, PeakState>,
+    id: string,
+    currentLevel: number,
+    now: number,
+  ): number {
+    const existing = store.get(id) ?? {
+      level: Number.NEGATIVE_INFINITY,
+      peakLevel: Number.NEGATIVE_INFINITY,
+      heldSince: now,
+    }
+    const next = this.advancePeakState(existing, currentLevel, now)
+    store.set(id, next)
+    return next.level
+  }
+
+  /**
+   * Advance a peak state for one tick. Decay is always computed from the
+   * ORIGINAL peak (not the last decayed value) so the rate is time-
+   * consistent regardless of tick frequency.
+   */
+  private advancePeakState(prev: PeakState, currentLevel: number, now: number): PeakState {
+    // Rise immediately to any new high — resets the hold clock.
+    if (currentLevel >= prev.peakLevel) {
+      return { level: currentLevel, peakLevel: currentLevel, heldSince: now }
+    }
+    const elapsed = now - prev.heldSince
+    // Hold phase — keep showing the original peak.
+    if (elapsed <= PEAK_HOLD_MS) {
+      return { level: prev.peakLevel, peakLevel: prev.peakLevel, heldSince: prev.heldSince }
+    }
+    // Decay phase — compute from the stable original peak.
+    const decayed = prev.peakLevel - PEAK_DECAY_DB_PER_MS * (elapsed - PEAK_HOLD_MS)
+    if (decayed <= currentLevel) {
+      // Fully decayed to current — reset the peak cycle.
+      return { level: currentLevel, peakLevel: currentLevel, heldSince: now }
+    }
+    return { level: decayed, peakLevel: prev.peakLevel, heldSince: prev.heldSince }
   }
 
   private stopMeterLoop(): void {
@@ -132,6 +213,7 @@ export class SfMixer extends LitElement {
                 .muted=${ch.muted}
                 .soloed=${ch.soloed}
                 .level=${this.levels[ch.id] ?? Number.NEGATIVE_INFINITY}
+                .peakLevel=${this.peakLevels[ch.id] ?? Number.NEGATIVE_INFINITY}
               ></sf-channel-strip>
             `,
           )}
@@ -143,7 +225,9 @@ export class SfMixer extends LitElement {
 
   private renderMaster() {
     const meterHeight = this.levelToHeight(this.masterLevel)
+    const peakHeight = this.levelToHeight(this.masterPeakLevel)
     const meterColor = this.levelColorClass(this.masterLevel)
+    const readout = Number.isFinite(this.masterLevel) ? `${Math.round(this.masterLevel)} dB` : '-∞'
     return html`
       <div class="${mixer.master}">
         <div class="${mixer.masterLabel}">Master</div>
@@ -163,18 +247,29 @@ export class SfMixer extends LitElement {
               <span class="${mixer.value}">${this.masterVolume}</span>
             </div>
           </div>
-          <div
-            class="${mixer.meterContainer}"
-            role="meter"
-            aria-label="Master level"
-            aria-valuenow=${Number.isFinite(this.masterLevel) ? String(this.masterLevel) : '-Infinity'}
-            aria-valuemin="-60"
-            aria-valuemax="0"
-          >
+          <div class="${mixer.meterColumn}">
             <div
-              class="${mixer.meterFill} ${meterColor}"
-              style="height: ${meterHeight}%"
-            ></div>
+              class="${mixer.meterContainer}"
+              role="meter"
+              aria-label="Master level"
+              aria-valuenow=${Number.isFinite(this.masterLevel) ? String(this.masterLevel) : '-Infinity'}
+              aria-valuemin="-60"
+              aria-valuemax="0"
+            >
+              <div
+                class="${mixer.meterFill} ${meterColor}"
+                style="height: ${meterHeight}%"
+              ></div>
+              ${
+                Number.isFinite(this.masterPeakLevel)
+                  ? html`<div
+                    class="${mixer.meterPeak}"
+                    style="bottom: ${peakHeight}%"
+                  ></div>`
+                  : ''
+              }
+            </div>
+            <div class="${mixer.meterReadout}">${readout}</div>
           </div>
         </div>
       </div>

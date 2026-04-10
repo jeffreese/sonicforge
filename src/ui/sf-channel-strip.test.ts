@@ -153,4 +153,36 @@ describe('sf-channel-strip', () => {
     expect(handler).toHaveBeenCalledOnce()
     expect(handler.mock.calls[0][0].detail).toEqual({ id: 'piano', soloed: true })
   })
+
+  it('renders -∞ readout when level is silent', async () => {
+    const el = createElement({ level: Number.NEGATIVE_INFINITY })
+    await el.updateComplete
+    expect(el.textContent).toContain('-∞')
+  })
+
+  it('renders rounded dB readout when level is audible', async () => {
+    const el = createElement({ level: -12.4 })
+    await el.updateComplete
+    expect(el.textContent).toContain('-12 dB')
+  })
+
+  it('renders peak hold indicator when peakLevel is finite', async () => {
+    const el = createElement({ level: -20, peakLevel: -6 })
+    await el.updateComplete
+    const peakLine = el.querySelector('[role="meter"] > div:nth-child(2)') as HTMLElement
+    expect(peakLine).not.toBeNull()
+    // -6 dB should place the peak line at 90% of the meter height.
+    expect(peakLine.style.bottom).toBe('90%')
+  })
+
+  it('hides peak hold indicator when peakLevel is -Infinity', async () => {
+    const el = createElement({
+      level: Number.NEGATIVE_INFINITY,
+      peakLevel: Number.NEGATIVE_INFINITY,
+    })
+    await el.updateComplete
+    // Only the meter fill div should exist inside the meter container.
+    const children = el.querySelectorAll('[role="meter"] > div')
+    expect(children.length).toBe(1)
+  })
 })
