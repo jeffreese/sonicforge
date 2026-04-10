@@ -1,0 +1,210 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "title": "Wobblepump",
+    "bpm": 140,
+    "timeSignature": [4, 4],
+    "key": "E minor",
+    "description": "Sub-epic #4 verification — exercises SidechainRouter and ModulationEngine together. A dubstep-ish groove in E minor with: (1) a mono wobble bass whose filter cutoff is modulated by an LFO at 8n rate, sweeping 120 Hz to 2 kHz (LFO → synth-internal filter.frequency path from sub-epic #4 commit 1), (2) a sustained warm pad that gets ducked by the kick drum on every beat (kick → pad sidechain with amount 0.85 and 100ms release for clear pumping), and (3) a supersaw stab layer that also gets ducked (secondary sidechain target sharing the same kick source). Simple 4-bar pattern that loops across 8 bars."
+  },
+  "instruments": [
+    {
+      "id": "kick",
+      "name": "Kick",
+      "category": "drums",
+      "source": "drums",
+      "defaultVolume": 90
+    },
+    {
+      "id": "bass",
+      "name": "Wobble Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": {
+        "type": "mono",
+        "oscillator": { "type": "sawtooth" },
+        "envelope": { "attack": 0.005, "decay": 0.3, "sustain": 0.9, "release": 0.2 },
+        "filter": { "type": "lowpass", "frequency": 400, "Q": 8, "rolloff": -24 },
+        "filterEnvelope": {
+          "attack": 0.005,
+          "decay": 0.15,
+          "sustain": 0.8,
+          "release": 0.2,
+          "baseFrequency": 100,
+          "octaves": 3
+        }
+      },
+      "defaultVolume": 82,
+      "effects": [
+        { "type": "compressor", "params": { "threshold": -16, "ratio": 4 } }
+      ]
+    },
+    {
+      "id": "pad",
+      "name": "Warm Pad",
+      "category": "pad",
+      "source": "synth",
+      "synth": "warm_pad",
+      "defaultVolume": 65,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 5, "wet": 0.4 } }
+      ]
+    },
+    {
+      "id": "stab",
+      "name": "Supersaw Stab",
+      "category": "melodic",
+      "source": "synth",
+      "synth": "supersaw_lead",
+      "defaultVolume": 60,
+      "effects": [
+        { "type": "reverb", "params": { "decay": 2, "wet": 0.25 } }
+      ]
+    }
+  ],
+  "lfos": [
+    {
+      "id": "wobble",
+      "frequency": "8n",
+      "type": "sine",
+      "min": 120,
+      "max": 2000
+    }
+  ],
+  "modulation": [
+    {
+      "source": "wobble",
+      "target": "bass.filter.frequency"
+    }
+  ],
+  "sidechain": [
+    {
+      "source": "kick",
+      "target": "pad",
+      "amount": 0.85,
+      "release": 0.1
+    },
+    {
+      "source": "kick",
+      "target": "stab",
+      "amount": 0.6,
+      "release": 0.08
+    }
+  ],
+  "sections": [
+    {
+      "name": "groove",
+      "bars": 8,
+      "tracks": [
+        {
+          "instrumentId": "kick",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "0:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "0:2:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "0:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "1:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "1:2:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "1:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "2:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "2:2:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "2:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "3:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "3:2:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "3:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "kick", "time": "4:0:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "4:1:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "4:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "4:3:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "5:0:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "5:1:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "5:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "5:3:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "6:0:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "6:1:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "6:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "kick", "time": "6:3:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "kick", "time": "7:0:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "kick", "time": "7:1:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "kick", "time": "7:2:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "kick", "time": "7:3:0", "duration": "4n", "velocity": 110 }
+          ]
+        },
+        {
+          "instrumentId": "bass",
+          "notes": [
+            { "pitch": "E1", "time": "0:0:0", "duration": "2n", "velocity": 90 },
+            { "pitch": "E1", "time": "0:2:0", "duration": "2n", "velocity": 88 },
+            { "pitch": "E1", "time": "1:0:0", "duration": "2n", "velocity": 90 },
+            { "pitch": "G1", "time": "1:2:0", "duration": "2n", "velocity": 88 },
+            { "pitch": "D1", "time": "2:0:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "D1", "time": "2:2:0", "duration": "2n", "velocity": 90 },
+            { "pitch": "C1", "time": "3:0:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "B1", "time": "3:2:0", "duration": "2n", "velocity": 90 },
+            { "pitch": "E1", "time": "4:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "E1", "time": "4:2:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "E1", "time": "5:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "G1", "time": "5:2:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "D1", "time": "6:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "D1", "time": "6:2:0", "duration": "2n", "velocity": 92 },
+            { "pitch": "C1", "time": "7:0:0", "duration": "2n", "velocity": 95 },
+            { "pitch": "B1", "time": "7:2:0", "duration": "2n", "velocity": 92 }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            { "pitch": "E3", "time": "0:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "G3", "time": "0:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "B3", "time": "0:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "E3", "time": "1:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "G3", "time": "1:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "B3", "time": "1:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "D3", "time": "2:0:0", "duration": "1n", "velocity": 70 },
+            { "pitch": "F#3", "time": "2:0:0", "duration": "1n", "velocity": 64 },
+            { "pitch": "A3", "time": "2:0:0", "duration": "1n", "velocity": 60 },
+            { "pitch": "C3", "time": "3:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "E3", "time": "3:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "G3", "time": "3:0:0", "duration": "1n", "velocity": 60 },
+            { "pitch": "E3", "time": "4:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "G3", "time": "4:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "B3", "time": "4:0:0", "duration": "1n", "velocity": 60 },
+            { "pitch": "E3", "time": "5:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "G3", "time": "5:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "B3", "time": "5:0:0", "duration": "1n", "velocity": 60 },
+            { "pitch": "D3", "time": "6:0:0", "duration": "1n", "velocity": 74 },
+            { "pitch": "F#3", "time": "6:0:0", "duration": "1n", "velocity": 66 },
+            { "pitch": "A3", "time": "6:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "C3", "time": "7:0:0", "duration": "1n", "velocity": 74 },
+            { "pitch": "E3", "time": "7:0:0", "duration": "1n", "velocity": 66 },
+            { "pitch": "G3", "time": "7:0:0", "duration": "1n", "velocity": 62 }
+          ]
+        },
+        {
+          "instrumentId": "stab",
+          "notes": [
+            { "pitch": "E4", "time": "0:1:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "G4", "time": "0:3:0", "duration": "8n", "velocity": 72, "articulation": "staccato" },
+            { "pitch": "E4", "time": "1:1:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "B4", "time": "1:3:0", "duration": "8n", "velocity": 72, "articulation": "staccato" },
+            { "pitch": "D4", "time": "2:1:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "F#4", "time": "2:3:0", "duration": "8n", "velocity": 72, "articulation": "staccato" },
+            { "pitch": "C4", "time": "3:1:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "E4", "time": "3:3:0", "duration": "8n", "velocity": 72, "articulation": "staccato" },
+            { "pitch": "E4", "time": "4:1:0", "duration": "8n", "velocity": 78, "articulation": "staccato" },
+            { "pitch": "G4", "time": "4:3:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "E4", "time": "5:1:0", "duration": "8n", "velocity": 78, "articulation": "staccato" },
+            { "pitch": "B4", "time": "5:3:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "D4", "time": "6:1:0", "duration": "8n", "velocity": 78, "articulation": "staccato" },
+            { "pitch": "F#4", "time": "6:3:0", "duration": "8n", "velocity": 75, "articulation": "staccato" },
+            { "pitch": "C4", "time": "7:1:0", "duration": "8n", "velocity": 78, "articulation": "staccato" },
+            { "pitch": "E4", "time": "7:3:0", "duration": "8n", "velocity": 80, "articulation": "staccato" }
+          ]
+        }
+      ]
+    }
+  ]
+}
