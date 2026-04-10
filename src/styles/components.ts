@@ -45,6 +45,13 @@ export const mixer = {
     'px-2 py-0.5 rounded text-xs font-medium transition-colors bg-warning text-on-primary',
   master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 min-w-[160px]',
   masterLabel: 'text-primary text-sm font-medium',
+  // Meter bar — vertical level indicator beside the channel controls.
+  meterContainer: 'relative w-2 h-16 bg-surface rounded overflow-hidden border border-border',
+  meterFill: 'absolute bottom-0 left-0 right-0 transition-[height] duration-75 ease-out',
+  meterGreen: 'bg-success',
+  meterYellow: 'bg-warning',
+  meterRed: 'bg-error',
+  meterRow: 'flex gap-2 items-stretch',
 }
 
 export const transport = {
