@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import { expandChords } from '../schema/chords'
 import type { SonicForgeComposition } from '../schema/composition'
 import { validate } from '../schema/validate'
+import { AutomationEngine } from './AutomationEngine'
 import { EffectsChain } from './EffectsChain'
 import { type InstrumentSource, type LoadedInstrument, loadInstruments } from './InstrumentLoader'
 import { MixBus } from './MixBus'
@@ -9,6 +10,7 @@ import { MultiLayerSampler } from './MultiLayerSampler'
 import { loadSampleData } from './SampleLoader'
 import { TrackPlayer } from './TrackPlayer'
 import { Transport, type TransportCallbacks } from './Transport'
+import type { AutomationTargetRegistry } from './automation-targets'
 import { DEFAULT_HUMANIZATION } from './humanize'
 
 export type EngineState = 'empty' | 'loading' | 'ready' | 'playing' | 'paused'
@@ -31,7 +33,10 @@ export class Engine {
   private _state: EngineState = 'empty'
   private mixBus = new MixBus()
   private effectsChains: EffectsChain[] = []
+  /** instrumentId → EffectsChain for automation target resolution. */
+  private chainsByInstrument = new Map<string, EffectsChain>()
   private masterEffectsChain: EffectsChain | null = null
+  private automationEngine = new AutomationEngine()
 
   get state(): EngineState {
     return this._state
@@ -88,6 +93,7 @@ export class Engine {
         const chain = new EffectsChain()
         chain.connect(loaded.sampler, channel, instDef.effects)
         this.effectsChains.push(chain)
+        this.chainsByInstrument.set(instDef.id, chain)
       }
 
       // Master bus effects: if the composition declares masterEffects, route
@@ -103,6 +109,20 @@ export class Engine {
           this.composition.masterEffects,
         )
       }
+
+      // Compile automation lanes against the resolved target registry.
+      // Must happen after instruments, per-instrument chains, and master
+      // chain are built so every target path can be resolved.
+      const registry: AutomationTargetRegistry = {
+        mixBus: this.mixBus,
+        instrumentChains: this.chainsByInstrument,
+        masterChain: this.masterEffectsChain,
+      }
+      this.automationEngine.compile(
+        this.composition.automation,
+        this.composition.metadata,
+        registry,
+      )
 
       // Configure transport
       this.transport.configure(this.composition.metadata, this.composition.sections)
@@ -141,25 +161,34 @@ export class Engine {
   async play(): Promise<void> {
     if (!this.composition) return
     await this.transport.play()
+    this.automationEngine.scheduleFromCurrentPosition()
     this.setState('playing')
   }
 
   pause(): void {
     this.transport.pause()
+    this.automationEngine.stop()
     this.setState('paused')
   }
 
   stop(): void {
     this.transport.stop()
+    this.automationEngine.stop()
     this.setState('ready')
   }
 
   seekToSection(index: number): void {
     this.transport.seekToSection(index)
+    if (this._state === 'playing') {
+      this.automationEngine.scheduleFromCurrentPosition()
+    }
   }
 
   seekToBeat(beat: number): void {
     this.transport.seekToBeat(beat)
+    if (this._state === 'playing') {
+      this.automationEngine.scheduleFromCurrentPosition()
+    }
   }
 
   setLoopSection(index: number | null): void {
@@ -260,11 +289,14 @@ export class Engine {
       chain.dispose()
     }
     this.effectsChains = []
+    this.chainsByInstrument.clear()
 
     if (this.masterEffectsChain) {
       this.masterEffectsChain.dispose()
       this.masterEffectsChain = null
     }
+
+    this.automationEngine.dispose()
 
     for (const [, inst] of this.instruments) {
       inst.sampler.dispose()

@@ -188,6 +188,107 @@ describe('validate — effects', () => {
     }
     expect(() => validate(comp)).not.toThrow()
   })
+
+  it('accepts effects with explicit ids', () => {
+    const comp = {
+      ...validComposition,
+      instruments: [
+        {
+          id: 'pad',
+          name: 'Pad',
+          sample: 'warm_pad',
+          category: 'pad' as const,
+          effects: [
+            { type: 'reverb', id: 'mainReverb', params: { wet: 0.5 } },
+            { type: 'reverb', id: 'sendReverb', params: { wet: 0.2 } },
+          ],
+        },
+      ],
+      sections: [{ name: 'a', bars: 4, tracks: [{ instrumentId: 'pad', notes: [] }] }],
+    }
+    expect(() => validate(comp)).not.toThrow()
+  })
+
+  it('rejects duplicate effect ids within a chain', () => {
+    const comp = {
+      ...validComposition,
+      instruments: [
+        {
+          id: 'pad',
+          name: 'Pad',
+          sample: 'warm_pad',
+          category: 'pad' as const,
+          effects: [
+            { type: 'reverb', id: 'myReverb', params: {} },
+            { type: 'delay', id: 'myReverb', params: {} },
+          ],
+        },
+      ],
+      sections: [{ name: 'a', bars: 4, tracks: [{ instrumentId: 'pad', notes: [] }] }],
+    }
+    expect(() => validate(comp)).toThrow('duplicate effect id')
+  })
+
+  it('rejects empty string effect ids', () => {
+    const comp = {
+      ...validComposition,
+      instruments: [
+        {
+          id: 'pad',
+          name: 'Pad',
+          sample: 'warm_pad',
+          category: 'pad' as const,
+          effects: [{ type: 'reverb', id: '', params: {} }],
+        },
+      ],
+      sections: [{ name: 'a', bars: 4, tracks: [{ instrumentId: 'pad', notes: [] }] }],
+    }
+    expect(() => validate(comp)).toThrow('effect.id must be a non-empty string')
+  })
+
+  it('accepts the same effect id across different chains', () => {
+    const comp = {
+      ...validComposition,
+      instruments: [
+        {
+          id: 'pad',
+          name: 'Pad',
+          sample: 'warm_pad',
+          category: 'pad' as const,
+          effects: [{ type: 'reverb', id: 'mainReverb', params: {} }],
+        },
+        {
+          id: 'lead',
+          name: 'Lead',
+          sample: 'lead_sound',
+          category: 'melodic' as const,
+          effects: [{ type: 'reverb', id: 'mainReverb', params: {} }],
+        },
+      ],
+      sections: [
+        {
+          name: 'a',
+          bars: 4,
+          tracks: [
+            { instrumentId: 'pad', notes: [] },
+            { instrumentId: 'lead', notes: [] },
+          ],
+        },
+      ],
+    }
+    expect(() => validate(comp)).not.toThrow()
+  })
+
+  it('enforces id uniqueness within masterEffects chain', () => {
+    const comp = {
+      ...validComposition,
+      masterEffects: [
+        { type: 'eq3', id: 'main', params: {} },
+        { type: 'limiter', id: 'main', params: {} },
+      ],
+    }
+    expect(() => validate(comp)).toThrow('duplicate effect id')
+  })
 })
 
 describe('validate — automation', () => {
