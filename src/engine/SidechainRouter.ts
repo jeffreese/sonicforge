@@ -10,19 +10,34 @@ import type { MixBus } from './MixBus'
  *
  *   sampler → effects → duckingGain → channel → master → destination
  *                            ↑
- *                            │  (subtracted from 1)
+ *                            │  (control signal drives .gain directly)
  *                            │
+ *                     Tone.Add(1)
+ *                            ↑
  *                     Tone.Multiply(-amount)
  *                            ↑
  *                     Tone.Follower
  *                            ↑
  *                     sourceChannel (tapped post-fader via a branch)
  *
- * The ducking gain starts at linear gain 1 (pass-through). The follower
- * tracks the source's amplitude envelope (0..1). Multiplying by -amount
- * and summing into the gain signal gives the target's effective gain as
- * `1 - follower * amount`, so a loud kick pulls the target down by up
- * to `amount` (0..1 range, 1 = full silence on hit).
+ * Control signal math: `1 + (-amount * follower) = 1 - amount * follower`
+ *
+ *   follower = 0 (silent source) → gain = 1 (full pass-through)
+ *   follower = 1 (loud source)   → gain = 1 - amount (ducked)
+ *
+ * Implementation note: we build the full control signal with an explicit
+ * Tone.Add(1) node BEFORE it reaches the target gain's `.gain` param,
+ * rather than trying to rely on the connect-to-param behavior of Tone.js.
+ * Connecting a source to a Tone.Param does NOT sum with the param's base
+ * value — it drives the param from the connected signal, and any attempt
+ * to use `gain.value = 1` as a baseline is effectively ignored once a
+ * signal is connected. We set `gain.value = 0` explicitly to make this
+ * unambiguous: the Add(1) node is the only source of the gain value.
+ *
+ * (Earlier iterations of this class relied on the sum-with-baseline
+ * assumption and produced silent targets. That broken behavior was
+ * caught in sub-epic #6 when Jeff soloed a pad in a bass-trance demo
+ * and heard nothing.)
  *
  * Because signal routing happens in two phases, the Engine must call
  * prepareTargets() BEFORE building the effects chains (so the ducking
@@ -32,9 +47,10 @@ import type { MixBus } from './MixBus'
 export class SidechainRouter {
   /** Target instrument id → ducking Gain node inserted in its signal path. */
   private targetGains = new Map<string, Tone.Gain>()
-  /** Followers and multipliers created for sources, tracked for disposal. */
+  /** Followers, multipliers, and adders created per config, tracked for disposal. */
   private followers: Tone.Follower[] = []
   private multipliers: Tone.Multiply[] = []
+  private adders: Tone.Add[] = []
 
   /**
    * Phase 1: for every sidechain config, create a Tone.Gain that will sit
@@ -99,13 +115,20 @@ export class SidechainRouter {
 
       const multiplier = new Tone.Multiply(-config.amount)
       follower.connect(multiplier)
-      // Sum the (negative) envelope signal into the ducking gain's control.
-      // Tone.Gain.gain is a Tone.Signal with a base value of 1, so the
-      // result is `1 + follower * -amount` = `1 - follower * amount`.
-      multiplier.connect(targetGain.gain)
+
+      // Build the control signal `1 - amount*follower` explicitly with an
+      // Add(1) node so the signal arriving at targetGain.gain is already the
+      // correct value. Then zero out the gain's base value so the connected
+      // signal is the only source — this sidesteps any ambiguity about
+      // whether connecting to a Tone.Param sums with or replaces the base.
+      const adder = new Tone.Add(1)
+      multiplier.connect(adder)
+      targetGain.gain.value = 0
+      adder.connect(targetGain.gain)
 
       this.followers.push(follower)
       this.multipliers.push(multiplier)
+      this.adders.push(adder)
     }
   }
 
@@ -116,6 +139,8 @@ export class SidechainRouter {
 
   /** Dispose all created nodes. Called by Engine.dispose(). */
   dispose(): void {
+    for (const a of this.adders) a.dispose()
+    this.adders = []
     for (const m of this.multipliers) m.dispose()
     this.multipliers = []
     for (const f of this.followers) f.dispose()
