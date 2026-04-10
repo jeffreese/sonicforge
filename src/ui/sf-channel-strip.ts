@@ -42,11 +42,13 @@ export class SfChannelStrip extends LitElement {
 
   /**
    * Format a dB level as a short, human-readable string for the numeric
-   * readout below the meter bar. Silent shows `-∞`, other values round
-   * to the nearest integer dB.
+   * readout below the meter bar. Silent shows `-∞` — we treat anything
+   * below -60 dB (the meter's visual floor) as silent because Tone.Meter
+   * returns subnormal floats around -6460 dB instead of -Infinity when
+   * the signal is fully quiet.
    */
   private formatDb(db: number): string {
-    if (!Number.isFinite(db)) return '-∞'
+    if (!Number.isFinite(db) || db < -60) return '-∞'
     return `${Math.round(db)} dB`
   }
 
@@ -146,7 +148,7 @@ export class SfChannelStrip extends LitElement {
                 style="height: ${meterHeight}%"
               ></div>
               ${
-                Number.isFinite(this.peakLevel)
+                Number.isFinite(this.peakLevel) && this.peakLevel > -60
                   ? html`<div
                     class="${mixer.meterPeak}"
                     style="bottom: ${peakHeight}%"

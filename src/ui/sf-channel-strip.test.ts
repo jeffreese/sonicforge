@@ -160,6 +160,24 @@ describe('sf-channel-strip', () => {
     expect(el.textContent).toContain('-∞')
   })
 
+  it('renders -∞ readout for Tone.Meter subnormal-silence values', async () => {
+    // Tone.Meter returns ~-6460 dB at true silence instead of -Infinity.
+    // Anything below the -60 dB meter floor should display as -∞, not as
+    // a 5-digit number that pushes the layout around.
+    const el = createElement({ level: -6460 })
+    await el.updateComplete
+    expect(el.textContent).toContain('-∞')
+    expect(el.textContent).not.toContain('-6460')
+  })
+
+  it('hides peak hold indicator when peakLevel is below meter floor', async () => {
+    const el = createElement({ level: -6460, peakLevel: -6460 })
+    await el.updateComplete
+    // Subnormal peaks should render like true silence — no peak line.
+    const children = el.querySelectorAll('[role="meter"] > div')
+    expect(children.length).toBe(1)
+  })
+
   it('renders rounded dB readout when level is audible', async () => {
     const el = createElement({ level: -12.4 })
     await el.updateComplete

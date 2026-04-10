@@ -58,7 +58,9 @@ export const mixer = {
   // Column that wraps the meter bar + numeric dB readout below it.
   meterColumn: 'flex flex-col items-center gap-1',
   // Small monospace text under the meter showing current dB level.
-  meterReadout: 'font-mono text-[10px] text-muted tabular-nums leading-none',
+  // Fixed width so the changing digit count (e.g. "-6 dB" → "-60 dB" → "-∞")
+  // can't push the meter column around and jitter the surrounding layout.
+  meterReadout: 'font-mono text-[10px] text-muted tabular-nums leading-none w-12 text-center',
 }
 
 export const transport = {

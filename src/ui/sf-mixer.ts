@@ -227,7 +227,12 @@ export class SfMixer extends LitElement {
     const meterHeight = this.levelToHeight(this.masterLevel)
     const peakHeight = this.levelToHeight(this.masterPeakLevel)
     const meterColor = this.levelColorClass(this.masterLevel)
-    const readout = Number.isFinite(this.masterLevel) ? `${Math.round(this.masterLevel)} dB` : '-∞'
+    // Treat anything below the meter floor as silent — Tone.Meter returns
+    // subnormal floats (~-6460 dB) at true silence instead of -Infinity.
+    const readout =
+      Number.isFinite(this.masterLevel) && this.masterLevel >= -60
+        ? `${Math.round(this.masterLevel)} dB`
+        : '-∞'
     return html`
       <div class="${mixer.master}">
         <div class="${mixer.masterLabel}">Master</div>
@@ -261,7 +266,7 @@ export class SfMixer extends LitElement {
                 style="height: ${meterHeight}%"
               ></div>
               ${
-                Number.isFinite(this.masterPeakLevel)
+                Number.isFinite(this.masterPeakLevel) && this.masterPeakLevel > -60
                   ? html`<div
                     class="${mixer.meterPeak}"
                     style="bottom: ${peakHeight}%"
