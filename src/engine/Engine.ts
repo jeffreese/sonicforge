@@ -6,8 +6,10 @@ import { AutomationEngine } from './AutomationEngine'
 import { EffectsChain } from './EffectsChain'
 import { type InstrumentSource, type LoadedInstrument, loadInstruments } from './InstrumentLoader'
 import { MixBus } from './MixBus'
+import { ModulationEngine } from './ModulationEngine'
 import { MultiLayerSampler } from './MultiLayerSampler'
 import { loadSampleData } from './SampleLoader'
+import { SidechainRouter } from './SidechainRouter'
 import { TrackPlayer } from './TrackPlayer'
 import { Transport, type TransportCallbacks } from './Transport'
 import type { AutomationTargetRegistry } from './automation-targets'
@@ -37,6 +39,8 @@ export class Engine {
   private chainsByInstrument = new Map<string, EffectsChain>()
   private masterEffectsChain: EffectsChain | null = null
   private automationEngine = new AutomationEngine()
+  private sidechainRouter = new SidechainRouter()
+  private modulationEngine = new ModulationEngine()
 
   get state(): EngineState {
     return this._state
@@ -82,6 +86,11 @@ export class Engine {
         this.composition.sections,
       )
 
+      // Sidechain phase 1: create ducking Gain nodes for every instrument
+      // that is a sidechain target. These nodes become the effects chain
+      // terminal for the target instead of the mix bus channel directly.
+      const duckingGains = this.sidechainRouter.prepareTargets(this.composition.sidechain)
+
       // Create mix bus channels and effects chains for each instrument
       for (const instDef of this.composition.instruments) {
         const loaded = this.instruments.get(instDef.id)
@@ -89,12 +98,22 @@ export class Engine {
 
         const channel = this.mixBus.createChannel(instDef)
 
-        // Build effects chain: sampler → effects → channel
+        // Build effects chain. If this instrument is a sidechain target,
+        // route through the ducking gain and then into the channel.
+        const duckingGain = duckingGains.get(instDef.id)
+        const chainTerminal = duckingGain ?? channel
         const chain = new EffectsChain()
-        chain.connect(loaded.sampler, channel, instDef.effects)
+        chain.connect(loaded.sampler, chainTerminal, instDef.effects)
+        if (duckingGain) {
+          duckingGain.connect(channel)
+        }
         this.effectsChains.push(chain)
         this.chainsByInstrument.set(instDef.id, chain)
       }
+
+      // Sidechain phase 2: tap each source channel post-fader into a Tone.Follower
+      // and route the (negated, scaled) envelope into the target's ducking gain.
+      this.sidechainRouter.connectSources(this.composition.sidechain, this.instruments, this.mixBus)
 
       // Master bus effects: if the composition declares masterEffects, route
       // master → effects → destination. Otherwise the master stays connected
@@ -117,12 +136,26 @@ export class Engine {
         mixBus: this.mixBus,
         instrumentChains: this.chainsByInstrument,
         masterChain: this.masterEffectsChain,
+        getInstrumentSynthNode: (id: string) => {
+          const loaded = this.instruments.get(id)
+          if (!loaded) return null
+          // SynthInstrument exposes getInnerSynth(); other InstrumentSources
+          // (MultiLayerSampler, DrumKit) don't implement it — return null for
+          // those to skip synth-internal resolution.
+          const source = loaded.sampler as unknown as {
+            getInnerSynth?: () => unknown
+          }
+          return source.getInnerSynth ? source.getInnerSynth() : null
+        },
       }
       this.automationEngine.compile(
         this.composition.automation,
         this.composition.metadata,
         registry,
       )
+
+      // Compile modulation (LFOs + routes) against the same registry.
+      this.modulationEngine.compile(this.composition.lfos, this.composition.modulation, registry)
 
       // Configure transport
       this.transport.configure(this.composition.metadata, this.composition.sections)
@@ -162,18 +195,21 @@ export class Engine {
     if (!this.composition) return
     await this.transport.play()
     this.automationEngine.scheduleFromCurrentPosition()
+    this.modulationEngine.start()
     this.setState('playing')
   }
 
   pause(): void {
     this.transport.pause()
     this.automationEngine.stop()
+    this.modulationEngine.stop()
     this.setState('paused')
   }
 
   stop(): void {
     this.transport.stop()
     this.automationEngine.stop()
+    this.modulationEngine.stop()
     this.setState('ready')
   }
 
@@ -297,6 +333,8 @@ export class Engine {
     }
 
     this.automationEngine.dispose()
+    this.modulationEngine.dispose()
+    this.sidechainRouter.dispose()
 
     for (const [, inst] of this.instruments) {
       inst.sampler.dispose()

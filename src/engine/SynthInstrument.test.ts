@@ -1,6 +1,64 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { SynthPatch } from '../schema/composition'
-import { buildSynthOptions, defaultPolyphony, resolvePatch } from './SynthInstrument'
+
+// Mock Tone.js so SynthInstrument can instantiate under jsdom. The real
+// classes can't construct without a live AudioContext, so we stub each class
+// as an extendable JS class. Instanceof checks still work because each stub
+// is a distinct class.
+vi.mock('tone', () => {
+  class GainStub {
+    connect() {
+      return this
+    }
+    disconnect() {
+      return this
+    }
+    dispose() {
+      return this
+    }
+  }
+  const makeSynthStub = () =>
+    class extends GainStub {
+      filter = { frequency: fakeParam(), Q: fakeParam() }
+      oscillator = { detune: fakeParam() }
+      triggerAttackRelease() {
+        return this
+      }
+    }
+  class PolySynthStub extends GainStub {
+    triggerAttackRelease() {
+      return this
+    }
+  }
+  return {
+    Gain: GainStub,
+    MonoSynth: makeSynthStub(),
+    Synth: makeSynthStub(),
+    FMSynth: makeSynthStub(),
+    AMSynth: makeSynthStub(),
+    DuoSynth: makeSynthStub(),
+    PluckSynth: class extends GainStub {
+      triggerAttackRelease() {
+        return this
+      }
+    },
+    PolySynth: PolySynthStub,
+  }
+})
+
+function fakeParam() {
+  return {
+    value: 0,
+    setValueAtTime: () => {},
+    linearRampToValueAtTime: () => {},
+    exponentialRampToValueAtTime: () => {},
+    cancelScheduledValues: () => {},
+  }
+}
+
+const { SynthInstrument, buildSynthOptions, defaultPolyphony, resolvePatch } = await import(
+  './SynthInstrument'
+)
 
 describe('resolvePatch', () => {
   it('returns the patch unchanged when given a SynthPatch object', () => {
@@ -96,5 +154,40 @@ describe('buildSynthOptions', () => {
     expect('oscillator' in options).toBe(false)
     expect('envelope' in options).toBe(false)
     expect('filter' in options).toBe(false)
+  })
+})
+
+describe('SynthInstrument.getInnerSynth', () => {
+  it('returns the inner synth for a mono type', () => {
+    const instance = new SynthInstrument({ type: 'mono' })
+    const inner = instance.getInnerSynth()
+    expect(inner).not.toBeNull()
+  })
+
+  it('returns the inner synth for fm with polyphony: false', () => {
+    const instance = new SynthInstrument({ type: 'fm', polyphony: false })
+    expect(instance.getInnerSynth()).not.toBeNull()
+  })
+
+  it('returns null for poly type (PolySynth cannot be modulated from outside)', () => {
+    const instance = new SynthInstrument({ type: 'poly' })
+    expect(instance.getInnerSynth()).toBeNull()
+  })
+
+  it('returns null for fm with default (polyphonic) wrapping', () => {
+    const instance = new SynthInstrument({ type: 'fm' })
+    expect(instance.getInnerSynth()).toBeNull()
+  })
+
+  it('returns the inner synth for duo (intrinsically mono)', () => {
+    const instance = new SynthInstrument({ type: 'duo' })
+    expect(instance.getInnerSynth()).not.toBeNull()
+  })
+
+  it('exposes a filter.frequency Tone.Param on mono synths', () => {
+    const instance = new SynthInstrument({ type: 'mono' })
+    const inner = instance.getInnerSynth() as unknown as Record<string, unknown>
+    const filter = inner.filter as Record<string, unknown>
+    expect(typeof (filter.frequency as { setValueAtTime: unknown }).setValueAtTime).toBe('function')
   })
 })

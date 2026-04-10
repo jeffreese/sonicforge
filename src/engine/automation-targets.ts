@@ -33,6 +33,15 @@ export interface AutomationTargetRegistry {
   instrumentChains: Map<string, EffectsChain>
   /** Master effects chain, or null if the composition has none. */
   masterChain: EffectsChain | null
+  /**
+   * Returns the inner Tone.js synth node for an instrument, or null if the
+   * instrument is not a synth or is a PolySynth (which can't be modulated
+   * from outside — see SynthInstrument.getInnerSynth).
+   *
+   * Used by the resolver to walk synth-internal property paths like
+   * `"bass.filter.frequency"` → `synthNode.filter.frequency`.
+   */
+  getInstrumentSynthNode(id: string): unknown
 }
 
 export type TonePrimitiveParam = Tone.Param<'normalRange'> | Tone.Param<'decibels'> | Tone.Signal
@@ -64,10 +73,38 @@ export function resolveTarget(
     return resolveTrackParam(registry.mixBus, head, rest[0])
   }
 
-  // Per-instrument effect: "<instrumentId>.<effectIdOrType>.<paramName>"
+  // Per-instrument: try effect lookup first, then fall back to synth-internal
+  // property walking. Effect lookup wins when there's a conflict — document
+  // and move on (rare in practice, and explicit effect ids make the author's
+  // intent unambiguous).
   const chain = registry.instrumentChains.get(head)
-  if (!chain) return null
-  return resolveEffectParam(chain, rest)
+  if (chain) {
+    const fromEffect = resolveEffectParam(chain, rest)
+    if (fromEffect) return fromEffect
+  }
+
+  // Synth-internal walk: "bass.filter.frequency" → synthNode.filter.frequency.
+  // Works for mono synths (mono, fm/am with polyphony: false, duo, pluck).
+  // Returns null for PolySynth (see SynthInstrument.getInnerSynth).
+  const synthNode = registry.getInstrumentSynthNode(head)
+  if (synthNode) {
+    return walkPath(synthNode, rest)
+  }
+
+  return null
+}
+
+/**
+ * Walk a dotted path from a root object down to a Tone.Param / Tone.Signal.
+ * Exported so tests and the Modulation engine can share the same traversal.
+ */
+export function walkPath(root: unknown, pathRest: string[]): TonePrimitiveParam | null {
+  let current: unknown = root
+  for (const key of pathRest) {
+    if (!current || typeof current !== 'object') return null
+    current = (current as Record<string, unknown>)[key]
+  }
+  return isToneParam(current) ? (current as TonePrimitiveParam) : null
 }
 
 function resolveTrackParam(

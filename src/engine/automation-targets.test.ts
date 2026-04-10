@@ -62,10 +62,29 @@ function makeRegistry(): AutomationTargetRegistry {
     },
   } as unknown as AutomationTargetRegistry['masterChain']
 
+  // Fake synth node for "bass" — a mono synth with filter + oscillator.
+  // Each nested object that terminates in a Tone.Param returns a fakeParam.
+  const bassSynthNode = {
+    filter: {
+      frequency: fakeParam(),
+      Q: fakeParam(),
+      // nonParam: a raw number should NOT be resolved as a target.
+      type: 'lowpass',
+    },
+    oscillator: {
+      detune: fakeParam(),
+    },
+    volume: fakeParam(),
+  }
+
   return {
     mixBus,
     instrumentChains: new Map([['lead', leadChain]]),
     masterChain,
+    getInstrumentSynthNode(id: string) {
+      if (id === 'bass') return bassSynthNode
+      return null
+    },
   }
 }
 
@@ -124,5 +143,61 @@ describe('resolveTarget', () => {
 
   it('returns null for master path with unknown effect', () => {
     expect(resolveTarget('master.ghost.something', makeRegistry())).toBeNull()
+  })
+
+  // ───── Synth-internal resolution (sub-epic #4) ─────
+
+  it('resolves a synth-internal filter frequency param', () => {
+    const target = resolveTarget('bass.filter.frequency', makeRegistry())
+    expect(target).not.toBeNull()
+    expect(typeof target?.setValueAtTime).toBe('function')
+  })
+
+  it('resolves a synth-internal filter Q param', () => {
+    const target = resolveTarget('bass.filter.Q', makeRegistry())
+    expect(target).not.toBeNull()
+  })
+
+  it('resolves a nested oscillator detune param', () => {
+    const target = resolveTarget('bass.oscillator.detune', makeRegistry())
+    expect(target).not.toBeNull()
+  })
+
+  it('returns null for a non-param synth property (e.g. filter.type string)', () => {
+    // filter.type is a string ('lowpass'), not a Tone.Param — resolver should
+    // reject it via the duck-type check.
+    expect(resolveTarget('bass.filter.type', makeRegistry())).toBeNull()
+  })
+
+  it('returns null for an unknown synth-internal path', () => {
+    expect(resolveTarget('bass.nonexistent.param', makeRegistry())).toBeNull()
+  })
+
+  it('returns null for a PolySynth instrument (no inner synth available)', () => {
+    // A synth whose getInstrumentSynthNode returns null (simulating PolySynth)
+    // cannot be modulated from outside.
+    const registry = makeRegistry()
+    registry.getInstrumentSynthNode = () => null
+    expect(resolveTarget('bass.filter.frequency', registry)).toBeNull()
+  })
+
+  it('effect lookup wins over synth-internal when both paths would resolve', () => {
+    // If "lead" had both an effect named "filter" AND a synth filter, the
+    // effect lookup takes precedence. We don't have a "filter" effect in the
+    // fixture but the lead's effect chain returns null for "filter", so the
+    // fallback to synth-internal should work if lead had a synth node.
+    // Here we verify the FALLBACK order: effect first, then synth.
+    const registry = makeRegistry()
+    // Add a synth node for lead as well.
+    const leadSynthNode = { filter: { frequency: fakeParam() } }
+    registry.getInstrumentSynthNode = (id: string) => {
+      if (id === 'bass') return null
+      if (id === 'lead') return leadSynthNode
+      return null
+    }
+    // lead.reverb.wet → effect path wins
+    expect(resolveTarget('lead.reverb.wet', registry)).not.toBeNull()
+    // lead.filter.frequency → no effect called "filter", falls back to synth
+    expect(resolveTarget('lead.filter.frequency', registry)).not.toBeNull()
   })
 })
