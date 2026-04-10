@@ -39,7 +39,8 @@
 - [x] `pnpm test` passes (347 tests, 15 new for OneShotInstrument)
 - [x] `pnpm build` passes
 - [x] `pnpm lint` passes
-- [ ] Manual: load `compositions/oneshot-house.json` in the browser, verify drum samples trigger correctly, bassline and pad play cleanly alongside, pad pumps under the kick
+- [x] Manual: `compositions/oneshot-house.json` plays correctly in the browser — drum samples trigger cleanly, synth bass and pad play alongside, pad pumps under the kick via sub-epic #4 sidechain. Confirmed production-quality output.
+- [x] Bonus: initial browser test revealed a TrackPlayer dispatch bug (oneshots were silently skipped because the old `isDrum` flag couldn't express "hit names pass through verbatim"); fixed in-branch by refactoring `LoadedInstrument.isDrum` → `mode: 'pitched' | 'drum' | 'oneshot'`
 
 ## Notes
 
