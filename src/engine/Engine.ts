@@ -1,10 +1,10 @@
-import * as Tone from 'tone'
 import { expandChords } from '../schema/chords'
 import type { SonicForgeComposition } from '../schema/composition'
 import { validate } from '../schema/validate'
 import { EffectsChain } from './EffectsChain'
 import { type InstrumentSource, type LoadedInstrument, loadInstruments } from './InstrumentLoader'
 import { MixBus } from './MixBus'
+import { MultiLayerSampler } from './MultiLayerSampler'
 import { loadSampleData } from './SampleLoader'
 import { TrackPlayer } from './TrackPlayer'
 import { Transport, type TransportCallbacks } from './Transport'
@@ -201,15 +201,9 @@ export class Engine {
     // Load the new sample data
     const sampleData = await loadSampleData(newSample)
 
-    // Create new sampler
-    const newSampler = await new Promise<Tone.Sampler>((resolve, reject) => {
-      const sampler = new Tone.Sampler({
-        urls: sampleData.urls,
-        baseUrl: sampleData.baseUrl,
-        onload: () => resolve(sampler),
-        onerror: (err) => reject(err),
-      })
-    })
+    // Create new multi-layer sampler
+    const newSampler = new MultiLayerSampler()
+    await newSampler.load(sampleData.layers)
 
     // Disconnect old sampler and dispose
     const oldSampler = loaded.sampler

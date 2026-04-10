@@ -15,5 +15,5 @@
 
 ## Integration
 
-- [ ] Verify playback with existing compositions — should sound noticeably more natural
-- [ ] Verify determinism — same composition + settings = same offsets across plays
+- [x] Verify playback with existing compositions — should sound noticeably more natural
+- [x] Verify determinism — same composition + settings = same offsets across plays

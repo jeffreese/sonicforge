@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import type { InstrumentDef, Section } from '../schema/composition'
 import { drumHitToNote } from '../util/music'
 import { DrumKit } from './DrumKit'
+import { MultiLayerSampler } from './MultiLayerSampler'
 import { loadSampleData } from './SampleLoader'
 
 /** Union type for instrument audio sources — Sampler for melodic, DrumKit for drums. */
@@ -41,21 +42,29 @@ export async function loadInstruments(
 
         const sampleData = await loadSampleData(inst.sample)
 
-        // Create sampler and wait for it to load (not connected to anything yet)
-        await new Promise<void>((resolve, reject) => {
-          const sampler = new Tone.Sampler({
-            urls: sampleData.urls,
-            baseUrl: sampleData.baseUrl,
-            onload: () => {
-              loaded.set(inst.id, { id: inst.id, sampler, isDrum })
-              resolve()
-            },
-            onerror: (err) => {
-              console.warn(`Failed to decode samples for ${inst.id}`, err)
-              reject(err)
-            },
+        if (sampleData.layers.length === 1 && sampleData.layers[0].velocity === 0) {
+          // Legacy single-layer manifest — use plain Tone.Sampler
+          const layer = sampleData.layers[0]
+          await new Promise<void>((resolve, reject) => {
+            const sampler = new Tone.Sampler({
+              urls: layer.urls,
+              baseUrl: layer.baseUrl,
+              onload: () => {
+                loaded.set(inst.id, { id: inst.id, sampler, isDrum })
+                resolve()
+              },
+              onerror: (err) => {
+                console.warn(`Failed to decode samples for ${inst.id}`, err)
+                reject(err)
+              },
+            })
           })
-        })
+        } else {
+          // Multi-layer manifest — use MultiLayerSampler
+          const multiSampler = new MultiLayerSampler()
+          await multiSampler.load(sampleData.layers)
+          loaded.set(inst.id, { id: inst.id, sampler: multiSampler, isDrum })
+        }
       } catch (err) {
         console.warn(`Failed to load instrument ${inst.id}:`, err)
       }

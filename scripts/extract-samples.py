@@ -3,7 +3,8 @@
 Extract instrument samples from an SF2 soundfont file.
 
 Uses fluidsynth to render individual notes and ffmpeg to convert to OGG.
-Generates ~20 notes per instrument (every 3 semitones from C2 to C7).
+Generates 61 notes per instrument (every semitone from C2 to C7) at 4
+velocity layers (pp=30, mp=60, mf=90, ff=120). Encodes at 192kbps Opus.
 
 Prerequisites:
     brew install fluidsynth ffmpeg
@@ -109,6 +110,9 @@ GM_INSTRUMENTS = {
 
 NOTE_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
 
+# Velocity layers: pp, mp, mf, ff
+VELOCITY_LAYERS = [30, 60, 90, 120]
+
 
 def midi_to_note_name(midi_note: int) -> str:
     """Convert MIDI note number to note name with flat notation (e.g., 61 -> Db4)."""
@@ -118,17 +122,17 @@ def midi_to_note_name(midi_note: int) -> str:
 
 
 def get_sample_notes() -> "list[int]":
-    """Generate MIDI note numbers: every 3 semitones from C2 (36) to C7 (96)."""
-    return list(range(36, 97, 3))
+    """Generate MIDI note numbers: every semitone from C2 (36) to C7 (96)."""
+    return list(range(36, 97))
 
 
-def create_midi_file(program: int, midi_note: int, output_path: str) -> None:
-    """Create a MIDI file with a single note-on event."""
+def create_midi_file(program: int, midi_note: int, velocity: int, output_path: str) -> None:
+    """Create a MIDI file with a single note-on event at the given velocity."""
     midi = MIDIFile(1)
     midi.addTempo(0, 0, 120)
     midi.addProgramChange(0, 0, 0, program)
     # Note duration of 3 beats at 120 BPM = 1.5 seconds
-    midi.addNote(0, 0, midi_note, 0, 3, 100)
+    midi.addNote(0, 0, midi_note, 0, 3, velocity)
 
     with open(output_path, "wb") as f:
         midi.writeFile(f)
@@ -176,7 +180,7 @@ def convert_to_ogg(wav_path: str, ogg_path: str) -> bool:
                 "-c:a",
                 "libopus",
                 "-b:a",
-                "96k",
+                "192k",
                 "-af",
                 "afade=t=out:st=1.5:d=0.5",
                 ogg_path,
@@ -196,35 +200,50 @@ def convert_to_ogg(wav_path: str, ogg_path: str) -> bool:
 def extract_instrument(
     sf2_path: str, instrument_name: str, program: int, output_dir: Path
 ) -> Optional[dict]:
-    """Extract all sample notes for a single instrument."""
+    """Extract all sample notes at all velocity layers for a single instrument."""
     inst_dir = output_dir / instrument_name
     inst_dir.mkdir(parents=True, exist_ok=True)
 
     notes = get_sample_notes()
-    extracted = []
+    extracted_notes: list[str] = []
+    extracted_layers: list[int] = []
 
     with tempfile.TemporaryDirectory() as tmpdir:
         for midi_note in notes:
             note_name = midi_to_note_name(midi_note)
-            midi_path = os.path.join(tmpdir, f"{note_name}.mid")
-            wav_path = os.path.join(tmpdir, f"{note_name}.wav")
-            ogg_path = str(inst_dir / f"{note_name}.ogg")
+            note_ok = False
 
-            create_midi_file(program, midi_note, midi_path)
+            for velocity in VELOCITY_LAYERS:
+                midi_path = os.path.join(tmpdir, f"{note_name}_v{velocity}.mid")
+                wav_path = os.path.join(tmpdir, f"{note_name}_v{velocity}.wav")
+                ogg_path = str(inst_dir / f"{note_name}_v{velocity}.ogg")
 
-            if not render_with_fluidsynth(sf2_path, midi_path, wav_path):
-                continue
+                create_midi_file(program, midi_note, velocity, midi_path)
 
-            if not convert_to_ogg(wav_path, ogg_path):
-                continue
+                if not render_with_fluidsynth(sf2_path, midi_path, wav_path):
+                    continue
 
-            extracted.append(note_name)
+                if not convert_to_ogg(wav_path, ogg_path):
+                    continue
 
-    if not extracted:
+                note_ok = True
+                if velocity not in extracted_layers:
+                    extracted_layers.append(velocity)
+
+            if note_ok:
+                extracted_notes.append(note_name)
+
+    if not extracted_notes:
         return None
 
+    extracted_layers.sort()
+
     # Write manifest
-    manifest = {"instrument": instrument_name, "notes": extracted}
+    manifest = {
+        "instrument": instrument_name,
+        "velocityLayers": extracted_layers,
+        "notes": extracted_notes,
+    }
     with open(inst_dir / "manifest.json", "w") as f:
         json.dump(manifest, f, indent=2)
 
@@ -271,7 +290,9 @@ def main():
         print(f"[{i}/{total}] {name} (program {program})...")
         result = extract_instrument(sf2_path, name, program, output_dir)
         if result:
-            print(f"  -> {len(result['notes'])} notes extracted")
+            n_notes = len(result['notes'])
+            n_layers = len(result['velocityLayers'])
+            print(f"  -> {n_notes} notes × {n_layers} velocity layers = {n_notes * n_layers} samples")
         else:
             print(f"  -> FAILED (no notes extracted)")
 
