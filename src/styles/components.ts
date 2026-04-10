@@ -34,7 +34,13 @@ export const mixer = {
   // horizontal scrollbar is present.
   stripScroll: 'overflow-x-auto',
   strip: 'flex gap-3 items-stretch',
-  channel: 'bg-surface-elevated border border-border rounded-lg p-3 min-w-[160px]',
+  // Fixed width + flex-shrink-0 so every card is exactly the same size and
+  // the cards never shrink asymmetrically when the mixer overflows
+  // horizontally. Without this, master shrinks harder than the channels
+  // (smaller natural width) and its internal flex-1 wrapper — which has
+  // `min-width: auto` from the slider's intrinsic size — overflows the
+  // card bounds, pushing the meter column outside the border.
+  channel: 'bg-surface-elevated border border-border rounded-lg p-3 w-48 flex-shrink-0',
   channelName: 'text-on-surface text-sm font-medium truncate',
   value: 'font-mono text-xs text-muted tabular-nums w-8 text-right',
   controlRow: 'flex items-center gap-2',
@@ -49,7 +55,7 @@ export const mixer = {
     'px-2 py-0.5 rounded text-xs font-medium transition-colors text-muted hover:text-on-surface hover:bg-surface-hover',
   soloBtnActive:
     'px-2 py-0.5 rounded text-xs font-medium transition-colors bg-warning text-on-primary',
-  master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 min-w-[160px]',
+  master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 w-48 flex-shrink-0',
   masterLabel: 'text-primary text-sm font-medium',
   // Meter bar — vertical level indicator beside the channel controls.
   meterContainer: 'relative w-2 h-16 bg-surface rounded overflow-hidden border border-border',

@@ -106,7 +106,7 @@ export class SfChannelStrip extends LitElement {
       <div class="${mixer.channel}">
         <div class="${mixer.channelName}">${this.name}</div>
         <div class="${mixer.meterRow} mt-2">
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="${mixer.controlRow}">
               <span class="${mixer.label}">Vol</span>
               <input

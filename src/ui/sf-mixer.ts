@@ -239,7 +239,7 @@ export class SfMixer extends LitElement {
       <div class="${mixer.master}">
         <div class="${mixer.masterLabel}">Master</div>
         <div class="${mixer.meterRow} mt-2">
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="${mixer.controlRow}">
               <span class="${mixer.label}">Vol</span>
               <input
