@@ -110,6 +110,14 @@ export class MixBus {
     this.master.volume.value = this.volumeToDb(volume)
   }
 
+  /**
+   * Expose the master channel so the Engine can route it through a master
+   * effects chain (between the mix bus output and Tone.Destination).
+   */
+  getMaster(): Tone.Channel {
+    return this.master
+  }
+
   private volumeToDb(volume: number): number {
     if (volume <= 0) return Number.NEGATIVE_INFINITY
     // Map 0–100 to -60dB–0dB with a curve

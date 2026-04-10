@@ -4,6 +4,7 @@ import { drumHitToNote } from '../util/music'
 import { DrumKit } from './DrumKit'
 import { MultiLayerSampler } from './MultiLayerSampler'
 import { loadSampleData } from './SampleLoader'
+import { SynthInstrument } from './SynthInstrument'
 
 /** Union type for instrument audio sources — Sampler for melodic, DrumKit for drums. */
 export type InstrumentSource = Tone.ToneAudioNode & {
@@ -40,12 +41,28 @@ export async function loadInstruments(
           return
         }
 
-        // Sub-epic #1 only supports 'sampled' instruments at runtime.
-        // Synth support ships in sub-epic #2; one-shot support in sub-epic #5.
-        if (!inst.sample) {
+        // Synth instruments — wrap Tone.js synths via SynthInstrument.
+        if (inst.source === 'synth') {
+          if (!inst.synth) {
+            throw new Error(
+              `Instrument "${inst.id}": source "synth" requires a synth patch or preset name`,
+            )
+          }
+          const synthInstrument = new SynthInstrument(inst.synth)
+          loaded.set(inst.id, { id: inst.id, sampler: synthInstrument, isDrum: false })
+          return
+        }
+
+        // One-shot instruments are not yet supported — ships in sub-epic #5.
+        if (inst.source === 'oneshot') {
           throw new Error(
-            `Instrument "${inst.id}": source "${inst.source ?? 'unknown'}" is not yet supported at runtime. Synth instruments ship in sub-epic #2; one-shot instruments in sub-epic #5.`,
+            `Instrument "${inst.id}": source "oneshot" is not yet supported at runtime. One-shot instruments ship in sub-epic #5.`,
           )
+        }
+
+        // Default path: 'sampled' instruments via MultiLayerSampler / Tone.Sampler.
+        if (!inst.sample) {
+          throw new Error(`Instrument "${inst.id}": sampled source requires a "sample" field`)
         }
 
         const sampleData = await loadSampleData(inst.sample)
