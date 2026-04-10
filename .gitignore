@@ -4,3 +4,5 @@ dist/
 .DS_Store
 public/samples/*
 !public/samples/.gitkeep
+.venv/
+*.sf2

@@ -49,10 +49,12 @@ export class SampleAuditioner {
     try {
       const sampleData = await loadSampleData(sampleName)
 
+      // Use the highest velocity layer for preview audition
+      const layer = sampleData.layers[sampleData.layers.length - 1]
       await new Promise<void>((resolve, reject) => {
         const sampler = new Tone.Sampler({
-          urls: sampleData.urls,
-          baseUrl: sampleData.baseUrl,
+          urls: layer.urls,
+          baseUrl: layer.baseUrl,
           onload: () => {
             sampler.connect(this.previewChannel)
             this.cache.set(sampleName, sampler)
