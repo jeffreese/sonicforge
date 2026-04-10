@@ -3,6 +3,7 @@ import type { InstrumentDef, Section } from '../schema/composition'
 import { drumHitToNote } from '../util/music'
 import { DrumKit } from './DrumKit'
 import { MultiLayerSampler } from './MultiLayerSampler'
+import { OneShotInstrument } from './OneShotInstrument'
 import { loadSampleData } from './SampleLoader'
 import { SynthInstrument } from './SynthInstrument'
 
@@ -34,12 +35,9 @@ export async function loadInstruments(
 
     const promise = (async () => {
       try {
-        // Drums use synthesized DrumKit — no soundfont needed
-        if (isDrum) {
-          const drumKit = new DrumKit()
-          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true })
-          return
-        }
+        // Explicit source dispatch takes precedence over category-based defaults.
+        // This lets a `category: 'drums'` instrument opt into 'oneshot' source
+        // for sample-based drums instead of the synthesized DrumKit.
 
         // Synth instruments — wrap Tone.js synths via SynthInstrument.
         if (inst.source === 'synth') {
@@ -53,11 +51,24 @@ export async function loadInstruments(
           return
         }
 
-        // One-shot instruments are not yet supported — ships in sub-epic #5.
+        // One-shot instruments — Tone.Player per hit, triggered by hit name.
         if (inst.source === 'oneshot') {
-          throw new Error(
-            `Instrument "${inst.id}": source "oneshot" is not yet supported at runtime. One-shot instruments ship in sub-epic #5.`,
-          )
+          if (!inst.oneshots) {
+            throw new Error(
+              `Instrument "${inst.id}": source "oneshot" requires an "oneshots" field`,
+            )
+          }
+          const oneShot = new OneShotInstrument()
+          await oneShot.load(inst.oneshots)
+          loaded.set(inst.id, { id: inst.id, sampler: oneShot, isDrum: false })
+          return
+        }
+
+        // Drums without an explicit source use the synthesized DrumKit.
+        if (isDrum) {
+          const drumKit = new DrumKit()
+          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true })
+          return
         }
 
         // Default path: 'sampled' instruments via MultiLayerSampler / Tone.Sampler.
