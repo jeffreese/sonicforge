@@ -1,4 +1,20 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
+// Mock the engine singleton so importing sf-mixer (which imports from
+// ../engine/instance to poll meter levels) doesn't try to construct a
+// real Tone.js MixBus under jsdom. The mock returns stable dB values
+// that the meter rendering tests can assert on.
+vi.mock('../engine/instance', () => ({
+  engine: {
+    getMixBus: vi.fn().mockReturnValue({
+      getStates: () => [],
+      setMasterVolume: vi.fn(),
+      getChannelLevel: vi.fn().mockReturnValue(Number.NEGATIVE_INFINITY),
+      getMasterLevel: vi.fn().mockReturnValue(Number.NEGATIVE_INFINITY),
+    }),
+  },
+}))
+
 import type { ChannelState } from '../stores/MixerStore'
 import { mixerStore } from '../stores/MixerStore'
 import './sf-mixer'
@@ -167,5 +183,32 @@ describe('sf-mixer', () => {
     el.remove()
     mixerStore.loadChannels([])
     expect(el.isConnected).toBe(false)
+  })
+
+  it('renders a meter bar on each channel strip', async () => {
+    mixerStore.loadChannels(testChannels)
+    const el = createElement()
+    await el.updateComplete
+    const meters = el.querySelectorAll('sf-channel-strip [role="meter"]')
+    // One meter per channel strip.
+    expect(meters.length).toBe(testChannels.length)
+  })
+
+  it('renders a master meter in the master section', async () => {
+    const el = createElement()
+    await el.updateComplete
+    const masterMeter = el.querySelector('[aria-label="Master level"]')
+    expect(masterMeter).not.toBeNull()
+  })
+
+  it('cancels the rAF loop on disconnect', async () => {
+    mixerStore.loadChannels(testChannels)
+    const cancelSpy = vi.spyOn(globalThis, 'cancelAnimationFrame')
+    const el = createElement()
+    await el.updateComplete
+    el.remove()
+    // cancelAnimationFrame should have been called to clean up the loop.
+    expect(cancelSpy).toHaveBeenCalled()
+    cancelSpy.mockRestore()
   })
 })
