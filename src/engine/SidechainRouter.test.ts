@@ -86,7 +86,7 @@ function fakeMixBus(channels: Map<string, { connectTargets: unknown[] }>) {
 
 function fakeInstruments(ids: string[]) {
   const map = new Map()
-  for (const id of ids) map.set(id, { id, sampler: {}, isDrum: false })
+  for (const id of ids) map.set(id, { id, sampler: {}, mode: 'pitched' })
   return map
 }
 

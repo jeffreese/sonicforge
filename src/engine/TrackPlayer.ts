@@ -96,16 +96,27 @@ export class TrackPlayer {
           Math.min(1, velocity * offsets.velocityMultiplier),
         )
 
-        // Determine the pitch to play
+        // Determine the pitch to play based on instrument mode.
+        //   'drum'    → translate hit name to MIDI note for DrumKit
+        //   'oneshot' → pass hit name through verbatim to OneShotInstrument
+        //   'pitched' → parse as note name (e.g. "C4") for melodic instruments
         let pitch: string
-        if (this.instrument.isDrum) {
-          const drumNote = getDrumNote(note.pitch)
-          if (!drumNote) continue
-          pitch = drumNote
-        } else {
-          const parsed = parseNote(note.pitch)
-          if (!parsed) continue
-          pitch = parsed.name + parsed.octave
+        switch (this.instrument.mode) {
+          case 'drum': {
+            const drumNote = getDrumNote(note.pitch)
+            if (!drumNote) continue
+            pitch = drumNote
+            break
+          }
+          case 'oneshot':
+            pitch = note.pitch
+            break
+          default: {
+            const parsed = parseNote(note.pitch)
+            if (!parsed) continue
+            pitch = parsed.name + parsed.octave
+            break
+          }
         }
 
         // Schedule with Tone.Transport

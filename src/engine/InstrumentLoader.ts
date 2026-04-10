@@ -12,10 +12,26 @@ export type InstrumentSource = Tone.ToneAudioNode & {
   triggerAttackRelease(...args: unknown[]): unknown
 }
 
+/**
+ * How a loaded instrument interprets note pitches at trigger time:
+ *
+ *   'pitched' — pitches are parsed as notes like "C4" / "Eb5". Used for
+ *               melodic instruments: MultiLayerSampler, Tone.Sampler,
+ *               SynthInstrument.
+ *   'drum'    — pitches are drum hit names (kick, snare, hihat, …) that
+ *               get translated to MIDI note names via drumHitToNote before
+ *               being passed to the synthesized DrumKit (which then maps
+ *               them back to the right voice).
+ *   'oneshot' — pitches are arbitrary hit names that pass through to
+ *               OneShotInstrument unchanged. The instrument author defines
+ *               the hit-name vocabulary in its `oneshots` map.
+ */
+export type InstrumentMode = 'pitched' | 'drum' | 'oneshot'
+
 export interface LoadedInstrument {
   id: string
   sampler: InstrumentSource
-  isDrum: boolean
+  mode: InstrumentMode
 }
 
 /**
@@ -31,7 +47,7 @@ export async function loadInstruments(
   const promises: Promise<void>[] = []
 
   for (const inst of instruments) {
-    const isDrum = inst.category === 'drums'
+    const isDrumCategory = inst.category === 'drums'
 
     const promise = (async () => {
       try {
@@ -47,7 +63,7 @@ export async function loadInstruments(
             )
           }
           const synthInstrument = new SynthInstrument(inst.synth)
-          loaded.set(inst.id, { id: inst.id, sampler: synthInstrument, isDrum: false })
+          loaded.set(inst.id, { id: inst.id, sampler: synthInstrument, mode: 'pitched' })
           return
         }
 
@@ -60,14 +76,14 @@ export async function loadInstruments(
           }
           const oneShot = new OneShotInstrument()
           await oneShot.load(inst.oneshots)
-          loaded.set(inst.id, { id: inst.id, sampler: oneShot, isDrum: false })
+          loaded.set(inst.id, { id: inst.id, sampler: oneShot, mode: 'oneshot' })
           return
         }
 
         // Drums without an explicit source use the synthesized DrumKit.
-        if (isDrum) {
+        if (isDrumCategory) {
           const drumKit = new DrumKit()
-          loaded.set(inst.id, { id: inst.id, sampler: drumKit, isDrum: true })
+          loaded.set(inst.id, { id: inst.id, sampler: drumKit, mode: 'drum' })
           return
         }
 
@@ -86,7 +102,7 @@ export async function loadInstruments(
               urls: layer.urls,
               baseUrl: layer.baseUrl,
               onload: () => {
-                loaded.set(inst.id, { id: inst.id, sampler, isDrum })
+                loaded.set(inst.id, { id: inst.id, sampler, mode: 'pitched' })
                 resolve()
               },
               onerror: (err) => {
@@ -99,7 +115,7 @@ export async function loadInstruments(
           // Multi-layer manifest — use MultiLayerSampler
           const multiSampler = new MultiLayerSampler()
           await multiSampler.load(sampleData.layers)
-          loaded.set(inst.id, { id: inst.id, sampler: multiSampler, isDrum })
+          loaded.set(inst.id, { id: inst.id, sampler: multiSampler, mode: 'pitched' })
         }
       } catch (err) {
         console.warn(`Failed to load instrument ${inst.id}:`, err)
