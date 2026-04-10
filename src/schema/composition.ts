@@ -94,6 +94,14 @@ export type EffectType = (typeof EFFECT_TYPES)[number]
 
 export interface EffectConfig {
   type: EffectType
+  /**
+   * Optional stable identifier for this effect instance. When set, automation
+   * lanes can target this effect by id (`"pad.mainReverb.wet"`) rather than
+   * relying on effect ordering. IDs must be unique within a single effects
+   * chain. When unset, automation resolves by `type` against the first
+   * matching effect in the chain.
+   */
+  id?: string
   params: Record<string, number | string>
   bypass?: boolean
 }

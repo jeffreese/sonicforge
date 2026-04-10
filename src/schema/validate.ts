@@ -115,17 +115,27 @@ function validateInstrument(inst: unknown, ids: Set<string>, errors: string[]): 
   // 'drums' source requires nothing explicit — existing drum kit is synthesized
 
   if (i.effects !== undefined) {
-    if (!Array.isArray(i.effects)) {
-      errors.push(`instrument "${i.id}": effects must be an array`)
-    } else {
-      for (const eff of i.effects) {
-        validateEffect(eff, `instrument "${i.id}"`, errors)
-      }
-    }
+    validateEffectsChain(i.effects, `instrument "${i.id}"`, errors)
   }
 }
 
-function validateEffect(eff: unknown, context: string, errors: string[]): void {
+function validateEffectsChain(effects: unknown, context: string, errors: string[]): void {
+  if (!Array.isArray(effects)) {
+    errors.push(`${context}: effects must be an array`)
+    return
+  }
+  const seenIds = new Set<string>()
+  for (const eff of effects) {
+    validateEffect(eff, context, errors, seenIds)
+  }
+}
+
+function validateEffect(
+  eff: unknown,
+  context: string,
+  errors: string[],
+  seenIds: Set<string>,
+): void {
   if (!eff || typeof eff !== 'object') {
     errors.push(`${context}: effect must be an object`)
     return
@@ -140,6 +150,15 @@ function validateEffect(eff: unknown, context: string, errors: string[]): void {
   }
   if (!e.params || typeof e.params !== 'object') {
     errors.push(`${context}: effect.params must be an object`)
+  }
+  if (e.id !== undefined) {
+    if (typeof e.id !== 'string' || e.id.length === 0) {
+      errors.push(`${context}: effect.id must be a non-empty string`)
+    } else if (seenIds.has(e.id)) {
+      errors.push(`${context}: duplicate effect id "${e.id}" within chain`)
+    } else {
+      seenIds.add(e.id)
+    }
   }
 }
 
@@ -180,13 +199,7 @@ function validateSections(sections: unknown, instrumentIds: Set<string>, errors:
 
 function validateMasterEffects(masterEffects: unknown, errors: string[]): void {
   if (masterEffects === undefined) return
-  if (!Array.isArray(masterEffects)) {
-    errors.push('masterEffects must be an array')
-    return
-  }
-  for (const eff of masterEffects) {
-    validateEffect(eff, 'masterEffects', errors)
-  }
+  validateEffectsChain(masterEffects, 'masterEffects', errors)
 }
 
 function validateAutomation(automation: unknown, errors: string[]): void {
