@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import type { SectionOffset } from '../engine/Transport'
+import { engine } from '../engine/instance'
 import type { InstrumentDef, SonicForgeComposition } from '../schema/composition'
 import { compositionStore } from '../stores/CompositionStore'
 import type { Unsubscribe } from '../stores/Store'
@@ -92,6 +93,13 @@ export class SfArrangement extends LitElement {
   private unsubComposition?: Unsubscribe
   private unsubTransport?: Unsubscribe
 
+  // Track-header swatch meter animation. Populated in `updated()` by walking
+  // the rendered sidebar DOM; consumed each rAF tick to set inline opacity
+  // without going through Lit's reactive state (which would trigger a full
+  // component re-render + canvas redraw every frame).
+  private swatchEls = new Map<string, HTMLElement>()
+  private meterRafId: number | null = null
+
   createRenderRoot() {
     return this
   }
@@ -129,6 +137,8 @@ export class SfArrangement extends LitElement {
         }
       }
     })
+
+    this.startMeterLoop()
   }
 
   disconnectedCallback(): void {
@@ -137,6 +147,7 @@ export class SfArrangement extends LitElement {
     this.unsubTransport?.()
     this.resizeObserver?.disconnect()
     this.stopPlayheadAnimation()
+    this.stopMeterLoop()
   }
 
   /** Load section offset data (provided by engine after composition load). */
@@ -247,7 +258,60 @@ export class SfArrangement extends LitElement {
       }
     }
 
+    // Re-cache swatch elements after every render so the meter loop can
+    // find them. Keys come from the `data-instrument-id` attribute set in
+    // `renderTrackHeaders`.
+    this.swatchEls.clear()
+    const swatches = this.querySelectorAll<HTMLElement>('[data-instrument-id]')
+    for (const el of swatches) {
+      const id = el.dataset.instrumentId
+      if (id) this.swatchEls.set(id, el)
+    }
+
     this.resize()
+  }
+
+  // ── Swatch meter loop ──────────────────────────────────────────────
+
+  /**
+   * rAF loop that polls the mix bus for each instrument's current dB level
+   * and writes the result directly to the swatch element's opacity. Runs
+   * continuously while the component is mounted so silent tracks dim and
+   * active ones pop without waiting for playback events.
+   *
+   * We bypass reactive state here on purpose — updating a `@state` every
+   * frame would trigger a full re-render and redraw the piano roll canvas
+   * 60 times a second.
+   */
+  private startMeterLoop(): void {
+    if (this.meterRafId !== null) return
+    const tick = () => {
+      const mixBus = engine.getMixBus()
+      for (const [id, el] of this.swatchEls) {
+        const level = mixBus.getChannelLevel(id)
+        el.style.opacity = String(this.levelToSwatchOpacity(level))
+      }
+      this.meterRafId = requestAnimationFrame(tick)
+    }
+    this.meterRafId = requestAnimationFrame(tick)
+  }
+
+  private stopMeterLoop(): void {
+    if (this.meterRafId !== null) {
+      cancelAnimationFrame(this.meterRafId)
+      this.meterRafId = null
+    }
+  }
+
+  /**
+   * Map a dB level to swatch opacity. Silent tracks settle at 0.35 so the
+   * name stays readable; 0 dB pushes opacity to 1.0. Below -60 dB treated
+   * as silent.
+   */
+  private levelToSwatchOpacity(db: number): number {
+    if (!Number.isFinite(db)) return 0.35
+    const clamped = Math.max(-60, Math.min(0, db))
+    return 0.35 + ((clamped + 60) / 60) * 0.65
   }
 
   // ── Data preparation ───────────────────────────────────────────────
@@ -756,6 +820,7 @@ export class SfArrangement extends LitElement {
             >
               <span
                 class="${arrangement.trackHeaderSwatch}"
+                data-instrument-id="${inst.id}"
                 style="background-color: ${INSTRUMENT_COLORS[i % INSTRUMENT_COLORS.length]}"
               ></span>
               <span class="${arrangement.trackHeaderName}">${inst.name}</span>

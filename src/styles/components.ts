@@ -27,8 +27,20 @@ export const input = {
 
 export const mixer = {
   container: 'bg-surface border-t border-border px-4 py-3',
-  strip: 'flex gap-3 overflow-x-auto',
-  channel: 'bg-surface-elevated border border-border rounded-lg p-3 min-w-[160px]',
+  // Wrapper that owns horizontal scrolling. Must be a separate element from
+  // the flex row below — putting overflow-x on the flex row itself forces
+  // overflow-y to auto (per CSS spec), turning the row into a dual-axis
+  // scroll container and breaking `items-stretch` on the cards whenever a
+  // horizontal scrollbar is present.
+  stripScroll: 'overflow-x-auto',
+  strip: 'flex gap-3 items-stretch',
+  // Fixed width + flex-shrink-0 so every card is exactly the same size and
+  // the cards never shrink asymmetrically when the mixer overflows
+  // horizontally. Without this, master shrinks harder than the channels
+  // (smaller natural width) and its internal flex-1 wrapper — which has
+  // `min-width: auto` from the slider's intrinsic size — overflows the
+  // card bounds, pushing the meter column outside the border.
+  channel: 'bg-surface-elevated border border-border rounded-lg p-3 w-48 flex-shrink-0',
   channelName: 'text-on-surface text-sm font-medium truncate',
   value: 'font-mono text-xs text-muted tabular-nums w-8 text-right',
   controlRow: 'flex items-center gap-2',
@@ -43,7 +55,7 @@ export const mixer = {
     'px-2 py-0.5 rounded text-xs font-medium transition-colors text-muted hover:text-on-surface hover:bg-surface-hover',
   soloBtnActive:
     'px-2 py-0.5 rounded text-xs font-medium transition-colors bg-warning text-on-primary',
-  master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 min-w-[160px]',
+  master: 'bg-surface-elevated border border-primary/50 rounded-lg p-3 w-48 flex-shrink-0',
   masterLabel: 'text-primary text-sm font-medium',
   // Meter bar — vertical level indicator beside the channel controls.
   meterContainer: 'relative w-2 h-16 bg-surface rounded overflow-hidden border border-border',
@@ -51,7 +63,17 @@ export const mixer = {
   meterGreen: 'bg-success',
   meterYellow: 'bg-warning',
   meterRed: 'bg-error',
+  // Peak hold indicator — thin horizontal line tracking the recent peak.
+  meterPeak:
+    'absolute left-0 right-0 h-[2px] bg-on-surface/80 transition-[bottom] duration-100 ease-out',
   meterRow: 'flex gap-2 items-stretch',
+  // Column that wraps the meter bar + numeric dB readout below it.
+  meterColumn: 'flex flex-col items-center gap-1',
+  // Small monospace text under the meter showing current dB level.
+  // Fixed width so the changing digit count (e.g. "-6 dB" → "-60 dB" → "-∞")
+  // can't push the meter column around and jitter the surrounding layout.
+  meterReadout:
+    'font-mono text-[10px] text-muted tabular-nums leading-none w-12 text-center whitespace-nowrap',
 }
 
 export const transport = {

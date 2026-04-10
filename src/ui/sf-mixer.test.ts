@@ -201,6 +201,17 @@ describe('sf-mixer', () => {
     expect(masterMeter).not.toBeNull()
   })
 
+  it('renders a dB readout next to the master meter', async () => {
+    const el = createElement()
+    await el.updateComplete
+    // Master meter column contains a readout element — initially -∞ under the
+    // mocked engine which returns -Infinity.
+    const masterSection = el.querySelector('[aria-label="Master level"]') as HTMLElement
+    expect(masterSection).not.toBeNull()
+    const column = masterSection.parentElement as HTMLElement
+    expect(column.textContent).toContain('-∞')
+  })
+
   it('cancels the rAF loop on disconnect', async () => {
     mixerStore.loadChannels(testChannels)
     const cancelSpy = vi.spyOn(globalThis, 'cancelAnimationFrame')

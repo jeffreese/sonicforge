@@ -12,6 +12,8 @@ export class SfChannelStrip extends LitElement {
   @property({ type: Boolean }) soloed = false
   /** Current signal level in dB. -Infinity = silent, 0 = peak. */
   @property({ type: Number }) level = Number.NEGATIVE_INFINITY
+  /** Peak-hold level in dB, computed by the parent mixer. */
+  @property({ type: Number }) peakLevel = Number.NEGATIVE_INFINITY
 
   createRenderRoot() {
     return this
@@ -36,6 +38,18 @@ export class SfChannelStrip extends LitElement {
     if (db > -3) return mixer.meterRed
     if (db > -12) return mixer.meterYellow
     return mixer.meterGreen
+  }
+
+  /**
+   * Format a dB level as a short, human-readable string for the numeric
+   * readout below the meter bar. Silent shows `-∞` — we treat anything
+   * below -60 dB (the meter's visual floor) as silent because Tone.Meter
+   * returns subnormal floats around -6460 dB instead of -Infinity when
+   * the signal is fully quiet.
+   */
+  private formatDb(db: number): string {
+    if (!Number.isFinite(db) || db < -60) return '-∞'
+    return `${Math.round(db)} dB`
   }
 
   private formatPan(pan: number): string {
@@ -85,13 +99,14 @@ export class SfChannelStrip extends LitElement {
   render() {
     const panDisplay = Math.round(this.pan * 100)
     const meterHeight = this.levelToHeight(this.level)
+    const peakHeight = this.levelToHeight(this.peakLevel)
     const meterColor = this.levelColorClass(this.level)
 
     return html`
       <div class="${mixer.channel}">
         <div class="${mixer.channelName}">${this.name}</div>
         <div class="${mixer.meterRow} mt-2">
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="${mixer.controlRow}">
               <span class="${mixer.label}">Vol</span>
               <input
@@ -119,18 +134,29 @@ export class SfChannelStrip extends LitElement {
               <span class="${mixer.value}">${this.formatPan(this.pan)}</span>
             </div>
           </div>
-          <div
-            class="${mixer.meterContainer}"
-            role="meter"
-            aria-label="${this.name} level"
-            aria-valuenow=${Number.isFinite(this.level) ? String(this.level) : '-Infinity'}
-            aria-valuemin="-60"
-            aria-valuemax="0"
-          >
+          <div class="${mixer.meterColumn}">
             <div
-              class="${mixer.meterFill} ${meterColor}"
-              style="height: ${meterHeight}%"
-            ></div>
+              class="${mixer.meterContainer}"
+              role="meter"
+              aria-label="${this.name} level"
+              aria-valuenow=${Number.isFinite(this.level) ? String(this.level) : '-Infinity'}
+              aria-valuemin="-60"
+              aria-valuemax="0"
+            >
+              <div
+                class="${mixer.meterFill} ${meterColor}"
+                style="height: ${meterHeight}%"
+              ></div>
+              ${
+                Number.isFinite(this.peakLevel) && this.peakLevel > -60
+                  ? html`<div
+                    class="${mixer.meterPeak}"
+                    style="bottom: ${peakHeight}%"
+                  ></div>`
+                  : ''
+              }
+            </div>
+            <div class="${mixer.meterReadout}">${this.formatDb(this.level)}</div>
           </div>
         </div>
         <div class="${mixer.buttonRow}">

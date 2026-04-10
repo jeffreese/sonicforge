@@ -3,3 +3,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom elements default to `display: inline`, which breaks block
+ * layout and flex sizing of their children (inline flex items don't
+ * participate correctly in cross-axis or main-axis calculations). All
+ * SonicForge components use light DOM and should behave like plain
+ * block elements. */
+sf-mixer,
+sf-channel-strip,
+sf-arrangement,
+sf-transport-bar,
+sf-sample-explorer,
+sf-sample-picker,
+sf-composition-loader,
+sf-app {
+  display: block;
+}
