@@ -32,6 +32,34 @@ BPM: 70–90 (lo-fi), 120–140 (house), 140–170 (DnB) | Repetition with subtl
 ### Blues
 BPM: 60–120 | 12-bar form | Blue notes: b3, b5, b7 over major chords | Guitar or piano lead, walking bass
 
+## EDM Subgenres
+
+See `synth-presets.md`, `effects-reference.md`, `modulation-patterns.md`, and `oneshot-hits.md` for the specific presets, effects, and modulation patterns referenced below. Use `source: 'synth'` with the suggested preset + `source: 'oneshot'` drum kits for the canonical sound.
+
+### House
+BPM: 120–128 | 4-on-the-floor kick | Open hat on off-beats (2&, 4&) | Sidechain kick → pad pumping (amount 0.7–0.9, release 0.1) | Instruments: `reese_bass` or `acid_bass`, `warm_pad` or `stab_pad`, `detuned_lead` for hooks | Song form: intro → buildup → drop → breakdown → drop → outro
+
+### Techno
+BPM: 125–135 | Driving 4-on-floor kick, minimal snare (maybe on 4 or a "ghost" clap) | 16th-note hat patterns | Industrial textures | Sparse melodic content, repetition-focused | Instruments: `acid_bass`, `reese_bass`, effect-heavy leads via `distortion` + `bitcrusher` | Minimal pads
+
+### Trance
+BPM: 132–140 | 4-on-floor kick with open hat | Driving bass on off-beats (unlike house's on-beats) | Instruments: `supersaw_lead` is mandatory, `arp_pluck` for rolling arpeggios, `organ_pad` | Long buildups with automated filter sweeps + volume swells | Emotional chord progressions (i–VI–III–VII, i–bVII–VI–bVII)
+
+### Dubstep
+BPM: 140 (feels like 70 half-time) | Half-time kick/snare (kick on 1, snare on 3) | Wobble bass via LFO → `bass.filter.frequency` (required: `type: 'mono'`, LFO at `"8n"` or `"16n"`) | Trap-style hi-hat rolls | FX-heavy (impacts on drops, risers into drops) | Minor keys | Instruments: `wobble_bass`, `fm_bass`, `supersaw_lead` for melodic sections
+
+### Drum & Bass
+BPM: 170–180 | Fast breakbeat kick/snare pattern (amen break or similar) | Rolling sub bass (`sub_bass` or `reese_bass`) playing 8th notes locked to kick | Atmospheric pads in breakdowns | Song form: intro → drop → switch-up → drop → outro | Dark minor keys (C minor, F minor) | D&B snares should hit on 2 and 4 with ghost notes in between
+
+### Trap
+BPM: 140 (half-time feel 70) | 808 sub (`sub_bass`) with pitch slides via automation | Tight trap snare (`371860__cryanrautha__ganon-snare.ogg` or trap-style) | 16th and 32nd hi-hat rolls with velocity variation (55 → 110 → 55) | Sparse melodic elements (`fm_bell`, `pluck_lead`) | Minor keys, lots of space | Effects: reverb on snares, minimal elsewhere
+
+### Future Bass
+BPM: 140–160 | Half-time feel | `supersaw_lead` for huge chord stabs (stacked fifths + octaves) | `pluck_lead` for melodic hooks | Emotional pitch-bent pad chords | Drops: chord stabs over trap-style drums | Automation: reverb wet swells, filter sweeps on the lead | Effect-heavy (chorus, reverb, stereowidener)
+
+### Ambient
+BPM: 60–80 (or unpitched, no transport) | No drums or sparse single hits | `warm_pad` drone as the foundation | `fm_bell` for sparse melodic colors | Long reverb decays (6s+) on everything | Extensive modulation (phaser, chorus, autofilter for slow movement) | Minimalist progression (one chord for 16 bars is fine) | Evolution via automation of filter/reverb over long time scales
+
 ## Drum Patterns
 
 **Pop/Rock:** Kick: 1, 3 | Snare: 2, 4 | Hihat: steady 8ths
