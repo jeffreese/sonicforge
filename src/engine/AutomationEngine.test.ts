@@ -343,5 +343,6 @@ function makeRegistryWithLeadVolume(param: ReturnType<typeof makeParam>['param']
     },
     instrumentChains: new Map(),
     masterChain: null,
+    getInstrumentSynthNode: () => null,
   } as unknown as Parameters<InstanceType<typeof AutomationEngine>['compile']>[2]
 }

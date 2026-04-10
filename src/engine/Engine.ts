@@ -117,6 +117,17 @@ export class Engine {
         mixBus: this.mixBus,
         instrumentChains: this.chainsByInstrument,
         masterChain: this.masterEffectsChain,
+        getInstrumentSynthNode: (id: string) => {
+          const loaded = this.instruments.get(id)
+          if (!loaded) return null
+          // SynthInstrument exposes getInnerSynth(); other InstrumentSources
+          // (MultiLayerSampler, DrumKit) don't implement it — return null for
+          // those to skip synth-internal resolution.
+          const source = loaded.sampler as unknown as {
+            getInnerSynth?: () => unknown
+          }
+          return source.getInnerSynth ? source.getInnerSynth() : null
+        },
       }
       this.automationEngine.compile(
         this.composition.automation,

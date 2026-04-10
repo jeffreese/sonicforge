@@ -47,6 +47,21 @@ export class SynthInstrument extends Tone.Gain {
     return this
   }
 
+  /**
+   * Expose the wrapped Tone.js synth node for external modulation (LFO routing,
+   * automation of filter cutoff, etc.).
+   *
+   * Returns `null` for polyphonic synths because `Tone.PolySynth` manages N
+   * voices internally — there's no accessible `Tone.Signal` on a shared filter
+   * frequency or envelope, so modulating "the filter" from outside has no
+   * well-defined meaning. Compositions that need LFO on a filter should use
+   * a mono synth type (`type: 'mono'` or `polyphony: false` on fm/am).
+   */
+  getInnerSynth(): Tone.ToneAudioNode | null {
+    if (this.synth instanceof Tone.PolySynth) return null
+    return this.synth
+  }
+
   dispose(): this {
     this.synth.dispose()
     return super.dispose()
