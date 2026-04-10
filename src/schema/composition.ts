@@ -37,6 +37,14 @@ export type SynthType = 'mono' | 'poly' | 'fm' | 'am' | 'duo' | 'pluck'
 
 export interface SynthPatch {
   type: SynthType
+  /**
+   * Override the default polyphony for this synth type. When unset, each
+   * type has a sensible default: `mono` → mono, `poly` → poly, `fm`/`am` → poly,
+   * `duo`/`pluck` → mono (those synths don't wrap in PolySynth cleanly).
+   * Setting `polyphony: true` on `mono`/`fm`/`am`/`poly` wraps in `Tone.PolySynth`;
+   * `polyphony: false` uses a single voice. Ignored for `duo` and `pluck`.
+   */
+  polyphony?: boolean
   oscillator?: {
     type?: string
     detune?: number

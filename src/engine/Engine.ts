@@ -1,3 +1,4 @@
+import * as Tone from 'tone'
 import { expandChords } from '../schema/chords'
 import type { SonicForgeComposition } from '../schema/composition'
 import { validate } from '../schema/validate'
@@ -30,6 +31,7 @@ export class Engine {
   private _state: EngineState = 'empty'
   private mixBus = new MixBus()
   private effectsChains: EffectsChain[] = []
+  private masterEffectsChain: EffectsChain | null = null
 
   get state(): EngineState {
     return this._state
@@ -86,6 +88,20 @@ export class Engine {
         const chain = new EffectsChain()
         chain.connect(loaded.sampler, channel, instDef.effects)
         this.effectsChains.push(chain)
+      }
+
+      // Master bus effects: if the composition declares masterEffects, route
+      // master → effects → destination. Otherwise the master stays connected
+      // directly to Tone.Destination (as MixBus constructs it).
+      if (this.composition.masterEffects && this.composition.masterEffects.length > 0) {
+        const master = this.mixBus.getMaster()
+        master.disconnect()
+        this.masterEffectsChain = new EffectsChain()
+        this.masterEffectsChain.connect(
+          master,
+          Tone.getDestination(),
+          this.composition.masterEffects,
+        )
       }
 
       // Configure transport
@@ -244,6 +260,11 @@ export class Engine {
       chain.dispose()
     }
     this.effectsChains = []
+
+    if (this.masterEffectsChain) {
+      this.masterEffectsChain.dispose()
+      this.masterEffectsChain = null
+    }
 
     for (const [, inst] of this.instruments) {
       inst.sampler.dispose()
