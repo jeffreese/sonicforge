@@ -179,16 +179,24 @@ export const app = {
 export const arrangement = {
   container: 'h-full flex flex-col bg-surface border-y border-border px-4 py-2',
   heading: 'text-on-surface text-sm font-medium mb-1 flex-shrink-0',
-  canvas: 'block w-full flex-1 min-h-0 cursor-pointer',
-  trackSelector: 'flex gap-1 mt-2 overflow-x-auto py-1',
-  trackBtn:
-    'px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted hover:text-on-surface hover:bg-surface-hover whitespace-nowrap',
-  trackBtnActive:
-    'px-2 py-1 rounded text-xs transition-colors bg-primary text-on-primary whitespace-nowrap',
-  trackBtnAll:
-    'px-2 py-1 rounded text-xs transition-colors text-muted hover:text-on-surface hover:bg-surface-hover border border-border whitespace-nowrap',
-  trackBtnAllActive:
-    'px-2 py-1 rounded text-xs transition-colors text-on-surface bg-surface-hover border border-border whitespace-nowrap',
+  // Horizontal flex row: track headers on the left, canvas filling the rest.
+  body: 'flex flex-row flex-1 min-h-0 gap-2',
+  canvas: 'block h-full flex-1 min-w-0 cursor-pointer',
+  // Left-side track header column. Fixed width so the canvas can compute
+  // its available horizontal space predictably.
+  trackHeaders: 'flex flex-col gap-1 w-40 flex-shrink-0 overflow-y-auto py-1',
+  // "All Tracks" row at the top of the sidebar — clears focus.
+  trackHeaderAll:
+    'px-2 py-1 rounded text-xs text-left transition-colors text-muted hover:text-on-surface hover:bg-surface-hover border border-border',
+  trackHeaderAllActive:
+    'px-2 py-1 rounded text-xs text-left transition-colors text-on-surface bg-surface-hover border border-border',
+  // Individual instrument row — color swatch + name, clickable to focus.
+  trackHeader:
+    'flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors bg-surface-elevated text-muted hover:text-on-surface hover:bg-surface-hover',
+  trackHeaderActive:
+    'flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors bg-primary text-on-primary',
+  trackHeaderSwatch: 'inline-block w-3 h-3 rounded-sm flex-shrink-0',
+  trackHeaderName: 'truncate min-w-0',
 }
 
 export const notePalette = [

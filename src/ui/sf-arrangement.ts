@@ -11,7 +11,13 @@ import { durationToBeats, timeToBeats } from '../util/timing'
 
 // ── Constants ────────────────────────────────────────────────────────
 
-const COLORS = [
+/**
+ * Per-track color palette used by the piano roll canvas AND by the track
+ * header swatches in the left sidebar. Colors are indexed by the instrument's
+ * position in `composition.instruments`. Exported so the track headers can
+ * use the exact same hex values as the note rendering.
+ */
+export const INSTRUMENT_COLORS = [
   '#6366f1',
   '#8b5cf6',
   '#ec4899',
@@ -21,6 +27,8 @@ const COLORS = [
   '#ef4444',
   '#14b8a6',
 ]
+// Alias kept for the existing canvas-rendering code below. Same array.
+const COLORS = INSTRUMENT_COLORS
 
 const SECTION_HEADER_HEIGHT = 28
 const BAR_NUMBER_HEIGHT = 20
@@ -710,29 +718,48 @@ export class SfArrangement extends LitElement {
     this.scrollY = Math.max(0, Math.min(this.pitchMax - this.pitchMin, this.scrollY))
   }
 
-  // ── Track selector ─────────────────────────────────────────────────
+  // ── Track headers (left sidebar) ───────────────────────────────────
 
   private handleTrackClick(index: number): void {
     this.focusedTrack = this.focusedTrack === index ? null : index
   }
 
-  private renderTrackSelector() {
-    if (this.instruments.length === 0) return ''
-
+  /**
+   * DAW-style left-side track header column. One row per instrument with
+   * a color swatch + name. Click to focus that track (solo). Click the
+   * active track or "All" to clear focus.
+   *
+   * Swatch colors come from INSTRUMENT_COLORS so they match the note
+   * colors rendered on the canvas exactly.
+   */
+  private renderTrackHeaders() {
     return html`
-      <div class="${arrangement.trackSelector}">
+      <div class="${arrangement.trackHeaders}">
         <button
-          class=${this.focusedTrack === null ? arrangement.trackBtnAllActive : arrangement.trackBtnAll}
+          class=${
+            this.focusedTrack === null
+              ? arrangement.trackHeaderAllActive
+              : arrangement.trackHeaderAll
+          }
           @click=${() => {
             this.focusedTrack = null
           }}
-        >All</button>
+        >All Tracks</button>
         ${this.instruments.map(
           (inst, i) => html`
             <button
-              class=${this.focusedTrack === i ? arrangement.trackBtnActive : arrangement.trackBtn}
+              class=${
+                this.focusedTrack === i ? arrangement.trackHeaderActive : arrangement.trackHeader
+              }
               @click=${() => this.handleTrackClick(i)}
-            >${inst.name}</button>
+              aria-label="${inst.name}${this.focusedTrack === i ? ' (focused)' : ''}"
+            >
+              <span
+                class="${arrangement.trackHeaderSwatch}"
+                style="background-color: ${INSTRUMENT_COLORS[i % INSTRUMENT_COLORS.length]}"
+              ></span>
+              <span class="${arrangement.trackHeaderName}">${inst.name}</span>
+            </button>
           `,
         )}
       </div>
@@ -745,13 +772,15 @@ export class SfArrangement extends LitElement {
     return html`
       <div class="${arrangement.container}">
         <h2 class="${arrangement.heading}">Timeline</h2>
-        <canvas
-          class="${arrangement.canvas}"
-          @click=${this.handleClick}
-          @dblclick=${this.handleDoubleClick}
-          @wheel=${this.handleWheel}
-        ></canvas>
-        ${this.renderTrackSelector()}
+        <div class="${arrangement.body}">
+          ${this.renderTrackHeaders()}
+          <canvas
+            class="${arrangement.canvas}"
+            @click=${this.handleClick}
+            @dblclick=${this.handleDoubleClick}
+            @wheel=${this.handleWheel}
+          ></canvas>
+        </div>
       </div>
     `
   }
