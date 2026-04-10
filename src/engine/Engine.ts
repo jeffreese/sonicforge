@@ -8,6 +8,7 @@ import { MixBus } from './MixBus'
 import { loadSampleData } from './SampleLoader'
 import { TrackPlayer } from './TrackPlayer'
 import { Transport, type TransportCallbacks } from './Transport'
+import { DEFAULT_HUMANIZATION } from './humanize'
 
 export type EngineState = 'empty' | 'loading' | 'ready' | 'playing' | 'paused'
 
@@ -21,6 +22,8 @@ export interface EngineCallbacks extends TransportCallbacks {
 export class Engine {
   private transport = new Transport()
   private trackPlayers: TrackPlayer[] = []
+  /** TrackPlayers grouped by instrument ID, for per-track settings like humanization. */
+  private trackPlayersByInstrument = new Map<string, TrackPlayer[]>()
   private instruments = new Map<string, LoadedInstrument>()
   private composition: SonicForgeComposition | null = null
   private callbacks: EngineCallbacks = {}
@@ -99,8 +102,14 @@ export class Engine {
           }
 
           const player = new TrackPlayer(instrument, this.composition.metadata)
+          player.setHumanize({ amount: DEFAULT_HUMANIZATION })
           player.scheduleTrack(track, offset)
           this.trackPlayers.push(player)
+
+          // Track by instrument for per-track settings
+          const group = this.trackPlayersByInstrument.get(track.instrumentId) ?? []
+          group.push(player)
+          this.trackPlayersByInstrument.set(track.instrumentId, group)
         }
       }
 
@@ -152,6 +161,15 @@ export class Engine {
 
   getTransport(): Transport {
     return this.transport
+  }
+
+  /** Update humanization amount for all TrackPlayers of a given instrument. */
+  setHumanization(instrumentId: string, amount: number): void {
+    const players = this.trackPlayersByInstrument.get(instrumentId)
+    if (!players) return
+    for (const player of players) {
+      player.setHumanize({ amount })
+    }
   }
 
   getMixBus(): MixBus {
@@ -224,6 +242,7 @@ export class Engine {
       player.dispose()
     }
     this.trackPlayers = []
+    this.trackPlayersByInstrument.clear()
 
     for (const chain of this.effectsChains) {
       chain.dispose()

@@ -7,6 +7,7 @@ export interface ChannelState {
   pan: number // -1 to 1
   muted: boolean
   soloed: boolean
+  humanization: number // 0–100
 }
 
 export interface MixerState {
@@ -20,6 +21,7 @@ export type MixerAction =
   | { type: 'setMuted'; id: string; muted: boolean }
   | { type: 'setSoloed'; id: string; soloed: boolean }
   | { type: 'setMasterVolume'; volume: number }
+  | { type: 'setHumanization'; id: string; humanization: number }
 
 /** Callback that the store calls to push changes to the engine's MixBus. */
 export type MixerSink = (action: MixerAction) => void
@@ -69,6 +71,11 @@ export class MixerStore extends Store<MixerState> {
   setSoloed(id: string, soloed: boolean): void {
     this.updateChannel(id, { soloed })
     this.sink?.({ type: 'setSoloed', id, soloed })
+  }
+
+  setHumanization(id: string, humanization: number): void {
+    this.updateChannel(id, { humanization })
+    this.sink?.({ type: 'setHumanization', id, humanization })
   }
 
   setMasterVolume(volume: number): void {

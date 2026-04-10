@@ -7,8 +7,16 @@ function createStore() {
 }
 
 const testChannels: ChannelState[] = [
-  { id: 'piano', name: 'Piano', volume: 80, pan: 0, muted: false, soloed: false },
-  { id: 'bass', name: 'Bass', volume: 70, pan: -0.3, muted: false, soloed: false },
+  { id: 'piano', name: 'Piano', volume: 80, pan: 0, muted: false, soloed: false, humanization: 50 },
+  {
+    id: 'bass',
+    name: 'Bass',
+    volume: 70,
+    pan: -0.3,
+    muted: false,
+    soloed: false,
+    humanization: 50,
+  },
 ]
 
 describe('MixerStore', () => {
@@ -29,7 +37,15 @@ describe('MixerStore', () => {
     const store = createStore()
     const original = [...testChannels]
     store.loadChannels(original)
-    original.push({ id: 'drums', name: 'Drums', volume: 90, pan: 0, muted: false, soloed: false })
+    original.push({
+      id: 'drums',
+      name: 'Drums',
+      volume: 90,
+      pan: 0,
+      muted: false,
+      soloed: false,
+      humanization: 50,
+    })
     expect(store.state.channels).toHaveLength(2)
   })
 
@@ -77,6 +93,14 @@ describe('MixerStore', () => {
     expect(store.state.masterVolume).toBe(80)
   })
 
+  it('updates humanization for a channel', () => {
+    const store = createStore()
+    store.loadChannels(testChannels)
+    store.setHumanization('piano', 75)
+    expect(store.state.channels[0].humanization).toBe(75)
+    expect(store.state.channels[1].humanization).toBe(50) // bass unchanged
+  })
+
   it('forwards actions to sink', () => {
     const store = createStore()
     const sink = vi.fn()
@@ -97,6 +121,9 @@ describe('MixerStore', () => {
 
     store.setMasterVolume(30)
     expect(sink).toHaveBeenCalledWith({ type: 'setMasterVolume', volume: 30 })
+
+    store.setHumanization('piano', 80)
+    expect(sink).toHaveBeenCalledWith({ type: 'setHumanization', id: 'piano', humanization: 80 })
   })
 
   it('works without a sink (no-op)', () => {

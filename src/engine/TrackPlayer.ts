@@ -5,6 +5,7 @@ import { durationToSeconds } from '../util/timing'
 import type { LoadedInstrument } from './InstrumentLoader'
 import { getDrumNote } from './InstrumentLoader'
 import type { SectionOffset } from './Transport'
+import { type HumanizeConfig, humanizeNote } from './humanize'
 
 function applyArticulation(
   note: Note,
@@ -37,11 +38,17 @@ function applyArticulation(
 
 export class TrackPlayer {
   private scheduledEvents: number[] = []
+  private humanize: HumanizeConfig = { amount: 0 }
 
   constructor(
     private instrument: LoadedInstrument,
     private metadata: Metadata,
   ) {}
+
+  /** Set humanization config for this track player. */
+  setHumanize(config: HumanizeConfig): void {
+    this.humanize = config
+  }
 
   /**
    * Schedule all notes for a track within a section.
@@ -57,7 +64,8 @@ export class TrackPlayer {
     for (let rep = 0; rep < repeats; rep++) {
       const repBarOffset = startBar + rep * section.bars
 
-      for (const note of track.notes) {
+      for (let noteIndex = 0; noteIndex < track.notes.length; noteIndex++) {
+        const note = track.notes[noteIndex]
         if (note.pitch === 'rest') continue
 
         // Parse time "bar:beat:sixteenth"
@@ -74,6 +82,20 @@ export class TrackPlayer {
 
         const { duration, velocity } = applyArticulation(note, baseDuration, baseVelocity)
 
+        // Apply humanization
+        const offsets = humanizeNote(
+          noteIndex,
+          track.instrumentId,
+          rep,
+          this.humanize,
+          note.articulation,
+        )
+        const humanizedTime = Math.max(0, timeInSeconds + offsets.timingOffset)
+        const humanizedVelocity = Math.max(
+          1 / 127,
+          Math.min(1, velocity * offsets.velocityMultiplier),
+        )
+
         // Determine the pitch to play
         let pitch: string
         if (this.instrument.isDrum) {
@@ -88,8 +110,8 @@ export class TrackPlayer {
 
         // Schedule with Tone.Transport
         const eventId = Tone.getTransport().schedule((time) => {
-          this.instrument.sampler.triggerAttackRelease(pitch, duration, time, velocity)
-        }, timeInSeconds)
+          this.instrument.sampler.triggerAttackRelease(pitch, duration, time, humanizedVelocity)
+        }, humanizedTime)
 
         this.scheduledEvents.push(eventId)
       }
