@@ -64,7 +64,7 @@ Tasks extracted from `../edm-sound-design-schema/tasks.md` sections "Sidechain C
 - [x] `pnpm test` passes (332 tests, 33 new across commits 1 and 2)
 - [x] `pnpm build` passes
 - [x] `pnpm lint` passes
-- [ ] Manual: load `compositions/wobblepump.json` in the browser, verify the wobble bass filter sweeps audibly and the pad/stab pump under the kick
+- [x] Manual: `compositions/wobblepump.json` plays correctly in the browser — wobble bass filter sweep audible, pad and stab pumping under the kick confirmed end-to-end
 
 ## Notes
 
