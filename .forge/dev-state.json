@@ -1,8 +1,8 @@
 {
-  "current_plan": "timeline-visualization",
-  "current_task": "All epics complete",
-  "branch": "feat/timeline-canvas-rewrite",
-  "status": "idle",
+  "current_plan": "humanization",
+  "current_task": "Integration — verify playback",
+  "branch": "feat/humanization",
+  "status": "in_progress",
   "mode": "epic",
   "pending": null
 }

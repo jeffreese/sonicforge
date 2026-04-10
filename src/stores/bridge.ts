@@ -5,6 +5,7 @@
  */
 import type { Engine, EngineState } from '../engine/Engine'
 import type { MixBus } from '../engine/MixBus'
+import { DEFAULT_HUMANIZATION } from '../engine/humanize'
 import type { SonicForgeComposition } from '../schema/composition'
 import { compositionStore } from './CompositionStore'
 import type { MixerAction } from './MixerStore'
@@ -57,15 +58,19 @@ export function bridgeCompositionToStores(
   // Load composition into store
   compositionStore.load(composition)
 
-  // Load mixer channels from MixBus state
-  mixerStore.loadChannels(mixBus.getStates())
+  // Load mixer channels from MixBus state, adding humanization default
+  const channels = mixBus.getStates().map((ch) => ({
+    ...ch,
+    humanization: DEFAULT_HUMANIZATION,
+  }))
+  mixerStore.loadChannels(channels)
 
   // Configure transport with composition metadata
   transportStore.configure(composition.metadata.bpm, composition.metadata.timeSignature)
 }
 
 /** Create a MixerSink that forwards store actions to the engine MixBus. */
-export function createMixerSink(mixBus: MixBus) {
+export function createMixerSink(mixBus: MixBus, engine: Engine) {
   return (action: MixerAction) => {
     switch (action.type) {
       case 'setVolume':
@@ -82,6 +87,9 @@ export function createMixerSink(mixBus: MixBus) {
         break
       case 'setMasterVolume':
         mixBus.setMasterVolume(action.volume)
+        break
+      case 'setHumanization':
+        engine.setHumanization(action.id, action.humanization)
         break
     }
   }

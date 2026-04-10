@@ -124,7 +124,7 @@ export class SfApp extends LitElement {
       bridgeCompositionToStores(composition, engine.getMixBus())
 
       // Wire mixer store actions back to engine
-      mixerStore.setSink(createMixerSink(engine.getMixBus()))
+      mixerStore.setSink(createMixerSink(engine.getMixBus(), engine))
 
       // Load arrangement with section data and position source
       const transport = engine.getTransport()

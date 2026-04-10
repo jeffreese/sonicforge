@@ -5,9 +5,25 @@ import './sf-mixer'
 import { SfMixer } from './sf-mixer'
 
 const testChannels: ChannelState[] = [
-  { id: 'piano', name: 'Piano', volume: 80, pan: 0, muted: false, soloed: false },
-  { id: 'bass', name: 'Bass', volume: 70, pan: -0.3, muted: false, soloed: false },
-  { id: 'drums', name: 'Drums', volume: 90, pan: 0.2, muted: true, soloed: false },
+  { id: 'piano', name: 'Piano', volume: 80, pan: 0, muted: false, soloed: false, humanization: 50 },
+  {
+    id: 'bass',
+    name: 'Bass',
+    volume: 70,
+    pan: -0.3,
+    muted: false,
+    soloed: false,
+    humanization: 50,
+  },
+  {
+    id: 'drums',
+    name: 'Drums',
+    volume: 90,
+    pan: 0.2,
+    muted: true,
+    soloed: false,
+    humanization: 50,
+  },
 ]
 
 function createElement(): SfMixer {

@@ -16,76 +16,72 @@ const testComposition: SonicForgeComposition = {
   ],
 }
 
+const mockMixBus = () => ({
+  setVolume: vi.fn(),
+  setPan: vi.fn(),
+  setMuted: vi.fn(),
+  setSoloed: vi.fn(),
+  setMasterVolume: vi.fn(),
+})
+
+const mockEngine = () => ({
+  setHumanization: vi.fn(),
+})
+
 describe('bridge', () => {
   describe('createMixerSink', () => {
     it('forwards setVolume to MixBus', () => {
-      const mixBus = {
-        setVolume: vi.fn(),
-        setPan: vi.fn(),
-        setMuted: vi.fn(),
-        setSoloed: vi.fn(),
-        setMasterVolume: vi.fn(),
-      }
-      const sink = createMixerSink(mixBus as never)
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
 
       sink({ type: 'setVolume', id: 'piano', volume: 60 })
       expect(mixBus.setVolume).toHaveBeenCalledWith('piano', 60)
     })
 
     it('forwards setPan to MixBus', () => {
-      const mixBus = {
-        setVolume: vi.fn(),
-        setPan: vi.fn(),
-        setMuted: vi.fn(),
-        setSoloed: vi.fn(),
-        setMasterVolume: vi.fn(),
-      }
-      const sink = createMixerSink(mixBus as never)
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
 
       sink({ type: 'setPan', id: 'bass', pan: -0.5 })
       expect(mixBus.setPan).toHaveBeenCalledWith('bass', -0.5)
     })
 
     it('forwards setMuted to MixBus', () => {
-      const mixBus = {
-        setVolume: vi.fn(),
-        setPan: vi.fn(),
-        setMuted: vi.fn(),
-        setSoloed: vi.fn(),
-        setMasterVolume: vi.fn(),
-      }
-      const sink = createMixerSink(mixBus as never)
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
 
       sink({ type: 'setMuted', id: 'piano', muted: true })
       expect(mixBus.setMuted).toHaveBeenCalledWith('piano', true)
     })
 
     it('forwards setSoloed to MixBus', () => {
-      const mixBus = {
-        setVolume: vi.fn(),
-        setPan: vi.fn(),
-        setMuted: vi.fn(),
-        setSoloed: vi.fn(),
-        setMasterVolume: vi.fn(),
-      }
-      const sink = createMixerSink(mixBus as never)
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
 
       sink({ type: 'setSoloed', id: 'piano', soloed: true })
       expect(mixBus.setSoloed).toHaveBeenCalledWith('piano', true)
     })
 
     it('forwards setMasterVolume to MixBus', () => {
-      const mixBus = {
-        setVolume: vi.fn(),
-        setPan: vi.fn(),
-        setMuted: vi.fn(),
-        setSoloed: vi.fn(),
-        setMasterVolume: vi.fn(),
-      }
-      const sink = createMixerSink(mixBus as never)
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
 
       sink({ type: 'setMasterVolume', volume: 50 })
       expect(mixBus.setMasterVolume).toHaveBeenCalledWith(50)
+    })
+
+    it('forwards setHumanization to Engine', () => {
+      const mixBus = mockMixBus()
+      const engine = mockEngine()
+      const sink = createMixerSink(mixBus as never, engine as never)
+
+      sink({ type: 'setHumanization', id: 'piano', humanization: 75 })
+      expect(engine.setHumanization).toHaveBeenCalledWith('piano', 75)
     })
   })
 
@@ -111,7 +107,15 @@ describe('bridge', () => {
     it('MixerStore channels sync with loaded state', () => {
       const store = new MixerStore()
       store.loadChannels([
-        { id: 'piano', name: 'Piano', volume: 80, pan: 0, muted: false, soloed: false },
+        {
+          id: 'piano',
+          name: 'Piano',
+          volume: 80,
+          pan: 0,
+          muted: false,
+          soloed: false,
+          humanization: 50,
+        },
       ])
 
       expect(store.state.channels).toHaveLength(1)
