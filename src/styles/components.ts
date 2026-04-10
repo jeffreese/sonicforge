@@ -27,7 +27,13 @@ export const input = {
 
 export const mixer = {
   container: 'bg-surface border-t border-border px-4 py-3',
-  strip: 'flex gap-3 overflow-x-auto',
+  // Wrapper that owns horizontal scrolling. Must be a separate element from
+  // the flex row below — putting overflow-x on the flex row itself forces
+  // overflow-y to auto (per CSS spec), turning the row into a dual-axis
+  // scroll container and breaking `items-stretch` on the cards whenever a
+  // horizontal scrollbar is present.
+  stripScroll: 'overflow-x-auto',
+  strip: 'flex gap-3 items-stretch',
   channel: 'bg-surface-elevated border border-border rounded-lg p-3 min-w-[160px]',
   channelName: 'text-on-surface text-sm font-medium truncate',
   value: 'font-mono text-xs text-muted tabular-nums w-8 text-right',

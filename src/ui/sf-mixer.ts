@@ -202,22 +202,24 @@ export class SfMixer extends LitElement {
         @mixer-mute=${this.handleMute}
         @mixer-solo=${this.handleSolo}
       >
-        <div class="${mixer.strip}">
-          ${this.channels.map(
-            (ch) => html`
-              <sf-channel-strip
-                .channelId=${ch.id}
-                .name=${ch.name}
-                .volume=${ch.volume}
-                .pan=${ch.pan}
-                .muted=${ch.muted}
-                .soloed=${ch.soloed}
-                .level=${this.levels[ch.id] ?? Number.NEGATIVE_INFINITY}
-                .peakLevel=${this.peakLevels[ch.id] ?? Number.NEGATIVE_INFINITY}
-              ></sf-channel-strip>
-            `,
-          )}
-          ${this.renderMaster()}
+        <div class="${mixer.stripScroll}">
+          <div class="${mixer.strip}">
+            ${this.channels.map(
+              (ch) => html`
+                <sf-channel-strip
+                  .channelId=${ch.id}
+                  .name=${ch.name}
+                  .volume=${ch.volume}
+                  .pan=${ch.pan}
+                  .muted=${ch.muted}
+                  .soloed=${ch.soloed}
+                  .level=${this.levels[ch.id] ?? Number.NEGATIVE_INFINITY}
+                  .peakLevel=${this.peakLevels[ch.id] ?? Number.NEGATIVE_INFINITY}
+                ></sf-channel-strip>
+              `,
+            )}
+            ${this.renderMaster()}
+          </div>
         </div>
       </div>
     `
