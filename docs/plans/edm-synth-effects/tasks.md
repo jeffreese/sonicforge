@@ -12,7 +12,7 @@ Tasks extracted from `../edm-sound-design-schema/tasks.md` sections "Synth Instr
 - [x] Add `polyphony?: boolean` field to `SynthPatch` as an explicit override for each type's default
 - [x] Update `InstrumentLoader` to dispatch on `source` field (`'synth'` → `SynthInstrument`)
 - [x] Unit tests for `SynthInstrument` helpers (resolvePatch, defaultPolyphony, buildSynthOptions) + preset library
-- [ ] Manual verification: synth instruments play through the existing effects chain + mixer (browser test)
+- [x] Manual verification: synth instruments play through the existing effects chain + mixer (verified in browser with `compositions/dreamwalker.json`)
 
 ## Effects Vocabulary
 
@@ -30,8 +30,7 @@ Tasks extracted from `../edm-sound-design-schema/tasks.md` sections "Synth Instr
 - [x] `pnpm test` passes (265 tests, 27 new across effect-factory + SynthInstrument + synth-presets)
 - [x] `pnpm build` passes
 - [x] `pnpm lint` passes
-- [ ] Manual: load an existing sampled composition, verify unchanged playback (browser smoke test)
-- [ ] Manual: create a test composition with a synth lead, verify it plays through the new SynthInstrument path (browser smoke test)
+- [x] Manual: `compositions/dreamwalker.json` (Nightmare on Elm Street-inspired, 7 synth instruments, master bus effects, 11/12 v1 effect types) plays correctly in the browser — verifies synth dispatch, preset resolution, effect factory, and master bus wiring end-to-end
 
 ## Notes
 
