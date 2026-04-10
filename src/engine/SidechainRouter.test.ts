@@ -9,12 +9,16 @@ const { instances } = vi.hoisted(() => ({
     gains: [] as GainStubInstance[],
     followers: [] as FollowerStubInstance[],
     multipliers: [] as MultiplyStubInstance[],
+    adders: [] as AddStubInstance[],
   },
 }))
 
+interface GainSignalStub {
+  value: number
+}
 interface GainStubInstance {
   gainValue: number
-  gain: { __isGainSignal: true }
+  gain: GainSignalStub
 }
 interface FollowerStubInstance {
   opts: unknown
@@ -24,13 +28,18 @@ interface MultiplyStubInstance {
   factor: number
   connectedTo: unknown[]
 }
+interface AddStubInstance {
+  addend: number
+  connectedTo: unknown[]
+}
 
 vi.mock('tone', () => {
   class GainStub {
     gainValue: number
-    gain = { __isGainSignal: true as const }
+    gain: GainSignalStub
     constructor(value: number) {
       this.gainValue = value
+      this.gain = { value }
       instances.gains.push(this as unknown as GainStubInstance)
     }
     dispose() {}
@@ -60,10 +69,23 @@ vi.mock('tone', () => {
     }
     dispose() {}
   }
+  class AddStub {
+    addend: number
+    connectedTo: unknown[] = []
+    constructor(addend: number) {
+      this.addend = addend
+      instances.adders.push(this as unknown as AddStubInstance)
+    }
+    connect(to: unknown) {
+      this.connectedTo.push(to)
+    }
+    dispose() {}
+  }
   return {
     Gain: GainStub,
     Follower: FollowerStub,
     Multiply: MultiplyStub,
+    Add: AddStub,
   }
 })
 
@@ -94,6 +116,7 @@ beforeEach(() => {
   instances.gains = []
   instances.followers = []
   instances.multipliers = []
+  instances.adders = []
 })
 
 describe('SidechainRouter', () => {
@@ -128,7 +151,7 @@ describe('SidechainRouter', () => {
     expect(router.targetCount).toBe(0)
   })
 
-  it('connectSources wires follower → multiplier(-amount) → duckingGain.gain', () => {
+  it('connectSources wires follower → multiplier(-amount) → add(1) → duckingGain.gain', () => {
     const router = new SidechainRouter()
     const configs: SidechainConfig[] = [{ source: 'kick', target: 'pad', amount: 0.8 }]
     router.prepareTargets(configs)
@@ -142,15 +165,23 @@ describe('SidechainRouter', () => {
 
     // kick channel connected to the follower
     expect(channels.get('kick')?.connectTargets.length).toBe(1)
-    // One follower, one multiplier
+    // One follower, one multiplier, one adder
     expect(instances.followers.length).toBe(1)
     expect(instances.multipliers.length).toBe(1)
+    expect(instances.adders.length).toBe(1)
     // Multiply factor is -amount
     expect(instances.multipliers[0].factor).toBe(-0.8)
+    // Adder constant is 1 (so control signal = 1 - amount*follower)
+    expect(instances.adders[0].addend).toBe(1)
     // Follower → multiplier
     expect(instances.followers[0].connectedTo[0]).toBe(instances.multipliers[0])
-    // Multiplier → target gain's .gain Tone.Signal
-    expect(instances.multipliers[0].connectedTo[0]).toBe(instances.gains[0].gain)
+    // Multiplier → adder
+    expect(instances.multipliers[0].connectedTo[0]).toBe(instances.adders[0])
+    // Adder → target gain's .gain Tone.Signal
+    expect(instances.adders[0].connectedTo[0]).toBe(instances.gains[0].gain)
+    // Target gain's base value is zeroed so the connected control signal is
+    // the sole driver of the gain value (avoiding sum-vs-replace ambiguity).
+    expect(instances.gains[0].gain.value).toBe(0)
   })
 
   it('passes release as follower smoothing time', () => {
@@ -217,13 +248,21 @@ describe('SidechainRouter', () => {
       ['pad', { connectTargets: [] as unknown[] }],
     ])
     router.connectSources(configs, fakeInstruments(['kick', 'snare', 'pad']), fakeMixBus(channels))
-    // Two followers, two multipliers, but still one gain (shared target)
+    // Two followers, two multipliers, two adders (one per config) — but
+    // still one gain (shared target).
     expect(instances.followers.length).toBe(2)
     expect(instances.multipliers.length).toBe(2)
+    expect(instances.adders.length).toBe(2)
     expect(instances.gains.length).toBe(1)
-    // Both multipliers connect to the same shared target gain
-    expect(instances.multipliers[0].connectedTo[0]).toBe(instances.gains[0].gain)
-    expect(instances.multipliers[1].connectedTo[0]).toBe(instances.gains[0].gain)
+    // Both adders connect to the same shared target gain. This means the
+    // gain receives the SUM of both control signals — summing two
+    // `1 - amount*follower` signals gives `2 - 0.7*followerA - 0.3*followerB`,
+    // which isn't what we want if both sources are constantly silent (gain
+    // would be stuck at 2). The router's multi-source behavior is best-effort;
+    // multiple sidechains against one target is an unusual pattern and this
+    // test locks in the current behavior for disposal correctness.
+    expect(instances.adders[0].connectedTo[0]).toBe(instances.gains[0].gain)
+    expect(instances.adders[1].connectedTo[0]).toBe(instances.gains[0].gain)
   })
 
   it('dispose cleans up all nodes', () => {

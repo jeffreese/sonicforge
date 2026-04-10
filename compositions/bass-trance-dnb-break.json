@@ -1,0 +1,460 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "title": "Heavy Current",
+    "bpm": 138,
+    "timeSignature": [4, 4],
+    "key": "A minor",
+    "description": "Bass-forward trance mix with a drum & bass break in the middle. 138 BPM, A minor, 16 bars across four 4-bar sections: intro → trance → dnb-break → return. The reese bass is the star — off-beat trance pattern in the trance sections, rolling 8th-note pattern in the break. No supersaw lead — the 'primarily bassy' brief means the bass carries the melodic movement. Kick→pad sidechain gives the trance sections their pumping feel; the DnB break pulls the sub bass out and lets the reese bass carry the low end alone over DnB-style kick/snare (kick on 1 and 2&, snare on 2 and 4). Chord progression: Am–F–C–G (i–VI–III–VII)."
+  },
+  "instruments": [
+    {
+      "id": "drums",
+      "name": "Trance/DnB Kit",
+      "category": "drums",
+      "source": "oneshot",
+      "oneshots": {
+        "kick": "samples/oneshots/kicks/265328__xkpl_klawz__big-room-kick-punchy.wav",
+        "snare": "samples/oneshots/snares/673516__theendofacycle__flat-fat-snare-drum-hit.wav",
+        "hat": "samples/oneshots/hats/399897__theflakesmaster__hi-hat.ogg",
+        "hat-open": "samples/oneshots/hats/816813__tboneaudio__hellcat-hi-hats.wav",
+        "clap": "samples/oneshots/claps/147597__kendallbear__never-be-clap.wav"
+      },
+      "defaultVolume": 90,
+      "effects": [
+        { "type": "compressor", "params": { "threshold": -14, "ratio": 4 } }
+      ]
+    },
+    {
+      "id": "reese",
+      "name": "Reese Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": "reese_bass",
+      "defaultVolume": 92,
+      "effects": [
+        { "type": "distortion", "params": { "distortion": 0.2, "wet": 0.3 } },
+        { "type": "compressor", "params": { "threshold": -12, "ratio": 5 } }
+      ]
+    },
+    {
+      "id": "sub",
+      "name": "Sub Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": "sub_bass",
+      "defaultVolume": 80,
+      "effects": [
+        { "type": "compressor", "params": { "threshold": -16, "ratio": 4 } }
+      ]
+    },
+    {
+      "id": "pad",
+      "name": "Organ Pad",
+      "category": "pad",
+      "source": "synth",
+      "synth": "organ_pad",
+      "defaultVolume": 58,
+      "effects": [
+        { "type": "chorus", "params": { "frequency": 0.8, "depth": 0.5, "wet": 0.3 } },
+        { "type": "reverb", "params": { "decay": 5, "wet": 0.5 } }
+      ]
+    }
+  ],
+  "masterEffects": [
+    { "type": "eq3", "params": { "low": 2, "mid": 0, "high": 0 } },
+    { "type": "limiter", "params": { "threshold": -1 } }
+  ],
+  "sidechain": [
+    { "source": "drums", "target": "pad", "amount": 0.75, "release": 0.1 }
+  ],
+  "sections": [
+    {
+      "name": "intro",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "kick", "time": "0:2:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 94 },
+            { "pitch": "kick", "time": "1:2:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 96 },
+            { "pitch": "hat", "time": "2:0:2", "duration": "16n", "velocity": 55 },
+            { "pitch": "kick", "time": "2:1:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "hat", "time": "2:1:2", "duration": "16n", "velocity": 52 },
+            { "pitch": "kick", "time": "2:2:0", "duration": "4n", "velocity": 96 },
+            { "pitch": "hat", "time": "2:2:2", "duration": "16n", "velocity": 55 },
+            { "pitch": "kick", "time": "2:3:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "hat", "time": "2:3:2", "duration": "16n", "velocity": 52 },
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "hat", "time": "3:0:2", "duration": "16n", "velocity": 58 },
+            { "pitch": "kick", "time": "3:1:0", "duration": "4n", "velocity": 94 },
+            { "pitch": "snare", "time": "3:1:0", "duration": "4n", "velocity": 75 },
+            { "pitch": "hat", "time": "3:1:2", "duration": "16n", "velocity": 55 },
+            { "pitch": "kick", "time": "3:2:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "hat", "time": "3:2:2", "duration": "16n", "velocity": 58 },
+            { "pitch": "kick", "time": "3:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "snare", "time": "3:3:0", "duration": "4n", "velocity": 80 },
+            { "pitch": "hat", "time": "3:3:2", "duration": "16n", "velocity": 60 }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:0", "duration": "1n", "velocity": 75 },
+            { "pitch": "A1", "time": "1:0:0", "duration": "1n", "velocity": 78 },
+            { "pitch": "F1", "time": "2:0:0", "duration": "1n", "velocity": 80 },
+            { "pitch": "G1", "time": "3:0:0", "duration": "1n", "velocity": 85 }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n", "velocity": 55 },
+            { "pitch": "C4", "time": "0:0:0", "duration": "1n", "velocity": 50 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "A3", "time": "1:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "C4", "time": "1:0:0", "duration": "1n", "velocity": 52 },
+            { "pitch": "E4", "time": "1:0:0", "duration": "1n", "velocity": 50 },
+            { "pitch": "F3", "time": "2:0:0", "duration": "1n", "velocity": 60 },
+            { "pitch": "A3", "time": "2:0:0", "duration": "1n", "velocity": 55 },
+            { "pitch": "C4", "time": "2:0:0", "duration": "1n", "velocity": 52 },
+            { "pitch": "G3", "time": "3:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "B3", "time": "3:0:0", "duration": "1n", "velocity": 56 },
+            { "pitch": "D4", "time": "3:0:0", "duration": "1n", "velocity": 54 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "trance",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat-open", "time": "0:0:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "0:1:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "snare", "time": "0:1:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "clap", "time": "0:1:0", "duration": "4n", "velocity": 82 },
+            { "pitch": "hat-open", "time": "0:1:2", "duration": "16n", "velocity": 70 },
+            { "pitch": "kick", "time": "0:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat-open", "time": "0:2:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "0:3:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "snare", "time": "0:3:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "clap", "time": "0:3:0", "duration": "4n", "velocity": 82 },
+            { "pitch": "hat-open", "time": "0:3:2", "duration": "16n", "velocity": 70 },
+
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat-open", "time": "1:0:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "1:1:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "snare", "time": "1:1:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "clap", "time": "1:1:0", "duration": "4n", "velocity": 82 },
+            { "pitch": "hat-open", "time": "1:1:2", "duration": "16n", "velocity": 70 },
+            { "pitch": "kick", "time": "1:2:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat-open", "time": "1:2:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "1:3:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "snare", "time": "1:3:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "clap", "time": "1:3:0", "duration": "4n", "velocity": 82 },
+            { "pitch": "hat-open", "time": "1:3:2", "duration": "16n", "velocity": 70 },
+
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "hat-open", "time": "2:0:2", "duration": "16n", "velocity": 78 },
+            { "pitch": "kick", "time": "2:1:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "snare", "time": "2:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "clap", "time": "2:1:0", "duration": "4n", "velocity": 85 },
+            { "pitch": "hat-open", "time": "2:1:2", "duration": "16n", "velocity": 72 },
+            { "pitch": "kick", "time": "2:2:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "hat-open", "time": "2:2:2", "duration": "16n", "velocity": 78 },
+            { "pitch": "kick", "time": "2:3:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "snare", "time": "2:3:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "clap", "time": "2:3:0", "duration": "4n", "velocity": 85 },
+            { "pitch": "hat-open", "time": "2:3:2", "duration": "16n", "velocity": 72 },
+
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "hat-open", "time": "3:0:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "3:1:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "snare", "time": "3:1:0", "duration": "4n", "velocity": 98 },
+            { "pitch": "clap", "time": "3:1:0", "duration": "4n", "velocity": 88 },
+            { "pitch": "hat-open", "time": "3:1:2", "duration": "16n", "velocity": 72 },
+            { "pitch": "kick", "time": "3:2:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "hat-open", "time": "3:2:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "snare", "time": "3:3:0", "duration": "16n", "velocity": 90 },
+            { "pitch": "snare", "time": "3:3:1", "duration": "16n", "velocity": 80 },
+            { "pitch": "snare", "time": "3:3:2", "duration": "16n", "velocity": 95 },
+            { "pitch": "snare", "time": "3:3:3", "duration": "16n", "velocity": 105 }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "A1", "time": "0:1:2", "duration": "8n", "velocity": 92 },
+            { "pitch": "A1", "time": "0:2:2", "duration": "8n", "velocity": 95 },
+            { "pitch": "A1", "time": "0:3:2", "duration": "8n", "velocity": 92 },
+
+            { "pitch": "F1", "time": "1:0:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "F1", "time": "1:1:2", "duration": "8n", "velocity": 92 },
+            { "pitch": "F1", "time": "1:2:2", "duration": "8n", "velocity": 95 },
+            { "pitch": "F1", "time": "1:3:2", "duration": "8n", "velocity": 92 },
+
+            { "pitch": "C2", "time": "2:0:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "C2", "time": "2:1:2", "duration": "8n", "velocity": 95 },
+            { "pitch": "C2", "time": "2:2:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "C2", "time": "2:3:2", "duration": "8n", "velocity": 95 },
+
+            { "pitch": "G1", "time": "3:0:2", "duration": "8n", "velocity": 102 },
+            { "pitch": "G1", "time": "3:1:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "G1", "time": "3:2:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "G1", "time": "3:3:2", "duration": "8n", "velocity": 105 }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:0", "duration": "1n", "velocity": 88 },
+            { "pitch": "F1", "time": "1:0:0", "duration": "1n", "velocity": 88 },
+            { "pitch": "C2", "time": "2:0:0", "duration": "1n", "velocity": 90 },
+            { "pitch": "G1", "time": "3:0:0", "duration": "1n", "velocity": 92 }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "C4", "time": "0:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "F3", "time": "1:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "A3", "time": "1:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "C4", "time": "1:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "C4", "time": "2:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "E4", "time": "2:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "G4", "time": "2:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "G3", "time": "3:0:0", "duration": "1n", "velocity": 70 },
+            { "pitch": "B3", "time": "3:0:0", "duration": "1n", "velocity": 64 },
+            { "pitch": "D4", "time": "3:0:0", "duration": "1n", "velocity": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dnb-break",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "hat", "time": "0:0:2", "duration": "16n", "velocity": 62 },
+            { "pitch": "snare", "time": "0:1:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "hat", "time": "0:1:2", "duration": "16n", "velocity": 58 },
+            { "pitch": "kick", "time": "0:2:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "hat", "time": "0:2:2", "duration": "16n", "velocity": 65 },
+            { "pitch": "snare", "time": "0:3:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "hat", "time": "0:3:2", "duration": "16n", "velocity": 60 },
+
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "hat", "time": "1:0:2", "duration": "16n", "velocity": 62 },
+            { "pitch": "snare", "time": "1:1:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "hat", "time": "1:1:2", "duration": "16n", "velocity": 58 },
+            { "pitch": "kick", "time": "1:2:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "hat", "time": "1:2:2", "duration": "16n", "velocity": 65 },
+            { "pitch": "snare", "time": "1:3:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "snare", "time": "1:3:2", "duration": "16n", "velocity": 78 },
+            { "pitch": "hat", "time": "1:3:2", "duration": "16n", "velocity": 60 },
+
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "hat", "time": "2:0:2", "duration": "16n", "velocity": 65 },
+            { "pitch": "snare", "time": "2:1:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat", "time": "2:1:2", "duration": "16n", "velocity": 60 },
+            { "pitch": "kick", "time": "2:2:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "hat", "time": "2:2:2", "duration": "16n", "velocity": 68 },
+            { "pitch": "snare", "time": "2:3:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "hat", "time": "2:3:2", "duration": "16n", "velocity": 62 },
+
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat", "time": "3:0:2", "duration": "16n", "velocity": 68 },
+            { "pitch": "snare", "time": "3:1:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "snare", "time": "3:1:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "hat", "time": "3:2:0", "duration": "16n", "velocity": 60 },
+            { "pitch": "kick", "time": "3:2:2", "duration": "8n", "velocity": 105 },
+            { "pitch": "snare", "time": "3:3:0", "duration": "8n", "velocity": 108 },
+            { "pitch": "snare", "time": "3:3:2", "duration": "16n", "velocity": 90 },
+            { "pitch": "snare", "time": "3:3:3", "duration": "16n", "velocity": 100 }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:0", "duration": "8n", "velocity": 100 },
+            { "pitch": "A1", "time": "0:0:2", "duration": "8n", "velocity": 88 },
+            { "pitch": "A1", "time": "0:1:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "E2", "time": "0:1:2", "duration": "8n", "velocity": 90 },
+            { "pitch": "A1", "time": "0:2:0", "duration": "8n", "velocity": 100 },
+            { "pitch": "A1", "time": "0:2:2", "duration": "8n", "velocity": 88 },
+            { "pitch": "G1", "time": "0:3:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "A1", "time": "0:3:2", "duration": "8n", "velocity": 92 },
+
+            { "pitch": "A1", "time": "1:0:0", "duration": "8n", "velocity": 102 },
+            { "pitch": "A1", "time": "1:0:2", "duration": "8n", "velocity": 88 },
+            { "pitch": "C2", "time": "1:1:0", "duration": "8n", "velocity": 98 },
+            { "pitch": "E2", "time": "1:1:2", "duration": "8n", "velocity": 92 },
+            { "pitch": "A1", "time": "1:2:0", "duration": "8n", "velocity": 100 },
+            { "pitch": "A1", "time": "1:2:2", "duration": "8n", "velocity": 88 },
+            { "pitch": "G1", "time": "1:3:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "F1", "time": "1:3:2", "duration": "8n", "velocity": 92 },
+
+            { "pitch": "F1", "time": "2:0:0", "duration": "8n", "velocity": 102 },
+            { "pitch": "F1", "time": "2:0:2", "duration": "8n", "velocity": 90 },
+            { "pitch": "F1", "time": "2:1:0", "duration": "8n", "velocity": 98 },
+            { "pitch": "C2", "time": "2:1:2", "duration": "8n", "velocity": 92 },
+            { "pitch": "F1", "time": "2:2:0", "duration": "8n", "velocity": 100 },
+            { "pitch": "F1", "time": "2:2:2", "duration": "8n", "velocity": 88 },
+            { "pitch": "A1", "time": "2:3:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "C2", "time": "2:3:2", "duration": "8n", "velocity": 92 },
+
+            { "pitch": "E1", "time": "3:0:0", "duration": "8n", "velocity": 105 },
+            { "pitch": "E1", "time": "3:0:2", "duration": "8n", "velocity": 92 },
+            { "pitch": "G1", "time": "3:1:0", "duration": "8n", "velocity": 98 },
+            { "pitch": "A1", "time": "3:1:2", "duration": "8n", "velocity": 95 },
+            { "pitch": "C2", "time": "3:2:0", "duration": "8n", "velocity": 100 },
+            { "pitch": "E2", "time": "3:2:2", "duration": "8n", "velocity": 95 },
+            { "pitch": "A1", "time": "3:3:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "A1", "time": "3:3:2", "duration": "8n", "velocity": 100 }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n", "velocity": 55 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "A3", "time": "1:0:0", "duration": "1n", "velocity": 55 },
+            { "pitch": "E4", "time": "1:0:0", "duration": "1n", "velocity": 48 },
+            { "pitch": "F3", "time": "2:0:0", "duration": "1n", "velocity": 58 },
+            { "pitch": "C4", "time": "2:0:0", "duration": "1n", "velocity": 50 },
+            { "pitch": "A2", "time": "3:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "E3", "time": "3:0:0", "duration": "1n", "velocity": 55 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "return",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            { "pitch": "kick", "time": "0:0:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat-open", "time": "0:0:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "0:1:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "snare", "time": "0:1:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "clap", "time": "0:1:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat-open", "time": "0:1:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "0:2:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat-open", "time": "0:2:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "0:3:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "snare", "time": "0:3:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "clap", "time": "0:3:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat-open", "time": "0:3:2", "duration": "16n", "velocity": 75 },
+
+            { "pitch": "kick", "time": "1:0:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat-open", "time": "1:0:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "1:1:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "snare", "time": "1:1:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "clap", "time": "1:1:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat-open", "time": "1:1:2", "duration": "16n", "velocity": 75 },
+            { "pitch": "kick", "time": "1:2:0", "duration": "4n", "velocity": 112 },
+            { "pitch": "hat-open", "time": "1:2:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "1:3:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "snare", "time": "1:3:0", "duration": "4n", "velocity": 100 },
+            { "pitch": "clap", "time": "1:3:0", "duration": "4n", "velocity": 90 },
+            { "pitch": "hat-open", "time": "1:3:2", "duration": "16n", "velocity": 75 },
+
+            { "pitch": "kick", "time": "2:0:0", "duration": "4n", "velocity": 115 },
+            { "pitch": "hat-open", "time": "2:0:2", "duration": "16n", "velocity": 82 },
+            { "pitch": "kick", "time": "2:1:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "snare", "time": "2:1:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "clap", "time": "2:1:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "hat-open", "time": "2:1:2", "duration": "16n", "velocity": 78 },
+            { "pitch": "kick", "time": "2:2:0", "duration": "4n", "velocity": 115 },
+            { "pitch": "hat-open", "time": "2:2:2", "duration": "16n", "velocity": 82 },
+            { "pitch": "kick", "time": "2:3:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "snare", "time": "2:3:0", "duration": "4n", "velocity": 102 },
+            { "pitch": "clap", "time": "2:3:0", "duration": "4n", "velocity": 92 },
+            { "pitch": "hat-open", "time": "2:3:2", "duration": "16n", "velocity": 78 },
+
+            { "pitch": "kick", "time": "3:0:0", "duration": "4n", "velocity": 115 },
+            { "pitch": "hat-open", "time": "3:0:2", "duration": "16n", "velocity": 85 },
+            { "pitch": "kick", "time": "3:1:0", "duration": "4n", "velocity": 108 },
+            { "pitch": "snare", "time": "3:1:0", "duration": "4n", "velocity": 105 },
+            { "pitch": "clap", "time": "3:1:0", "duration": "4n", "velocity": 95 },
+            { "pitch": "hat-open", "time": "3:1:2", "duration": "16n", "velocity": 80 },
+            { "pitch": "kick", "time": "3:2:0", "duration": "4n", "velocity": 115 },
+            { "pitch": "hat-open", "time": "3:2:2", "duration": "16n", "velocity": 85 },
+            { "pitch": "kick", "time": "3:3:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "snare", "time": "3:3:0", "duration": "4n", "velocity": 110 },
+            { "pitch": "clap", "time": "3:3:0", "duration": "4n", "velocity": 100 }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:2", "duration": "8n", "velocity": 105 },
+            { "pitch": "A1", "time": "0:1:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "E2", "time": "0:2:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "A1", "time": "0:2:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "A1", "time": "0:3:2", "duration": "8n", "velocity": 98 },
+
+            { "pitch": "F1", "time": "1:0:2", "duration": "8n", "velocity": 105 },
+            { "pitch": "F1", "time": "1:1:2", "duration": "8n", "velocity": 98 },
+            { "pitch": "C2", "time": "1:2:0", "duration": "8n", "velocity": 95 },
+            { "pitch": "F1", "time": "1:2:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "F1", "time": "1:3:2", "duration": "8n", "velocity": 98 },
+
+            { "pitch": "C2", "time": "2:0:2", "duration": "8n", "velocity": 108 },
+            { "pitch": "C2", "time": "2:1:2", "duration": "8n", "velocity": 100 },
+            { "pitch": "G2", "time": "2:2:0", "duration": "8n", "velocity": 98 },
+            { "pitch": "C2", "time": "2:2:2", "duration": "8n", "velocity": 102 },
+            { "pitch": "C2", "time": "2:3:2", "duration": "8n", "velocity": 100 },
+
+            { "pitch": "G1", "time": "3:0:2", "duration": "8n", "velocity": 110 },
+            { "pitch": "G1", "time": "3:1:2", "duration": "8n", "velocity": 102 },
+            { "pitch": "D2", "time": "3:2:0", "duration": "8n", "velocity": 105 },
+            { "pitch": "G1", "time": "3:2:2", "duration": "8n", "velocity": 105 },
+            { "pitch": "A1", "time": "3:3:0", "duration": "2n", "velocity": 115 }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            { "pitch": "A1", "time": "0:0:0", "duration": "1n", "velocity": 92 },
+            { "pitch": "F1", "time": "1:0:0", "duration": "1n", "velocity": 92 },
+            { "pitch": "C2", "time": "2:0:0", "duration": "1n", "velocity": 95 },
+            { "pitch": "G1", "time": "3:0:0", "duration": "1n", "velocity": 100 }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            { "pitch": "A3", "time": "0:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "C4", "time": "0:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "E4", "time": "0:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "F3", "time": "1:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "A3", "time": "1:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "C4", "time": "1:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "C4", "time": "2:0:0", "duration": "1n", "velocity": 72 },
+            { "pitch": "E4", "time": "2:0:0", "duration": "1n", "velocity": 65 },
+            { "pitch": "G4", "time": "2:0:0", "duration": "1n", "velocity": 62 },
+            { "pitch": "G3", "time": "3:0:0", "duration": "1n", "velocity": 75 },
+            { "pitch": "B3", "time": "3:0:0", "duration": "1n", "velocity": 68 },
+            { "pitch": "D4", "time": "3:0:0", "duration": "1n", "velocity": 64 }
+          ]
+        }
+      ]
+    }
+  ]
+}
