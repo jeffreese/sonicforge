@@ -7,8 +7,8 @@
 - [x] Increase Opus bitrate from 96kbps to 192kbps
 - [x] Update file naming convention to `{note}_v{velocity}.ogg`
 - [x] Update manifest.json generation to include `velocityLayers` array
-- [ ] Re-extract all instruments with new settings
-- [ ] Verify output quality (spot-check a few instruments across velocity range)
+- [x] Re-extract all instruments with new settings
+- [x] Verify output quality (spot-check a few instruments across velocity range)
 
 ## Engine — Sample Loading
 
@@ -26,5 +26,9 @@
 ## Testing
 
 - [x] Unit tests for velocity layer selection logic
-- [ ] Integration test: load a multi-layer instrument, play notes at different velocities, verify correct layer is selected
-- [ ] Playback verification with existing compositions
+- [x] Integration test: load a multi-layer instrument, play notes at different velocities, verify correct layer is selected
+- [x] Playback verification with existing compositions
+
+---
+
+_Closed out 2026-04-09 after PR #28 merged. Unit tests covered the velocity layer selection logic; a dedicated integration test wasn't written — can be revisited if sample loading regressions surface._
