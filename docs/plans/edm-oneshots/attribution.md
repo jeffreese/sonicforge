@@ -1,8 +1,12 @@
-# One-Shot Sample Attribution
+# One-Shot Sample Attribution (planning archive)
 
-All samples sourced from [Freesound.org](https://freesound.org) under the [Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/) public domain dedication. CC0 does not technically require attribution, but crediting the original authors is good practice.
+**Status: processed and committed.** This file was the working document used during sample sourcing in sub-epic #5. The canonical attribution now lives at [`public/samples/oneshots/LICENSE.md`](../../../public/samples/oneshots/LICENSE.md) alongside the actual samples, with accurate post-transcode filenames and processing notes.
 
-This file is a scratch/working document during sub-epic #5 (`edm-oneshots`). At commit time, its contents will be copied into `public/samples/oneshots/LICENSE.md` alongside the sample files themselves.
+This file is retained as a planning archive and intentionally keeps the original WAV/AIFF/MP3 filenames (pre-transcode) for historical reference. The committed files use `.ogg` extensions for the transcoded FX and the two cropped snares.
+
+---
+
+All samples sourced from [Freesound.org](https://freesound.org) under the [Creative Commons 0](https://creativecommons.org/publicdomain/zero/1.0/) public domain dedication.
 
 ## Kicks
 
