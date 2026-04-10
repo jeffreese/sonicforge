@@ -1,4 +1,19 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
+// Mock the engine singleton so importing sf-arrangement (which now polls
+// mix bus levels for the track-header swatch meters) doesn't try to boot
+// a real Tone.js MixBus under jsdom.
+const getChannelLevelMock = vi.fn<(id: string) => number>()
+getChannelLevelMock.mockReturnValue(Number.NEGATIVE_INFINITY)
+vi.mock('../engine/instance', () => ({
+  engine: {
+    getMixBus: vi.fn().mockReturnValue({
+      getChannelLevel: (id: string) => getChannelLevelMock(id),
+      getMasterLevel: vi.fn().mockReturnValue(Number.NEGATIVE_INFINITY),
+    }),
+  },
+}))
+
 import type { SectionOffset } from '../engine/Transport'
 import type { SonicForgeComposition } from '../schema/composition'
 import { compositionStore } from '../stores/CompositionStore'
@@ -66,7 +81,14 @@ afterEach(() => {
   document.body.innerHTML = ''
   compositionStore.clear()
   transportStore.resetPosition()
+  getChannelLevelMock.mockReset()
+  getChannelLevelMock.mockReturnValue(Number.NEGATIVE_INFINITY)
 })
+
+/** Wait one rAF tick so the swatch meter loop can populate opacities. */
+function nextFrame(): Promise<void> {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()))
+}
 
 describe('sf-arrangement', () => {
   it('is registered as a custom element', () => {
@@ -286,6 +308,58 @@ describe('sf-arrangement', () => {
 
     // "All Tracks" should now be active
     expect(buttons[0].className).toContain('bg-surface-hover')
+  })
+
+  it('swatch elements carry data-instrument-id matching instrument ids', async () => {
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    const swatches = el.querySelectorAll<HTMLElement>('[data-instrument-id]')
+    expect(swatches.length).toBe(2)
+    expect(swatches[0].dataset.instrumentId).toBe('piano')
+    expect(swatches[1].dataset.instrumentId).toBe('bass')
+  })
+
+  it('swatch opacity dims to 0.35 when track is silent', async () => {
+    getChannelLevelMock.mockReturnValue(Number.NEGATIVE_INFINITY)
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+    await nextFrame()
+
+    const swatches = el.querySelectorAll<HTMLElement>('[data-instrument-id]')
+    expect(Number.parseFloat(swatches[0].style.opacity)).toBeCloseTo(0.35, 2)
+    expect(Number.parseFloat(swatches[1].style.opacity)).toBeCloseTo(0.35, 2)
+  })
+
+  it('swatch opacity brightens with signal level', async () => {
+    // 0 dB → full brightness; -60 dB → dim
+    getChannelLevelMock.mockImplementation((id: string) => (id === 'piano' ? 0 : -60))
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+    await nextFrame()
+
+    const swatches = el.querySelectorAll<HTMLElement>('[data-instrument-id]')
+    // piano at 0 dB → 1.0, bass at -60 dB → 0.35
+    expect(Number.parseFloat(swatches[0].style.opacity)).toBeCloseTo(1.0, 2)
+    expect(Number.parseFloat(swatches[1].style.opacity)).toBeCloseTo(0.35, 2)
+  })
+
+  it('cancels the swatch meter rAF loop on disconnect', async () => {
+    const cancelSpy = vi.spyOn(globalThis, 'cancelAnimationFrame')
+    compositionStore.load(testComposition)
+    const el = createElement()
+    el.loadSections(testOffsets, 12)
+    await el.updateComplete
+
+    el.remove()
+    expect(cancelSpy).toHaveBeenCalled()
+    cancelSpy.mockRestore()
   })
 
   it('renders only the "All Tracks" header when no composition is loaded', async () => {
