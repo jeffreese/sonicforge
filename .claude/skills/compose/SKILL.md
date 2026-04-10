@@ -10,9 +10,15 @@ allowed-tools: Read, Write, Glob
 
 1. **Parse the request.** Extract genre/mood, instruments, BPM, key, structure, length. Fill in sensible defaults for anything not specified.
 
-2. **Load reference material.** Read these files before generating:
-   - `.claude/skills/compose/gm-samples.md` — valid instrument sample names
+2. **Load reference material.** Always read:
+   - `.claude/skills/compose/gm-samples.md` — valid instrument sample names (for `source: 'sampled'`)
    - `.claude/skills/compose/genre-guide.md` — genre conventions, progressions, drum patterns
+
+   If the request involves EDM, synths, effects, automation, sidechain, LFO modulation, or one-shot drums, also read:
+   - `.claude/skills/compose/synth-presets.md` — 14 starter synth patches with role hints
+   - `.claude/skills/compose/effects-reference.md` — the 12 supported effect types with params and usage patterns
+   - `.claude/skills/compose/modulation-patterns.md` — wobble bass, sidechain pumping, filter sweeps, drops
+   - `.claude/skills/compose/oneshot-hits.md` — bundled CC0 drum/FX samples available via `source: 'oneshot'`
 
 3. **Ask clarifying questions only if the request is very vague** (e.g., bare "/compose"). If there's enough to work with, generate directly.
 
