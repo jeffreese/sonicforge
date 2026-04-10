@@ -175,15 +175,26 @@ function applyPoint(target: TonePrimitiveParam, point: CompiledPoint, audioTime:
       target.setValueAtTime(point.value, audioTime)
       break
     case 'exponential':
-      // exponentialRampToValueAtTime rejects zero/negative target values.
-      target.exponentialRampToValueAtTime(Math.max(point.value, EXPONENTIAL_MIN), audioTime)
+      // Exponential ramps are mathematically undefined for non-positive values
+      // and the Web Audio API rejects them outright. For dB-ranged params (which
+      // are always ≤ 0) and any other signed-range param, silently fall back to
+      // linear so the automation still fires.
+      //
+      // Known limitation: if the STARTING value (last scheduled value on the
+      // param) is ≤ 0 but this point's target is > 0, Tone.js will still reject
+      // the exponentialRampToValueAtTime call. That edge case (transitioning
+      // from a negative anchor to a positive target) is rare and deliberately
+      // not addressed here — compositions that hit it should use linear curves.
+      if (point.value > 0) {
+        target.exponentialRampToValueAtTime(point.value, audioTime)
+      } else {
+        target.linearRampToValueAtTime(point.value, audioTime)
+      }
       break
     default:
       target.linearRampToValueAtTime(point.value, audioTime)
   }
 }
-
-const EXPONENTIAL_MIN = 1e-5
 
 /**
  * Linearly interpolate the value of a lane at a given transport time in
@@ -211,11 +222,13 @@ export function interpolateAt(points: CompiledPoint[], seconds: number): number 
           return a.value
         case 'exponential': {
           // Mirror the Web Audio API: exponential interpolation from a.value
-          // to b.value over [a.seconds, b.seconds]. Clamp both values to
-          // EXPONENTIAL_MIN to avoid zero-crossing blowups.
-          const av = Math.max(a.value, EXPONENTIAL_MIN)
-          const bv = Math.max(b.value, EXPONENTIAL_MIN)
-          return av * (bv / av) ** t
+          // to b.value over [a.seconds, b.seconds]. Exponential is undefined
+          // for non-positive values, so fall back to linear when either
+          // endpoint is ≤ 0 (same fallback policy as applyPoint).
+          if (a.value > 0 && b.value > 0) {
+            return a.value * (b.value / a.value) ** t
+          }
+          return a.value + (b.value - a.value) * t
         }
         default:
           return a.value + (b.value - a.value) * t

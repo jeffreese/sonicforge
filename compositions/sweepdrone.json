@@ -5,7 +5,7 @@
     "bpm": 120,
     "timeSignature": [4, 4],
     "key": "A minor",
-    "description": "Sub-epic #3 verification — exercises the AutomationEngine. A sustained reese bass + supersaw lead with: (1) a linear volume ramp on the lead that swells over 8 bars, (2) a linear automation sweep of a named 'drop' reverb's wet level from dry to soaked and back, (3) an exponential ramp on master limiter threshold for a dramatic final crush, and (4) a step-curve pan flip. Tests track params, effect-by-id targeting, effect-by-type targeting, master bus params, and linear/exponential/step curves all in one piece."
+    "description": "Sub-epic #3 verification — exercises the AutomationEngine. A sustained reese bass + supersaw lead with: (1) a linear volume ramp on the lead that swells over 8 bars, (2) a linear automation sweep of a named 'drop' reverb's wet level from dry to soaked and back, (3) a linear ramp on master limiter threshold for a final crush, and (4) a step-curve pan flip. Tests track params, effect-by-id targeting, effect-by-type targeting, master bus params, and linear/step curves. (Exponential curves only work for strictly-positive params per Web Audio API; dB-ranged params like limiter threshold must use linear.)"
   },
   "instruments": [
     {
@@ -84,7 +84,7 @@
       "points": [
         { "time": "0:0:0", "value": -3 },
         { "time": "7:0:0", "value": -3 },
-        { "time": "7:3:0", "value": -0.3, "curve": "exponential" }
+        { "time": "7:3:0", "value": -0.3, "curve": "linear" }
       ]
     }
   ],

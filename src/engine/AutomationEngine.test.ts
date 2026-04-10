@@ -167,7 +167,28 @@ describe('AutomationEngine', () => {
     expect(stepCall).toBeDefined()
   })
 
-  it('clamps exponential ramp target to positive minimum', () => {
+  it('uses exponential ramp when target value is strictly positive', () => {
+    const { param, calls } = makeParam()
+    const engine = new AutomationEngine()
+    const lane: AutomationLane[] = [
+      {
+        target: 'lead.volume',
+        points: [
+          { time: '0:0:0', value: 0.1 },
+          { time: '1:0:0', value: 1, curve: 'exponential' },
+        ],
+      },
+    ]
+    engine.compile(lane, metadata, makeRegistryWithLeadVolume(param))
+    transportSeconds.value = 0
+    toneNow.value = 100
+    engine.scheduleFromCurrentPosition()
+    const exp = calls.find((c) => c.method === 'exponentialRampToValueAtTime')
+    expect(exp).toBeDefined()
+    expect(exp?.value).toBe(1)
+  })
+
+  it('falls back to linear when exponential target is zero', () => {
     const { param, calls } = makeParam()
     const engine = new AutomationEngine()
     const lane: AutomationLane[] = [
@@ -184,8 +205,36 @@ describe('AutomationEngine', () => {
     toneNow.value = 100
     engine.scheduleFromCurrentPosition()
     const exp = calls.find((c) => c.method === 'exponentialRampToValueAtTime')
-    expect(exp).toBeDefined()
-    expect(exp?.value).toBeCloseTo(1e-5, 10)
+    expect(exp).toBeUndefined()
+    // The zero-value point should schedule a linear ramp instead.
+    const linear = calls.filter((c) => c.method === 'linearRampToValueAtTime')
+    expect(linear.some((c) => c.value === 0)).toBe(true)
+  })
+
+  it('falls back to linear when exponential target is negative (dB-range regression)', () => {
+    // Regression test for the limiter-threshold crash shipped in sub-epic #3.
+    // Tone.Param<'decibels'> rejects exponentialRampToValueAtTime for any
+    // non-positive value. The AutomationEngine must silently fall back to
+    // linear so dB params automate correctly.
+    const { param, calls } = makeParam()
+    const engine = new AutomationEngine()
+    const lane: AutomationLane[] = [
+      {
+        target: 'lead.volume',
+        points: [
+          { time: '0:0:0', value: -3 },
+          { time: '1:0:0', value: -0.3, curve: 'exponential' },
+        ],
+      },
+    ]
+    engine.compile(lane, metadata, makeRegistryWithLeadVolume(param))
+    transportSeconds.value = 0
+    toneNow.value = 100
+    engine.scheduleFromCurrentPosition()
+    const exp = calls.find((c) => c.method === 'exponentialRampToValueAtTime')
+    expect(exp).toBeUndefined()
+    const linear = calls.find((c) => c.method === 'linearRampToValueAtTime' && c.value === -0.3)
+    expect(linear).toBeDefined()
   })
 
   it('stop() cancels scheduled values on every lane', () => {
@@ -254,6 +303,19 @@ describe('interpolateAt', () => {
       { seconds: 4, value: 1, curve: 'step' as const },
     ]
     expect(interpolateAt(points, 2)).toBe(0)
+  })
+
+  it('falls back to linear interpolation for exponential curves with negative values', () => {
+    // Regression for the sub-epic #3 dB-range crash. Exponential interpolation
+    // is undefined for non-positive values and used to clamp to 1e-5 (positive),
+    // producing nonsense results for dB-ranged params. With the fallback, both
+    // endpoints being negative should interpolate linearly.
+    const points = [
+      { seconds: 0, value: -3, curve: 'linear' as const },
+      { seconds: 4, value: -0.3, curve: 'exponential' as const },
+    ]
+    // Midpoint of a linear interpolation from -3 to -0.3 is -1.65.
+    expect(interpolateAt(points, 2)).toBeCloseTo(-1.65, 5)
   })
 })
 
