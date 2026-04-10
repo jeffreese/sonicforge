@@ -4,5 +4,10 @@ dist/
 .DS_Store
 public/samples/*
 !public/samples/.gitkeep
+# One-shot samples (CC0 from Freesound) ship with the repo so compositions
+# that use `source: 'oneshot'` work out of the box. See
+# public/samples/oneshots/LICENSE.md for attribution.
+!public/samples/oneshots/
+!public/samples/oneshots/**
 .venv/
 *.sf2

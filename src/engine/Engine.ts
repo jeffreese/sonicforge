@@ -275,7 +275,9 @@ export class Engine {
     if (!this.composition) return
 
     const loaded = this.instruments.get(instrumentId)
-    if (!loaded || loaded.isDrum) return
+    // swapSample only works for pitched sampled instruments — drums and
+    // oneshots don't have a single swappable sample to hot-reload.
+    if (!loaded || loaded.mode !== 'pitched') return
 
     // Find the instrument definition
     const instDef = this.composition.instruments.find((i) => i.id === instrumentId)
