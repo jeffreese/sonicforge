@@ -32,7 +32,7 @@ allowed-tools: Read, Write, Glob
    - Keep instruments in their natural registers
    - Ensure harmonic consistency across simultaneous instruments
 
-5. **Write the JSON** to `compositions/<descriptive-name>.json`
+5. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<slug>.json`. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
 6. **Briefly describe what you created** — title, key, BPM, instruments, section overview. A few sentences max.
 

@@ -62,7 +62,7 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
 
 7. **Generate the composition JSON.** Follow `composition-format` and `music-theory` rules. Every note written out — no placeholders. Vary velocity. Keep instruments in their natural registers (bass C1–G3, melody C4–C6, pads C3–G5).
 
-8. **Write the JSON** to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source.
+8. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
 9. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved. A few sentences max.
 
