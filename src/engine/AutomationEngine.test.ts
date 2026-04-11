@@ -87,6 +87,95 @@ describe('AutomationEngine', () => {
     warn.mockRestore()
   })
 
+  it('continues scheduling other lanes when one lane throws', () => {
+    // Regression: a Tone.js param with an unusual range (e.g. a MonoSynth
+    // filter.frequency that has an active filterEnvelope attached) can throw
+    // from exponentialRampToValueAtTime. That single bad lane used to bubble
+    // out of Engine.play(), which prevented setState('playing') from ever
+    // running — the transport advanced internally but the visual playhead
+    // never started animating. Every lane must now be wrapped in try/catch.
+    const goodParam = makeParam()
+    const throwingParam = makeParam()
+    throwingParam.param.linearRampToValueAtTime = () => {
+      throw new RangeError('Value must be within [0, 0], got: 1e-7')
+    }
+
+    // Registry serving two lanes: a good "lead.volume" and a bad "bass.volume"
+    const registry = {
+      mixBus: {
+        getChannel(id: string) {
+          if (id === 'lead') return { volume: goodParam.param, pan: makeParam().param }
+          if (id === 'bass') return { volume: throwingParam.param, pan: makeParam().param }
+          return undefined
+        },
+      },
+      instrumentChains: new Map(),
+      masterChain: null,
+      getInstrumentSynthNode: () => null,
+    } as unknown as Parameters<InstanceType<typeof AutomationEngine>['compile']>[2]
+
+    const engine = new AutomationEngine()
+    engine.compile(
+      [
+        {
+          target: 'bass.volume',
+          points: [
+            { time: '0:0:0', value: 0 },
+            { time: '1:0:0', value: 1 },
+          ],
+        },
+        {
+          target: 'lead.volume',
+          points: [
+            { time: '0:0:0', value: 0 },
+            { time: '1:0:0', value: 1 },
+          ],
+        },
+      ],
+      metadata,
+      registry,
+    )
+
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    // Must not throw — the bad lane should be caught and logged.
+    expect(() => engine.scheduleFromCurrentPosition()).not.toThrow()
+    // The good lane must still have been scheduled.
+    const goodRamp = goodParam.calls.find((c) => c.method === 'linearRampToValueAtTime')
+    expect(goodRamp).toBeDefined()
+    expect(goodRamp?.value).toBe(1)
+    // The warning must mention the failing lane by target path.
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('bass.volume'),
+      expect.stringContaining('[0, 0]'),
+    )
+    warn.mockRestore()
+  })
+
+  it('stop() swallows per-lane cancellation errors', () => {
+    const throwingParam = makeParam()
+    throwingParam.param.cancelScheduledValues = () => {
+      throw new Error('cancel boom')
+    }
+    const registry = {
+      mixBus: {
+        getChannel(id: string) {
+          if (id === 'lead') return { volume: throwingParam.param, pan: makeParam().param }
+          return undefined
+        },
+      },
+      instrumentChains: new Map(),
+      masterChain: null,
+      getInstrumentSynthNode: () => null,
+    } as unknown as Parameters<InstanceType<typeof AutomationEngine>['compile']>[2]
+
+    const engine = new AutomationEngine()
+    engine.compile(makeSimpleLane(), metadata, registry)
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(() => engine.stop()).not.toThrow()
+    expect(warn).toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
   it('schedules points from a fresh start (transport at 0)', () => {
     const { param, calls } = makeParam()
     const engine = new AutomationEngine()

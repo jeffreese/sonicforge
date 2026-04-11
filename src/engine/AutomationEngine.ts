@@ -88,6 +88,13 @@ export class AutomationEngine {
    * Cancel any previously scheduled automation and reschedule every lane
    * from the transport's current position. Called by the Engine on play()
    * and after a seek.
+   *
+   * Per-lane operations are wrapped in try/catch so that a single
+   * misbehaving lane — for example, one that targets a Tone.js param with
+   * an unusual range or an active signal source — cannot throw out of
+   * `play()` and prevent the engine from transitioning to the `'playing'`
+   * state. The failing lane is logged and skipped; every other lane
+   * (and playback itself) continues.
    */
   scheduleFromCurrentPosition(): void {
     const transport = Tone.getTransport()
@@ -95,32 +102,49 @@ export class AutomationEngine {
     const now = Tone.now()
 
     for (const lane of this.lanes) {
-      lane.target.cancelScheduledValues(now)
+      try {
+        lane.target.cancelScheduledValues(now)
 
-      // Anchor the param to its interpolated value at the current transport
-      // position. Without this, the param would hold whatever value it had
-      // before cancelScheduledValues ran, causing a jump when automation
-      // resumes from a mid-lane seek.
-      const anchorValue = interpolateAt(lane.points, transportSeconds)
-      if (anchorValue !== null) {
-        lane.target.setValueAtTime(anchorValue, now)
-      }
+        // Anchor the param to its interpolated value at the current transport
+        // position. Without this, the param would hold whatever value it had
+        // before cancelScheduledValues ran, causing a jump when automation
+        // resumes from a mid-lane seek.
+        const anchorValue = interpolateAt(lane.points, transportSeconds)
+        if (anchorValue !== null) {
+          lane.target.setValueAtTime(anchorValue, now)
+        }
 
-      for (const point of lane.points) {
-        if (point.seconds <= transportSeconds) continue
-        const audioTime = now + (point.seconds - transportSeconds)
-        applyPoint(lane.target, point, audioTime)
+        for (const point of lane.points) {
+          if (point.seconds <= transportSeconds) continue
+          const audioTime = now + (point.seconds - transportSeconds)
+          applyPoint(lane.target, point, audioTime)
+        }
+      } catch (err) {
+        console.warn(
+          `AutomationEngine: failed to schedule lane "${lane.targetPath}":`,
+          (err as Error).message,
+        )
       }
     }
   }
 
   /**
    * Cancel all scheduled values. Called by the Engine on stop().
+   *
+   * Wrapped per-lane for the same reason as `scheduleFromCurrentPosition` —
+   * we never want one bad lane to throw out of the engine lifecycle.
    */
   stop(): void {
     const now = Tone.now()
     for (const lane of this.lanes) {
-      lane.target.cancelScheduledValues(now)
+      try {
+        lane.target.cancelScheduledValues(now)
+      } catch (err) {
+        console.warn(
+          `AutomationEngine: failed to cancel lane "${lane.targetPath}":`,
+          (err as Error).message,
+        )
+      }
     }
   }
 
