@@ -6,6 +6,12 @@ Ordered by priority. `/forge:next` reads this to determine what to work on.
 
 **[composition-index](composition-index/)** — Hook-maintained feature index of every composition in `compositions/*.json`. Lives at `tools/composition-index/index.json`, updated via a `PostToolUse` hook that fires on final composition Writes (enabled by the draft-first authoring convention). Surfaces library "gaps" — dimensions with low or zero coverage — as positive-framed diversification cues for `/compose` and `/remix`, counteracting training-distribution drift and within-session recency pull. Ships with a `/library-stats` reporting skill. Explicitly avoids negative framing ("don't repeat X") because negation primes rather than suppresses in transformer attention.
 
+Progress:
+
+- **Chunk A shipped in PR #50** — indexer package (`tools/composition-index/`), `extract.ts` with Tier 1 + Tier 2 features, `build.ts` + `update.ts` entry points, `snapshot.ts` with gap analysis, `PostToolUse` hook wired into `.claude/settings.json`, 78 new tests. Hook latency ~30ms per fire.
+- **Schema tags shipped in PR #51** (infrastructure improvement that emerged mid-plan) — `metadata.tags?: string[]` with lowercase-hyphenated format enforcement, human-reviewed backfill of all 20 existing compositions, indexer updated to read tags + aggregate `tagDistribution` / `primaryTagDistribution` / missing-primary-genre gaps. 12 new tests. See ADR-011. Real library snapshot now surfaces actionable gaps like "no jazz, lo-fi, house, techno, trap" as diversification cues.
+- **Chunk B (Phases 6–8) remaining** — `/compose` + `/remix` consult the snapshot during their startup, new `/library-stats` skill, ADR-012, dogfood with an underspecified request to verify the tag-rich gaps actually influence output.
+
 ## Queued
 
 1. **[dynamic-marks](dynamic-marks/)** — Wire the existing `DynamicMark` schema (pp/mf/ff, crescendo, decrescendo) into the engine as velocity envelopes. Small scope, data model already exists, high expressive payoff for every composition.
