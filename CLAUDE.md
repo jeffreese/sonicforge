@@ -91,6 +91,8 @@ src/styles/     — Design tokens and component style maps
 src/util/       — Timing and music theory helpers
 src/data/       — GM instrument definitions
 compositions/   — Example and generated JSON compositions
+tools/          — Authoring-time tooling (lives outside src/, lint/test/typecheck covered)
+tools/compose-helpers/ — TS primitives for long-form composition scaffolding (drums, bass, harmony, humanize)
 scripts/        — Sample extraction tooling (Python + FluidSynth + FFmpeg)
 public/samples/ — Self-hosted instrument samples (gitignored, extracted locally)
 docs/spec/      — Planning documents from Forge (feature spec, tech spec, task breakdown)

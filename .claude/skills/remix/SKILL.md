@@ -62,9 +62,17 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
 
 7. **Generate the composition JSON.** Follow `composition-format` and `music-theory` rules. Every note written out — no placeholders. Vary velocity. Keep instruments in their natural registers (bass C1–G3, melody C4–C6, pads C3–G5).
 
-8. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+   **For long remixes or heavy genre reworks**, reach for the helper library at `tools/compose-helpers/` for repetitive scaffolding (drum grids, bass patterns, pad sustains, arpeggios, humanization). Write a throwaway scratch script that imports primitives, builds repetitive tracks, and leaves melodies and fills hand-written. Helper output is a starting point — hand-edit for expression. New helpers are encouraged if a primitive you need doesn't exist yet.
 
-9. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved. A few sentences max.
+8. **Rigidity pass.** Before finalizing, scan the generated remix for mechanical uniformity and adjust. Applies regardless of whether helpers were used:
+   - **Velocity uniformity:** if >60% of notes in a track share the same velocity, apply a natural velocity curve (emphasize downbeats, soften offbeats, ghost notes between hits).
+   - **Bar-to-bar identicalness:** if 4+ consecutive bars are literal duplicates within a track, introduce one variation — a ghost note, a dropped hit, a velocity accent, a one-bar fill.
+   - **Section contrast:** each section should have at least one distinguishing element from its neighbors (instrumentation, density, dynamics, register, drum variation).
+   - **Transition markers:** every section boundary should have some audible marker — fill, crash, drop-out, sweep, automation point. Add one if none exist.
+
+9. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+
+10. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
 
 ## Quality Checklist
 
