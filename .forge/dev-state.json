@@ -1,7 +1,7 @@
 {
-  "current_plan": "composition-index",
-  "current_task": "finalize-composition helper — closes out the plan",
-  "branch": "fix/composition-finalize-helper",
+  "current_plan": "dynamic-marks",
+  "current_task": "hygiene: index.json content-derived generatedAt + lint-staged scripts/ extension",
+  "branch": "fix/index-generated-at-stable",
   "status": "idle",
   "mode": "epic",
   "pending": null
