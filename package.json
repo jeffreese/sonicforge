@@ -34,7 +34,7 @@
     "vitest": "^2.1.0"
   },
   "lint-staged": {
-    "{src,tools}/**/*.{ts,js}": [
+    "{src,tools,scripts}/**/*.{ts,js}": [
       "biome check --no-errors-on-unmatched",
       "vitest related --run"
     ]

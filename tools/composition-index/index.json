@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-04-11T16:08:10.027Z",
+  "generatedAt": "2026-04-11T17:18:41.294Z",
   "entries": {
     "compositions/bass-trance-dnb-break.json": {
       "path": "compositions/bass-trance-dnb-break.json",
@@ -711,13 +711,107 @@
       "hasSynths": false,
       "hasOneshots": true,
       "hasSampled": true,
-      "modifiedAt": "2026-04-11T15:51:30.303Z",
+      "modifiedAt": "2026-04-11T17:18:41.294Z",
       "progression": "- | - | - | - | F | A | D | Bb | F | A | D | C | D-A | Bb-F | F-C | C-G | D-A | Bb-F | G-D | C-G | F | A | D | Bb | F | A | D | C | D-A | Bb-F | F-C | C-G | D-A | Bb-F | G-D | C-G | F | C | D | F",
       "drumPattern": "trap",
       "dominantRegisters": {
         "piano": "A#2-C4",
         "lead": "A4-G5",
         "bass": "C1-A#2"
+      }
+    },
+    "compositions/hollow-machine.json": {
+      "path": "compositions/hollow-machine.json",
+      "title": "Hollow Machine",
+      "bpm": 130,
+      "key": "A minor",
+      "timeSignature": [
+        4,
+        4
+      ],
+      "tags": [
+        "techno",
+        "minimal-techno",
+        "brooding",
+        "hypnotic",
+        "dub-influenced"
+      ],
+      "primaryTag": "techno",
+      "totalBars": 48,
+      "noteCount": 942,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Build",
+          "bars": 8
+        },
+        {
+          "name": "Main A",
+          "bars": 8
+        },
+        {
+          "name": "Break",
+          "bars": 8
+        },
+        {
+          "name": "Main B",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drone",
+          "name": "Warm Drone",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "stab",
+          "name": "Stab Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "stab_pad"
+        },
+        {
+          "id": "bass",
+          "name": "Acid Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "acid_bass"
+        },
+        {
+          "id": "drums",
+          "name": "Techno Drums",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": [
+        "eq3",
+        "compressor",
+        "limiter"
+      ],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": true,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-11T17:18:41.294Z",
+      "progression": "- | - | - | - | - | - | - | - | - | - | - | - | A | A | A | A | A | A | A | A | F | F | G | G | A | A | A | A | A | A | A | A | A | A | A | A | F | F | G | G | A | A | A | A | - | - | - | A",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "bass": "F1-A1"
       }
     },
     "compositions/lucid-decay.json": {
@@ -2037,100 +2131,6 @@
       "dominantRegisters": {
         "bass": "C1-B1",
         "stab": "C4-B4"
-      }
-    },
-    "compositions/hollow-machine.json": {
-      "path": "compositions/hollow-machine.json",
-      "title": "Hollow Machine",
-      "bpm": 130,
-      "key": "A minor",
-      "timeSignature": [
-        4,
-        4
-      ],
-      "tags": [
-        "techno",
-        "minimal-techno",
-        "brooding",
-        "hypnotic",
-        "dub-influenced"
-      ],
-      "primaryTag": "techno",
-      "totalBars": 48,
-      "noteCount": 942,
-      "sections": [
-        {
-          "name": "Intro",
-          "bars": 8
-        },
-        {
-          "name": "Build",
-          "bars": 8
-        },
-        {
-          "name": "Main A",
-          "bars": 8
-        },
-        {
-          "name": "Break",
-          "bars": 8
-        },
-        {
-          "name": "Main B",
-          "bars": 8
-        },
-        {
-          "name": "Outro",
-          "bars": 8
-        }
-      ],
-      "instruments": [
-        {
-          "id": "drone",
-          "name": "Warm Drone",
-          "category": "pad",
-          "source": "synth",
-          "preset": "warm_pad"
-        },
-        {
-          "id": "stab",
-          "name": "Stab Pad",
-          "category": "pad",
-          "source": "synth",
-          "preset": "stab_pad"
-        },
-        {
-          "id": "bass",
-          "name": "Acid Bass",
-          "category": "bass",
-          "source": "synth",
-          "preset": "acid_bass"
-        },
-        {
-          "id": "drums",
-          "name": "Techno Drums",
-          "category": "drums",
-          "source": "oneshot",
-          "preset": null
-        }
-      ],
-      "masterEffectTypes": [
-        "eq3",
-        "compressor",
-        "limiter"
-      ],
-      "hasSidechain": true,
-      "hasLFOs": false,
-      "hasAutomation": true,
-      "hasMasterEffects": true,
-      "hasSynths": true,
-      "hasOneshots": true,
-      "hasSampled": false,
-      "modifiedAt": "2026-04-11T16:08:09.998Z",
-      "progression": "- | - | - | - | - | - | - | - | - | - | - | - | A | A | A | A | A | A | A | A | F | F | G | G | A | A | A | A | A | A | A | A | A | A | A | A | F | F | G | G | A | A | A | A | - | - | - | A",
-      "drumPattern": "4-on-floor",
-      "dominantRegisters": {
-        "bass": "F1-A1"
       }
     }
   }

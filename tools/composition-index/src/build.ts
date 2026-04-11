@@ -47,9 +47,34 @@ function build(opts: BuildOptions = {}): CompositionIndex {
   }
   return {
     version: '1.0',
-    generatedAt: new Date().toISOString(),
+    generatedAt: computeGeneratedAt(entries),
     entries,
   }
+}
+
+/**
+ * Compute the index's `generatedAt` value as the max `modifiedAt` across all
+ * entries. This makes the field content-derived rather than wall-clock: two
+ * builds of the same unchanged compositions produce byte-identical output.
+ *
+ * Why this matters: before this change, `generatedAt` was `new Date().toISOString()`
+ * stamped at build time. Running the composition-index integration test
+ * rebuilt the index, bumped the timestamp, and left an unstaged diff in the
+ * working tree even when no composition had actually changed. Derivation
+ * from entry modifiedAt eliminates the churn.
+ *
+ * Empty libraries fall back to the Unix epoch as an unambiguous "no content
+ * yet" sentinel. ISO 8601 strings compare lexicographically, so no parsing
+ * needed to find the max.
+ */
+export function computeGeneratedAt(entries: Record<string, IndexEntry>): string {
+  const values = Object.values(entries)
+  if (values.length === 0) return new Date(0).toISOString()
+  let max = values[0].modifiedAt
+  for (const entry of values) {
+    if (entry.modifiedAt > max) max = entry.modifiedAt
+  }
+  return max
 }
 
 export function indexOne(absPath: string, repoRoot: string = REPO_ROOT): IndexEntry {

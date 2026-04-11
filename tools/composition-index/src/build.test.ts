@@ -4,13 +4,14 @@ import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
   build,
+  computeGeneratedAt,
   deriveSnapshotPath,
   indexOne,
   listCompositionFiles,
   writeIndex,
   writeSnapshot,
 } from './build.js'
-import type { CompositionIndex } from './types.js'
+import type { CompositionIndex, IndexEntry } from './types.js'
 import { isCompositionPath, update } from './update.js'
 
 // ─── Fixture helpers ───
@@ -106,14 +107,28 @@ describe('build', () => {
     expect(index.entries['compositions/c.json']).toBeDefined()
   })
 
-  it('stamps generatedAt with a current ISO timestamp', () => {
+  it('derives generatedAt from the newest entry modifiedAt', () => {
     writeComposition('a')
-    const before = Date.now()
+    writeComposition('b')
     const index = build({ compositionsDir, repoRoot: tmp })
-    const after = Date.now()
-    const stamp = Date.parse(index.generatedAt)
-    expect(stamp).toBeGreaterThanOrEqual(before)
-    expect(stamp).toBeLessThanOrEqual(after)
+    const entries = Object.values(index.entries)
+    const newest = entries.reduce((max, e) => (e.modifiedAt > max ? e.modifiedAt : max), '')
+    expect(index.generatedAt).toBe(newest)
+  })
+
+  it('produces byte-identical output on back-to-back rebuilds of unchanged compositions', () => {
+    writeComposition('a')
+    writeComposition('b')
+    writeComposition('c')
+    const first = JSON.stringify(build({ compositionsDir, repoRoot: tmp }))
+    const second = JSON.stringify(build({ compositionsDir, repoRoot: tmp }))
+    expect(second).toBe(first)
+  })
+
+  it('uses the Unix epoch as generatedAt for an empty library', () => {
+    const index = build({ compositionsDir, repoRoot: tmp })
+    expect(index.entries).toEqual({})
+    expect(index.generatedAt).toBe('1970-01-01T00:00:00.000Z')
   })
 
   it('skips malformed files with an error log and continues', () => {
@@ -145,6 +160,71 @@ describe('writeIndex', () => {
     const raw: string = readFileSync(indexPath, 'utf-8')
     expect(raw).toContain('"version": "1.0"')
     expect(raw.endsWith('\n')).toBe(true)
+  })
+})
+
+// ─── computeGeneratedAt ───
+
+describe('computeGeneratedAt', () => {
+  function makeBareEntry(overrides: Partial<IndexEntry> = {}): IndexEntry {
+    return {
+      path: 'compositions/test.json',
+      title: 'Test',
+      bpm: 120,
+      key: 'Am',
+      timeSignature: [4, 4],
+      tags: [],
+      primaryTag: null,
+      totalBars: 16,
+      noteCount: 100,
+      sections: [],
+      instruments: [],
+      masterEffectTypes: [],
+      hasSidechain: false,
+      hasLFOs: false,
+      hasAutomation: false,
+      hasMasterEffects: false,
+      hasSynths: false,
+      hasOneshots: false,
+      hasSampled: false,
+      modifiedAt: '2026-04-11T00:00:00.000Z',
+      progression: null,
+      drumPattern: 'none',
+      dominantRegisters: {},
+      ...overrides,
+    }
+  }
+
+  it('returns the Unix epoch for empty entries', () => {
+    expect(computeGeneratedAt({})).toBe('1970-01-01T00:00:00.000Z')
+  })
+
+  it('returns the sole entrys modifiedAt for a single-entry index', () => {
+    const entries = {
+      'compositions/a.json': makeBareEntry({ modifiedAt: '2026-04-11T12:00:00.000Z' }),
+    }
+    expect(computeGeneratedAt(entries)).toBe('2026-04-11T12:00:00.000Z')
+  })
+
+  it('returns the max modifiedAt across multiple entries', () => {
+    const entries = {
+      'compositions/a.json': makeBareEntry({ modifiedAt: '2026-01-01T00:00:00.000Z' }),
+      'compositions/b.json': makeBareEntry({ modifiedAt: '2026-06-15T12:34:56.000Z' }),
+      'compositions/c.json': makeBareEntry({ modifiedAt: '2026-04-11T00:00:00.000Z' }),
+    }
+    expect(computeGeneratedAt(entries)).toBe('2026-06-15T12:34:56.000Z')
+  })
+
+  it('is deterministic — same input yields same output', () => {
+    const entries = {
+      'compositions/a.json': makeBareEntry({ modifiedAt: '2026-03-01T00:00:00.000Z' }),
+      'compositions/b.json': makeBareEntry({ modifiedAt: '2026-05-01T00:00:00.000Z' }),
+    }
+    const first = computeGeneratedAt(entries)
+    const second = computeGeneratedAt(entries)
+    const third = computeGeneratedAt(entries)
+    expect(first).toBe(second)
+    expect(second).toBe(third)
   })
 })
 
@@ -337,6 +417,23 @@ describe('update', () => {
     update(file, { indexPath, repoRoot: tmp, compositionsDir })
     const derived = join(tmp, 'snapshot.txt')
     expect(existsSync(derived)).toBe(true)
+  })
+
+  it('produces byte-identical output on back-to-back update calls against unchanged files', () => {
+    writeComposition('a')
+    const bFile = writeComposition('b')
+    const initial = build({ compositionsDir, repoRoot: tmp })
+    writeIndex(initial, indexPath)
+    writeSnapshot(initial, snapshotPath)
+
+    // First update: inserts b (already in the initial build but redundant write is fine)
+    update(bFile, { indexPath, snapshotPath, repoRoot: tmp, compositionsDir })
+    const first = readFileSync(indexPath, 'utf-8')
+    // Second update: same file, unchanged
+    update(bFile, { indexPath, snapshotPath, repoRoot: tmp, compositionsDir })
+    const second = readFileSync(indexPath, 'utf-8')
+
+    expect(second).toBe(first)
   })
 
   it('falls back to a full rebuild when the index has a wrong version', () => {

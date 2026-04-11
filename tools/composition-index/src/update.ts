@@ -26,6 +26,7 @@ import {
   INDEX_PATH,
   REPO_ROOT,
   build,
+  computeGeneratedAt,
   deriveSnapshotPath,
   indexOne,
   writeIndex,
@@ -84,7 +85,7 @@ export function update(
 
   const entry = indexOne(absPath, repoRoot)
   existing.entries[entry.path] = entry
-  existing.generatedAt = new Date().toISOString()
+  existing.generatedAt = computeGeneratedAt(existing.entries)
   writeIndex(existing, indexPath)
   writeSnapshot(existing, snapshotPath)
   return { action: 'updated', entryPath: entry.path }
