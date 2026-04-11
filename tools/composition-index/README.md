@@ -55,15 +55,39 @@ so the hook fires exactly once per completed composition — drafts live in
 
 ## Reading the snapshot
 
-For human consumption, use the `/library-stats` skill (added in Chunk B) or
-read `index.json` directly. The `snapshot.ts` module aggregates the full index
-into a `LibrarySnapshot` with distributions, top instruments, and a `gaps[]`
-list of dimensions the library hasn't explored yet.
+Two consumption paths — pick the cheaper one for the job:
+
+1. **Pre-rendered plain-text digest at `snapshot.txt`** (committed, updated by
+   the hook alongside `index.json`). Loaded by `/compose`, `/remix`, and
+   `/library-stats` at skill startup. Cheap to read (a few hundred bytes),
+   human-friendly, and always current with the composition set at HEAD.
+   Regenerate manually with `pnpm rebuild:index`.
+2. **Structured `index.json`** for cross-composition queries, tier-3 similarity
+   scoring, or anything that needs per-entry detail. This is the raw feature
+   tree — use it from code, not from skill prompts.
+
+The `snapshot.ts` module aggregates the full index into a `LibrarySnapshot`
+with distributions, top instruments, and a `gaps[]` list of dimensions the
+library hasn't explored yet. `renderSnapshot()` produces the plain-text report
+that `writeSnapshot()` persists to disk.
+
+### Demo filtering
+
+Entries carrying the `demo` meta-tag (see ADR-011) are verification fixtures
+— `oneshot-house`, `sweepdrone`, `wobblepump` — not artistic work. `snapshot()`
+and `computeGaps()` filter them out at the top so every aggregate, distribution,
+gap, and top-instrument count reflects only real compositions. The render emits
+a footer like `"(excluding 3 verification compositions tagged 'demo')"` when
+the filter ran. Direct callers of `snapshot()`, `computeGaps()`, and `renderSnapshot()`
+all inherit the filter automatically. See ADR-012 for the skill-integration
+design.
+
+### Positive framing
 
 Gaps use **positive framing** — they name what's missing, not what to avoid —
-because negation primes rather than suppresses in transformer attention. See
-[`~/.claude/rules/behavior-positive-framing.md`](behavioral origin) for the
-full rationale.
+because negation primes rather than suppresses in transformer attention. The
+positive-framing guarantee is enforced by a test in `snapshot.test.ts` that
+scans every generated gap string for `don't` / `avoid` / `never`.
 
 ## Non-goals
 

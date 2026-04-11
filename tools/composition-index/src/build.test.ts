@@ -1,8 +1,15 @@
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { build, indexOne, listCompositionFiles, writeIndex } from './build.js'
+import {
+  build,
+  deriveSnapshotPath,
+  indexOne,
+  listCompositionFiles,
+  writeIndex,
+  writeSnapshot,
+} from './build.js'
 import type { CompositionIndex } from './types.js'
 import { isCompositionPath, update } from './update.js'
 
@@ -11,12 +18,14 @@ import { isCompositionPath, update } from './update.js'
 let tmp: string
 let compositionsDir: string
 let indexPath: string
+let snapshotPath: string
 
 beforeEach(() => {
   tmp = mkdtempSync(join(tmpdir(), 'composition-index-test-'))
   compositionsDir = join(tmp, 'compositions')
   mkdirSync(compositionsDir, { recursive: true })
   indexPath = join(tmp, 'index.json')
+  snapshotPath = join(tmp, 'snapshot.txt')
 })
 
 afterEach(() => {
@@ -139,6 +148,59 @@ describe('writeIndex', () => {
   })
 })
 
+// ─── writeSnapshot / deriveSnapshotPath ───
+
+describe('writeSnapshot', () => {
+  it('writes a rendered plain-text snapshot to the given path', () => {
+    writeComposition('a', {
+      metadata: { title: 'A', bpm: 120, timeSignature: [4, 4], key: 'Am', tags: ['dubstep'] },
+    })
+    writeComposition('b', {
+      metadata: { title: 'B', bpm: 128, timeSignature: [4, 4], key: 'Fm', tags: ['house'] },
+    })
+    const index = build({ compositionsDir, repoRoot: tmp })
+    writeSnapshot(index, snapshotPath)
+    expect(existsSync(snapshotPath)).toBe(true)
+    const content = readFileSync(snapshotPath, 'utf-8')
+    expect(content).toContain('Composition library: 2 tracks')
+    expect(content).toContain('Library gaps')
+    expect(content.endsWith('\n')).toBe(true)
+  })
+
+  it('excludes demo-tagged entries from the rendered snapshot', () => {
+    writeComposition('real', {
+      metadata: { title: 'Real', bpm: 120, timeSignature: [4, 4], key: 'Am', tags: ['dubstep'] },
+    })
+    writeComposition('verify', {
+      metadata: {
+        title: 'Verify',
+        bpm: 128,
+        timeSignature: [4, 4],
+        key: 'C major',
+        tags: ['fx', 'demo'],
+      },
+    })
+    const index = build({ compositionsDir, repoRoot: tmp })
+    writeSnapshot(index, snapshotPath)
+    const content = readFileSync(snapshotPath, 'utf-8')
+    expect(content).toContain('Composition library: 1 track')
+    expect(content).toContain("(excluding 1 verification composition tagged 'demo')")
+    // Demo's C major should not count toward the key distribution
+    expect(content).not.toContain('C (1)')
+  })
+})
+
+describe('deriveSnapshotPath', () => {
+  it('replaces the index filename with snapshot.txt in the same directory', () => {
+    expect(deriveSnapshotPath('/abs/path/index.json')).toBe('/abs/path/snapshot.txt')
+    expect(deriveSnapshotPath('tools/composition-index/index.json')).toBe(
+      'tools/composition-index/snapshot.txt',
+    )
+    // Handles a plain filename (no directory component)
+    expect(deriveSnapshotPath('index.json')).toBe('snapshot.txt')
+  })
+})
+
 // ─── update ───
 
 describe('update', () => {
@@ -231,6 +293,50 @@ describe('update', () => {
     expect(isCompositionPath('tools/composition-index/index.json', tmp)).toBe(false)
     expect(isCompositionPath('/tmp/composition-draft-test.json', tmp)).toBe(false)
     expect(isCompositionPath('../outside/foo.json', tmp)).toBe(false)
+  })
+
+  it('writes snapshot.txt alongside index.json on the update path', () => {
+    writeComposition('existing', {
+      metadata: { title: 'E', bpm: 120, timeSignature: [4, 4], key: 'Am', tags: ['dubstep'] },
+    })
+    const initial = build({ compositionsDir, repoRoot: tmp })
+    writeIndex(initial, indexPath)
+    writeSnapshot(initial, snapshotPath)
+
+    const newFile = writeComposition('newly-added', {
+      metadata: { title: 'N', bpm: 128, timeSignature: [4, 4], key: 'Fm', tags: ['house'] },
+    })
+    update(newFile, { indexPath, snapshotPath, repoRoot: tmp, compositionsDir })
+
+    expect(existsSync(snapshotPath)).toBe(true)
+    const content = readFileSync(snapshotPath, 'utf-8')
+    expect(content).toContain('Composition library: 2 tracks')
+  })
+
+  it('writes snapshot.txt during the rebuild fallback path', () => {
+    writeComposition('a', {
+      metadata: { title: 'A', bpm: 120, timeSignature: [4, 4], key: 'Am', tags: ['dubstep'] },
+    })
+    const bFile = writeComposition('b', {
+      metadata: { title: 'B', bpm: 128, timeSignature: [4, 4], key: 'Fm', tags: ['house'] },
+    })
+    // No initial index → triggers rebuild fallback
+    update(bFile, { indexPath, snapshotPath, repoRoot: tmp, compositionsDir })
+    expect(existsSync(snapshotPath)).toBe(true)
+    expect(readFileSync(snapshotPath, 'utf-8')).toContain('Composition library: 2 tracks')
+  })
+
+  it('derives a default snapshotPath when none is provided', () => {
+    writeComposition('a', {
+      metadata: { title: 'A', bpm: 120, timeSignature: [4, 4], key: 'Am', tags: ['dubstep'] },
+    })
+    const file = writeComposition('b', {
+      metadata: { title: 'B', bpm: 128, timeSignature: [4, 4], key: 'Fm', tags: ['house'] },
+    })
+    // Use indexPath but omit snapshotPath — should derive sibling snapshot.txt
+    update(file, { indexPath, repoRoot: tmp, compositionsDir })
+    const derived = join(tmp, 'snapshot.txt')
+    expect(existsSync(derived)).toBe(true)
   })
 
   it('falls back to a full rebuild when the index has a wrong version', () => {

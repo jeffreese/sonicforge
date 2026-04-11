@@ -29,6 +29,12 @@
     }
   },
   "files": {
-    "ignore": ["dist/", "node_modules/", "public/samples/"]
+    "ignore": [
+      "dist/",
+      "node_modules/",
+      "public/samples/",
+      "tools/composition-index/index.json",
+      "tools/composition-index/snapshot.txt"
+    ]
   }
 }

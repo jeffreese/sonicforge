@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { computeGaps, isMajorKey, normalizeKey, renderSnapshot, snapshot } from './snapshot.js'
+import {
+  computeGaps,
+  isMajorKey,
+  isRealComposition,
+  normalizeKey,
+  renderSnapshot,
+  snapshot,
+} from './snapshot.js'
 import type { CompositionIndex, IndexEntry } from './types.js'
 
 // ─── Fixture helper ───
@@ -399,11 +406,177 @@ describe('snapshot — tags', () => {
 
 // ─── Snapshot rendering ───
 
+describe('isRealComposition', () => {
+  it('accepts entries without tags', () => {
+    expect(isRealComposition(makeEntry({ tags: [] }))).toBe(true)
+  })
+
+  it('accepts entries whose tags do not include `demo`', () => {
+    expect(isRealComposition(makeEntry({ tags: ['dubstep', 'dark'] }))).toBe(true)
+  })
+
+  it('rejects entries tagged `demo`', () => {
+    expect(isRealComposition(makeEntry({ tags: ['house', 'demo'] }))).toBe(false)
+    expect(isRealComposition(makeEntry({ tags: ['demo'] }))).toBe(false)
+  })
+})
+
+describe('snapshot — demo filtering', () => {
+  it('excludes demo entries from count and reports them via excludedDemoCount', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['house'], primaryTag: 'house' }),
+        makeEntry({ tags: ['house', 'demo'], primaryTag: 'house' }),
+        makeEntry({ tags: ['fx', 'demo'], primaryTag: 'fx' }),
+      ]),
+    )
+    expect(snap.count).toBe(2)
+    expect(snap.excludedDemoCount).toBe(2)
+  })
+
+  it('reports zero excludedDemoCount when the library has no demos', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['house'], primaryTag: 'house' }),
+      ]),
+    )
+    expect(snap.excludedDemoCount).toBe(0)
+  })
+
+  it('omits demo entries from key, tag, and drum-pattern distributions', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ key: 'Am', tags: ['dubstep'], primaryTag: 'dubstep' }),
+        // Demo entry should not pollute any distribution
+        makeEntry({
+          key: 'C major',
+          tags: ['house', 'demo'],
+          primaryTag: 'house',
+          drumPattern: 'trap',
+        }),
+      ]),
+    )
+    expect(snap.keyDistribution).toEqual({ Am: 1 })
+    expect(snap.primaryTagDistribution).toEqual({ dubstep: 1 })
+    expect(snap.tagDistribution).toEqual({ dubstep: 1 })
+    expect(snap.drumPatternDistribution).not.toHaveProperty('trap')
+  })
+
+  it('omits demo entries from topInstruments', () => {
+    const demoOnly = { id: 'demo-only', name: 'X', category: 'fx', source: 'oneshot', preset: null }
+    const bass = {
+      id: 'bass',
+      name: 'Bass',
+      category: 'bass',
+      source: 'synth',
+      preset: 'reese_bass',
+    }
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ instruments: [bass], tags: ['house'], primaryTag: 'house' }),
+        makeEntry({ instruments: [demoOnly], tags: ['demo'], primaryTag: 'demo' }),
+      ]),
+    )
+    const ids = snap.topInstruments.map((i) => i.id)
+    expect(ids).toContain('bass')
+    expect(ids).not.toContain('demo-only')
+  })
+
+  it('omits demo entries from EDM feature counts', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({
+          hasSidechain: false,
+          hasLFOs: false,
+          tags: ['dubstep'],
+          primaryTag: 'dubstep',
+        }),
+        // A demo entry that would otherwise inflate every EDM count
+        makeEntry({
+          hasSidechain: true,
+          hasLFOs: true,
+          hasAutomation: true,
+          hasSynths: true,
+          hasOneshots: true,
+          tags: ['demo'],
+          primaryTag: 'demo',
+        }),
+      ]),
+    )
+    expect(snap.edmFeatureUsage.hasSidechain).toBe(0)
+    expect(snap.edmFeatureUsage.hasLFOs).toBe(0)
+    expect(snap.edmFeatureUsage.hasAutomation).toBe(0)
+  })
+
+  it('leaves gaps computed only from real entries — a demo does not fill a gap', () => {
+    // Without the demo filter, this would show "has major keys" because the
+    // demo is in C major. With the filter, the library is still all-minor.
+    const gaps = computeGaps([
+      makeEntry({ key: 'Am', tags: ['dubstep'] }),
+      makeEntry({ key: 'Fm', tags: ['house'] }),
+      makeEntry({ key: 'C major', tags: ['demo'] }),
+    ])
+    expect(gaps).toContain('No compositions in major keys')
+  })
+
+  it('renders an empty-library report when every entry is a demo', () => {
+    const report = renderSnapshot(
+      snapshot(
+        makeIndex([
+          makeEntry({ tags: ['demo'], primaryTag: 'demo' }),
+          makeEntry({ tags: ['demo'], primaryTag: 'demo' }),
+        ]),
+      ),
+    )
+    expect(report).toContain('0 tracks')
+    expect(report).toContain('empty library')
+  })
+})
+
 describe('renderSnapshot', () => {
   it('produces a readable report for an empty library', () => {
     const report = renderSnapshot(snapshot(makeIndex([])))
     expect(report).toContain('0 tracks')
     expect(report).toContain('empty library')
+  })
+
+  it('appends the excluded-demos footer when demos were filtered', () => {
+    const report = renderSnapshot(
+      snapshot(
+        makeIndex([
+          makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+          makeEntry({ tags: ['house', 'demo'], primaryTag: 'house' }),
+          makeEntry({ tags: ['fx', 'demo'], primaryTag: 'fx' }),
+        ]),
+      ),
+    )
+    expect(report).toContain("(excluding 2 verification compositions tagged 'demo')")
+  })
+
+  it('singularizes the excluded-demos footer when exactly one was filtered', () => {
+    const report = renderSnapshot(
+      snapshot(
+        makeIndex([
+          makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+          makeEntry({ tags: ['house', 'demo'], primaryTag: 'house' }),
+        ]),
+      ),
+    )
+    expect(report).toContain("(excluding 1 verification composition tagged 'demo')")
+  })
+
+  it('omits the excluded-demos footer when no demos are present', () => {
+    const report = renderSnapshot(
+      snapshot(
+        makeIndex([
+          makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+          makeEntry({ tags: ['house'], primaryTag: 'house' }),
+        ]),
+      ),
+    )
+    expect(report).not.toContain('verification composition')
   })
 
   it('includes distributions and gaps in the rendered report', () => {

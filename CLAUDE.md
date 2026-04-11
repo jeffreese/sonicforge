@@ -94,6 +94,7 @@ src/data/       — GM instrument definitions
 compositions/   — Example and generated JSON compositions
 tools/          — Authoring-time tooling (lives outside src/, lint/test/typecheck covered)
 tools/compose-helpers/ — TS primitives for long-form composition scaffolding (drums, bass, harmony, humanize)
+tools/composition-index/ — Hook-maintained feature index + pre-rendered snapshot.txt digest of the library
 scripts/        — Sample extraction tooling (Python + FluidSynth + FFmpeg)
 public/samples/ — Self-hosted instrument samples (gitignored, extracted locally)
 docs/spec/      — Planning documents from Forge (feature spec, tech spec, task breakdown)
@@ -109,6 +110,7 @@ docs/plans/     — Development plans, backlog, and task breakdowns
 - **Composition JSON is the source of truth.** When modifying music, update CompositionStore — don't manipulate Tone.js objects directly. The engine re-schedules from the store.
 - **Existing skills are working and valuable.** The `/compose`, `/iterate`, `/explain`, and `/play` skills plus `composition-format` and `music-theory` rules predate the Lit migration. They work with the engine/schema layers which aren't changing.
 - **This is a migration, not a greenfield.** The engine, schema, and utility layers are stable. Only `src/ui/` is being rewritten. Don't refactor working engine code unless there's a specific reason.
+- **Library snapshot for diversification cueing.** `tools/composition-index/snapshot.txt` is a pre-rendered digest of the composition library (distributions, gaps, top tags/instruments), maintained automatically by a PostToolUse hook on every composition write. Verification fixtures tagged `demo` are already filtered out. `/compose` consults it silently during underspecified requests, `/remix` glances at it for sub-variant choice, and `/library-stats` prints it verbatim on demand. See ADR-012 for the skill-integration design.
 
 ## ADRs
 
