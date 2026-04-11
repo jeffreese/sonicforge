@@ -1,0 +1,4423 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "title": "Twinkle, Twinkle (Deep Bass House Remix)",
+    "bpm": 124,
+    "timeSignature": [
+      4,
+      4
+    ],
+    "key": "Am",
+    "genre": "deep bass house",
+    "description": "A deep bass house remix of Twinkle Twinkle (A Minor Lament). Preserves the Am lament progression and the original four-section structure; swaps music-box/piano/cello/strings/contrabass for a reese bass, sub, stab pad, warm pad, and detuned lead over a four-on-the-floor deep bass house kit."
+  },
+  "instruments": [
+    {
+      "id": "drums",
+      "name": "Deep Bass House Kit",
+      "category": "drums",
+      "source": "oneshot",
+      "defaultVolume": 86,
+      "oneshots": {
+        "kick": "samples/oneshots/kicks/265328__xkpl_klawz__big-room-kick-punchy.wav",
+        "clap": "samples/oneshots/claps/147597__kendallbear__never-be-clap.wav",
+        "hat": "samples/oneshots/hats/399897__theflakesmaster__hi-hat.ogg",
+        "hat-open": "samples/oneshots/hats/816813__tboneaudio__hellcat-hi-hats.wav"
+      }
+    },
+    {
+      "id": "reese",
+      "name": "Reese Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": "reese_bass",
+      "defaultVolume": 85,
+      "effects": [
+        {
+          "type": "eq3",
+          "params": {
+            "low": -4,
+            "mid": 3,
+            "high": -2,
+            "lowFrequency": 90
+          }
+        },
+        {
+          "type": "distortion",
+          "params": {
+            "distortion": 0.3,
+            "wet": 0.35
+          }
+        }
+      ]
+    },
+    {
+      "id": "sub",
+      "name": "Sub Bass",
+      "category": "bass",
+      "source": "synth",
+      "synth": "sub_bass",
+      "defaultVolume": 88,
+      "effects": [
+        {
+          "type": "eq3",
+          "params": {
+            "low": 3,
+            "mid": -6,
+            "high": -30,
+            "lowFrequency": 80,
+            "highFrequency": 220
+          }
+        }
+      ]
+    },
+    {
+      "id": "stab",
+      "name": "Stab Pad",
+      "category": "pad",
+      "source": "synth",
+      "synth": "stab_pad",
+      "defaultVolume": 66,
+      "effects": [
+        {
+          "type": "reverb",
+          "params": {
+            "decay": 2.5,
+            "wet": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "id": "pad",
+      "name": "Warm Pad",
+      "category": "pad",
+      "source": "synth",
+      "synth": "warm_pad",
+      "defaultVolume": 58,
+      "effects": [
+        {
+          "type": "reverb",
+          "params": {
+            "decay": 7,
+            "wet": 0.65
+          }
+        }
+      ]
+    },
+    {
+      "id": "lead",
+      "name": "Detuned Lead",
+      "category": "melodic",
+      "source": "synth",
+      "synth": "detuned_lead",
+      "defaultVolume": 70,
+      "effects": [
+        {
+          "type": "delay",
+          "params": {
+            "delayTime": "8n",
+            "feedback": 0.3,
+            "wet": 0.25
+          }
+        },
+        {
+          "type": "reverb",
+          "params": {
+            "decay": 4,
+            "wet": 0.4
+          }
+        }
+      ]
+    },
+    {
+      "id": "fx",
+      "name": "FX Oneshots",
+      "category": "fx",
+      "source": "oneshot",
+      "defaultVolume": 72,
+      "oneshots": {
+        "riser-short": "samples/oneshots/fx/487697__rubenrox__vocal-chop-riser.ogg",
+        "riser-long": "samples/oneshots/fx/503818__reathance__riser-3.ogg",
+        "impact": "samples/oneshots/fx/177242__deleted_user_3277771__cinematic-impact.ogg",
+        "impact-deep": "samples/oneshots/fx/754421__zazzsounddesign__dsgnimpt_deep-cinematic-impact-2_zazz.ogg"
+      }
+    }
+  ],
+  "masterEffects": [
+    {
+      "type": "eq3",
+      "id": "tone",
+      "params": {
+        "low": 2,
+        "mid": -1,
+        "high": 1
+      }
+    },
+    {
+      "type": "limiter",
+      "id": "glue",
+      "params": {
+        "threshold": -1
+      }
+    }
+  ],
+  "sidechain": [
+    {
+      "source": "drums",
+      "target": "reese",
+      "amount": 0.5,
+      "release": 0.1
+    },
+    {
+      "source": "drums",
+      "target": "sub",
+      "amount": 0.3,
+      "release": 0.08
+    },
+    {
+      "source": "drums",
+      "target": "stab",
+      "amount": 0.85,
+      "release": 0.12
+    },
+    {
+      "source": "drums",
+      "target": "pad",
+      "amount": 0.78,
+      "release": 0.14
+    }
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "name": "Intro",
+      "bars": 4,
+      "tracks": [
+        {
+          "instrumentId": "pad",
+          "notes": [
+            {
+              "pitch": "A3",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 38
+            },
+            {
+              "pitch": "C4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 38
+            },
+            {
+              "pitch": "E4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 38
+            },
+            {
+              "pitch": "A4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 38
+            },
+            {
+              "pitch": "A3",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "C4",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "E4",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "A4",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "D3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "D4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "D3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 53
+            },
+            {
+              "pitch": "F3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 53
+            },
+            {
+              "pitch": "A3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 53
+            },
+            {
+              "pitch": "D4",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 53
+            }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            {
+              "pitch": "A1",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 50
+            },
+            {
+              "pitch": "A1",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 57
+            },
+            {
+              "pitch": "D1",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 64
+            },
+            {
+              "pitch": "D1",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 71
+            }
+          ]
+        },
+        {
+          "instrumentId": "fx",
+          "notes": [
+            {
+              "pitch": "riser-long",
+              "time": "2:0:0",
+              "duration": "1n+1n",
+              "velocity": 92
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "verse-1",
+      "name": "Verse 1 \u2014 Twinkle, Twinkle",
+      "bars": 12,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            {
+              "pitch": "kick",
+              "time": "0:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "0:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "0:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "0:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "0:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "0:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "0:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "0:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "0:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "0:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "1:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "1:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "1:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "1:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "1:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "1:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "1:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "1:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "1:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "1:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "1:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "2:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "2:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "2:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "2:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "2:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "2:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "2:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "2:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "2:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "2:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "3:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "3:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "3:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "3:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "3:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "3:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "3:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "3:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "3:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "3:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "3:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "4:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "4:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "4:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "4:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "4:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "4:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "4:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "4:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "4:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "4:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "5:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "5:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "5:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "5:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "5:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "5:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "5:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "5:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "5:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "5:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "5:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "6:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "6:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "6:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "6:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "6:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "6:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "6:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "6:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "6:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "6:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "7:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "7:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "7:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "7:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "7:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "7:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "7:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "7:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "7:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "7:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "7:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "8:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "8:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "8:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "8:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "8:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "8:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "8:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "8:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "8:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "8:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "9:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "9:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "9:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "9:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "9:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "9:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "9:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "9:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "9:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "9:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "9:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "10:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "10:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "10:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "10:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "10:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "10:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "10:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "10:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "10:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "10:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "11:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "11:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "11:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "11:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "11:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "11:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "11:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "11:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "11:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "11:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "11:3:2",
+              "duration": "8n",
+              "velocity": 88
+            }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            {
+              "pitch": "A2",
+              "time": "0:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "A3",
+              "time": "0:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "0:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "A3",
+              "time": "0:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "0:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "0:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "0:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "0:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F2",
+              "time": "1:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "F3",
+              "time": "1:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F2",
+              "time": "1:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "F3",
+              "time": "1:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E2",
+              "time": "1:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "E3",
+              "time": "1:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "1:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "B2",
+              "time": "1:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "D2",
+              "time": "2:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "D3",
+              "time": "2:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D2",
+              "time": "2:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "2:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C2",
+              "time": "2:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "C3",
+              "time": "2:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C2",
+              "time": "2:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "G2",
+              "time": "2:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E2",
+              "time": "3:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "E3",
+              "time": "3:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "3:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "3:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "3:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "3:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "3:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "3:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C2",
+              "time": "4:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "C3",
+              "time": "4:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C2",
+              "time": "4:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "C3",
+              "time": "4:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G2",
+              "time": "4:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "G3",
+              "time": "4:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "G2",
+              "time": "4:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "4:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F2",
+              "time": "5:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "F3",
+              "time": "5:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F2",
+              "time": "5:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "F3",
+              "time": "5:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E2",
+              "time": "5:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "E3",
+              "time": "5:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "5:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "B2",
+              "time": "5:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C2",
+              "time": "6:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "C3",
+              "time": "6:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C2",
+              "time": "6:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "C3",
+              "time": "6:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G2",
+              "time": "6:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "G3",
+              "time": "6:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "G2",
+              "time": "6:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "6:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F2",
+              "time": "7:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "F3",
+              "time": "7:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F2",
+              "time": "7:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "F3",
+              "time": "7:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E2",
+              "time": "7:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "E3",
+              "time": "7:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "7:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "B2",
+              "time": "7:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A2",
+              "time": "8:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "A3",
+              "time": "8:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "8:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "A3",
+              "time": "8:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "8:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "8:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "8:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "8:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F2",
+              "time": "9:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "F3",
+              "time": "9:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F2",
+              "time": "9:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "F3",
+              "time": "9:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E2",
+              "time": "9:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "E3",
+              "time": "9:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "9:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "B2",
+              "time": "9:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "D2",
+              "time": "10:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "D3",
+              "time": "10:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D2",
+              "time": "10:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "10:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C2",
+              "time": "10:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "C3",
+              "time": "10:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C2",
+              "time": "10:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "G2",
+              "time": "10:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E2",
+              "time": "11:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "E3",
+              "time": "11:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "11:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "11:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "11:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "11:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "11:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "11:3:2",
+              "duration": "16n",
+              "velocity": 100
+            }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            {
+              "pitch": "A1",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F1",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D1",
+              "time": "2:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C1",
+              "time": "2:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A1",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C1",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "G1",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F1",
+              "time": "5:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "5:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C1",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "G1",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F1",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A1",
+              "time": "8:0:0",
+              "duration": "1n",
+              "velocity": 95
+            },
+            {
+              "pitch": "F1",
+              "time": "9:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "9:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D1",
+              "time": "10:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C1",
+              "time": "10:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "11:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A1",
+              "time": "11:2:0",
+              "duration": "2n",
+              "velocity": 95
+            }
+          ]
+        },
+        {
+          "instrumentId": "stab",
+          "notes": [
+            {
+              "pitch": "A3",
+              "time": "0:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "C4",
+              "time": "0:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "E4",
+              "time": "0:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "A3",
+              "time": "0:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "C4",
+              "time": "0:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "E4",
+              "time": "0:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "F3",
+              "time": "1:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "1:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "1:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E3",
+              "time": "1:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G#3",
+              "time": "1:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "1:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "D4",
+              "time": "2:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F4",
+              "time": "2:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A4",
+              "time": "2:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "2:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E4",
+              "time": "2:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G4",
+              "time": "2:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E3",
+              "time": "3:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G#3",
+              "time": "3:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "B3",
+              "time": "3:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "3:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C4",
+              "time": "3:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E4",
+              "time": "3:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G3",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "D4",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "F3",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E3",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G#3",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G3",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "D4",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "F3",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E3",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G#3",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A3",
+              "time": "8:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "C4",
+              "time": "8:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "E4",
+              "time": "8:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "A3",
+              "time": "8:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "C4",
+              "time": "8:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "E4",
+              "time": "8:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "F3",
+              "time": "9:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "9:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "9:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E3",
+              "time": "9:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G#3",
+              "time": "9:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "9:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "D4",
+              "time": "10:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F4",
+              "time": "10:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A4",
+              "time": "10:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "10:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E4",
+              "time": "10:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G4",
+              "time": "10:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E3",
+              "time": "11:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "G#3",
+              "time": "11:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "B3",
+              "time": "11:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A3",
+              "time": "11:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C4",
+              "time": "11:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E4",
+              "time": "11:2:0",
+              "duration": "16n",
+              "velocity": 92
+            }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            {
+              "pitch": "A3",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F3",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F4",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G#3",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "D3",
+              "time": "2:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F3",
+              "time": "2:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "2:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "D4",
+              "time": "2:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C3",
+              "time": "2:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E3",
+              "time": "2:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G3",
+              "time": "2:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C4",
+              "time": "2:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G#3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "B3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E4",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C4",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "A4",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G3",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "D4",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G4",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "F3",
+              "time": "5:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "5:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "5:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F4",
+              "time": "5:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "5:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G#3",
+              "time": "5:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "5:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "5:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G3",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "D4",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G4",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "F3",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F4",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G#3",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "A3",
+              "time": "8:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "8:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E4",
+              "time": "8:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A4",
+              "time": "8:0:0",
+              "duration": "1n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F3",
+              "time": "9:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "9:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C4",
+              "time": "9:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F4",
+              "time": "9:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E3",
+              "time": "9:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G#3",
+              "time": "9:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "B3",
+              "time": "9:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "9:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "D3",
+              "time": "10:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "F3",
+              "time": "10:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "10:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "D4",
+              "time": "10:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "C3",
+              "time": "10:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E3",
+              "time": "10:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "G3",
+              "time": "10:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C4",
+              "time": "10:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E3",
+              "time": "11:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "G#3",
+              "time": "11:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "B3",
+              "time": "11:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "E4",
+              "time": "11:0:0",
+              "duration": "2n",
+              "velocity": 48
+            },
+            {
+              "pitch": "A3",
+              "time": "11:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "C4",
+              "time": "11:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "E4",
+              "time": "11:2:0",
+              "duration": "2n",
+              "velocity": 44
+            },
+            {
+              "pitch": "A4",
+              "time": "11:2:0",
+              "duration": "2n",
+              "velocity": 44
+            }
+          ]
+        },
+        {
+          "instrumentId": "lead",
+          "notes": [
+            {
+              "pitch": "A4",
+              "time": "8:0:0",
+              "duration": "8n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E5",
+              "time": "8:2:0",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "F5",
+              "time": "9:0:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E5",
+              "time": "9:2:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D5",
+              "time": "10:0:0",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "C5",
+              "time": "10:2:0",
+              "duration": "8n",
+              "velocity": 82
+            },
+            {
+              "pitch": "B4",
+              "time": "11:0:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "A4",
+              "time": "11:2:0",
+              "duration": "4n",
+              "velocity": 80
+            }
+          ]
+        },
+        {
+          "instrumentId": "fx",
+          "notes": [
+            {
+              "pitch": "impact-deep",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 105
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge \u2014 How I Wonder",
+      "bars": 8,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            {
+              "pitch": "kick",
+              "time": "4:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "4:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "4:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "4:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "4:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "4:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "4:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "4:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "4:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "4:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "5:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "5:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "5:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "5:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "5:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "5:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "5:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "5:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "5:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "5:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "5:3:2",
+              "duration": "8n",
+              "velocity": 88
+            },
+            {
+              "pitch": "kick",
+              "time": "6:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "6:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "6:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "6:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "6:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "6:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "6:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "6:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "6:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "6:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "kick",
+              "time": "7:0:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "kick",
+              "time": "7:1:0",
+              "duration": "8n",
+              "velocity": 95
+            },
+            {
+              "pitch": "kick",
+              "time": "7:2:0",
+              "duration": "8n",
+              "velocity": 112
+            },
+            {
+              "pitch": "kick",
+              "time": "7:3:0",
+              "duration": "8n",
+              "velocity": 93
+            },
+            {
+              "pitch": "clap",
+              "time": "7:1:0",
+              "duration": "8n",
+              "velocity": 105
+            },
+            {
+              "pitch": "clap",
+              "time": "7:3:0",
+              "duration": "8n",
+              "velocity": 100
+            },
+            {
+              "pitch": "hat",
+              "time": "7:0:2",
+              "duration": "16n",
+              "velocity": 78
+            },
+            {
+              "pitch": "hat",
+              "time": "7:1:2",
+              "duration": "16n",
+              "velocity": 68
+            },
+            {
+              "pitch": "hat",
+              "time": "7:2:2",
+              "duration": "16n",
+              "velocity": 75
+            },
+            {
+              "pitch": "hat",
+              "time": "7:3:2",
+              "duration": "16n",
+              "velocity": 65
+            },
+            {
+              "pitch": "hat-open",
+              "time": "7:3:2",
+              "duration": "8n",
+              "velocity": 88
+            }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            {
+              "pitch": "D2",
+              "time": "4:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "D3",
+              "time": "4:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D2",
+              "time": "4:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "4:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "C2",
+              "time": "4:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "C3",
+              "time": "4:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C2",
+              "time": "4:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "G2",
+              "time": "4:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A2",
+              "time": "5:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "A3",
+              "time": "5:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "5:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "A3",
+              "time": "5:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "5:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "5:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "5:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "5:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "D2",
+              "time": "6:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "D3",
+              "time": "6:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D2",
+              "time": "6:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "D3",
+              "time": "6:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E2",
+              "time": "6:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "E3",
+              "time": "6:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E2",
+              "time": "6:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "B2",
+              "time": "6:3:2",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A2",
+              "time": "7:0:0",
+              "duration": "8n",
+              "velocity": 122
+            },
+            {
+              "pitch": "A3",
+              "time": "7:0:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "7:1:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "A3",
+              "time": "7:1:2",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "7:2:0",
+              "duration": "8n",
+              "velocity": 118
+            },
+            {
+              "pitch": "A3",
+              "time": "7:2:2",
+              "duration": "16n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A2",
+              "time": "7:3:0",
+              "duration": "16n",
+              "velocity": 85
+            },
+            {
+              "pitch": "E3",
+              "time": "7:3:2",
+              "duration": "16n",
+              "velocity": 100
+            }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            {
+              "pitch": "C1",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "G1",
+              "time": "0:2:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "E1",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "A1",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "A1",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 70
+            },
+            {
+              "pitch": "D1",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "E1",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 70
+            },
+            {
+              "pitch": "D1",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "C1",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A1",
+              "time": "5:0:0",
+              "duration": "1n",
+              "velocity": 95
+            },
+            {
+              "pitch": "D1",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "E1",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 95
+            },
+            {
+              "pitch": "A1",
+              "time": "7:0:0",
+              "duration": "1n",
+              "velocity": 95
+            }
+          ]
+        },
+        {
+          "instrumentId": "stab",
+          "notes": [
+            {
+              "pitch": "D4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A4",
+              "time": "4:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "C4",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "E4",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G4",
+              "time": "4:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A3",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "C4",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "E4",
+              "time": "5:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "A3",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "C4",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "E4",
+              "time": "5:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "D4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "F4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "A4",
+              "time": "6:0:0",
+              "duration": "16n",
+              "velocity": 100
+            },
+            {
+              "pitch": "E3",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "G#3",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "B3",
+              "time": "6:2:0",
+              "duration": "16n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A3",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "C4",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "E4",
+              "time": "7:0:0",
+              "duration": "16n",
+              "velocity": 98
+            },
+            {
+              "pitch": "A3",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "C4",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 90
+            },
+            {
+              "pitch": "E4",
+              "time": "7:2:0",
+              "duration": "16n",
+              "velocity": 90
+            }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            {
+              "pitch": "C3",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "E3",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "G3",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "C4",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "G3",
+              "time": "0:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "B3",
+              "time": "0:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "D4",
+              "time": "0:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "G4",
+              "time": "0:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "E3",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "G#3",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "B3",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "E4",
+              "time": "1:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "A3",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "C4",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "E4",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "A4",
+              "time": "1:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "A3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 60
+            },
+            {
+              "pitch": "C4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 60
+            },
+            {
+              "pitch": "E4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 60
+            },
+            {
+              "pitch": "A4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 60
+            },
+            {
+              "pitch": "D3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "F3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "A3",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "D4",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 60
+            },
+            {
+              "pitch": "E3",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "G#3",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "B3",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "E4",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 56
+            },
+            {
+              "pitch": "D3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "F3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "A3",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "D4",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "C3",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "E3",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "G3",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "C4",
+              "time": "4:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "A3",
+              "time": "5:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "C4",
+              "time": "5:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "E4",
+              "time": "5:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "A4",
+              "time": "5:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "D3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "F3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "A3",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "D4",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 54
+            },
+            {
+              "pitch": "E3",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "G#3",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "B3",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "E4",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 50
+            },
+            {
+              "pitch": "A3",
+              "time": "7:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "C4",
+              "time": "7:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "E4",
+              "time": "7:0:0",
+              "duration": "1n",
+              "velocity": 54
+            },
+            {
+              "pitch": "A4",
+              "time": "7:0:0",
+              "duration": "1n",
+              "velocity": 54
+            }
+          ]
+        },
+        {
+          "instrumentId": "lead",
+          "notes": [
+            {
+              "pitch": "E5",
+              "time": "0:0:0",
+              "duration": "4n.",
+              "velocity": 88
+            },
+            {
+              "pitch": "D5",
+              "time": "0:1:2",
+              "duration": "4n",
+              "velocity": 80
+            },
+            {
+              "pitch": "C5",
+              "time": "0:3:0",
+              "duration": "4n",
+              "velocity": 82
+            },
+            {
+              "pitch": "B4",
+              "time": "1:0:0",
+              "duration": "4n.",
+              "velocity": 92
+            },
+            {
+              "pitch": "A4",
+              "time": "1:1:2",
+              "duration": "4n",
+              "velocity": 78
+            },
+            {
+              "pitch": "G#4",
+              "time": "1:3:0",
+              "duration": "4n",
+              "velocity": 72
+            },
+            {
+              "pitch": "A4",
+              "time": "2:0:0",
+              "duration": "2n.",
+              "velocity": 94
+            },
+            {
+              "pitch": "E4",
+              "time": "2:3:0",
+              "duration": "4n",
+              "velocity": 75
+            },
+            {
+              "pitch": "F4",
+              "time": "3:0:0",
+              "duration": "2n",
+              "velocity": 88
+            },
+            {
+              "pitch": "E4",
+              "time": "3:2:0",
+              "duration": "2n",
+              "velocity": 72
+            },
+            {
+              "pitch": "D5",
+              "time": "4:0:0",
+              "duration": "4n.",
+              "velocity": 96
+            },
+            {
+              "pitch": "C5",
+              "time": "4:1:2",
+              "duration": "4n",
+              "velocity": 86
+            },
+            {
+              "pitch": "B4",
+              "time": "4:3:0",
+              "duration": "4n",
+              "velocity": 88
+            },
+            {
+              "pitch": "A4",
+              "time": "5:0:0",
+              "duration": "4n.",
+              "velocity": 98
+            },
+            {
+              "pitch": "G#4",
+              "time": "5:1:2",
+              "duration": "8n",
+              "velocity": 78
+            },
+            {
+              "pitch": "A4",
+              "time": "5:2:0",
+              "duration": "4n",
+              "velocity": 82
+            },
+            {
+              "pitch": "E4",
+              "time": "5:3:0",
+              "duration": "4n",
+              "velocity": 72
+            },
+            {
+              "pitch": "F4",
+              "time": "6:0:0",
+              "duration": "2n",
+              "velocity": 88
+            },
+            {
+              "pitch": "E4",
+              "time": "6:2:0",
+              "duration": "2n",
+              "velocity": 75
+            },
+            {
+              "pitch": "D4",
+              "time": "7:0:0",
+              "duration": "2n",
+              "velocity": 68
+            },
+            {
+              "pitch": "A3",
+              "time": "7:2:0",
+              "duration": "2n",
+              "velocity": 55
+            }
+          ]
+        },
+        {
+          "instrumentId": "fx",
+          "notes": [
+            {
+              "pitch": "riser-short",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 88
+            },
+            {
+              "pitch": "impact",
+              "time": "4:0:0",
+              "duration": "2n",
+              "velocity": 98
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outro",
+      "name": "Outro \u2014 Fading Star",
+      "bars": 8,
+      "tracks": [
+        {
+          "instrumentId": "drums",
+          "notes": [
+            {
+              "pitch": "kick",
+              "time": "0:0:0",
+              "duration": "8n",
+              "velocity": 92
+            },
+            {
+              "pitch": "kick",
+              "time": "0:2:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "hat",
+              "time": "0:0:2",
+              "duration": "16n",
+              "velocity": 60
+            },
+            {
+              "pitch": "hat",
+              "time": "0:1:2",
+              "duration": "16n",
+              "velocity": 52
+            },
+            {
+              "pitch": "hat",
+              "time": "0:2:2",
+              "duration": "16n",
+              "velocity": 58
+            },
+            {
+              "pitch": "hat",
+              "time": "0:3:2",
+              "duration": "16n",
+              "velocity": 50
+            },
+            {
+              "pitch": "kick",
+              "time": "1:0:0",
+              "duration": "8n",
+              "velocity": 92
+            },
+            {
+              "pitch": "kick",
+              "time": "1:2:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "hat",
+              "time": "1:0:2",
+              "duration": "16n",
+              "velocity": 60
+            },
+            {
+              "pitch": "hat",
+              "time": "1:1:2",
+              "duration": "16n",
+              "velocity": 52
+            },
+            {
+              "pitch": "hat",
+              "time": "1:2:2",
+              "duration": "16n",
+              "velocity": 58
+            },
+            {
+              "pitch": "hat",
+              "time": "1:3:2",
+              "duration": "16n",
+              "velocity": 50
+            },
+            {
+              "pitch": "kick",
+              "time": "2:0:0",
+              "duration": "8n",
+              "velocity": 92
+            },
+            {
+              "pitch": "kick",
+              "time": "2:2:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "hat",
+              "time": "2:0:2",
+              "duration": "16n",
+              "velocity": 60
+            },
+            {
+              "pitch": "hat",
+              "time": "2:1:2",
+              "duration": "16n",
+              "velocity": 52
+            },
+            {
+              "pitch": "hat",
+              "time": "2:2:2",
+              "duration": "16n",
+              "velocity": 58
+            },
+            {
+              "pitch": "hat",
+              "time": "2:3:2",
+              "duration": "16n",
+              "velocity": 50
+            },
+            {
+              "pitch": "kick",
+              "time": "3:0:0",
+              "duration": "8n",
+              "velocity": 92
+            },
+            {
+              "pitch": "kick",
+              "time": "3:2:0",
+              "duration": "8n",
+              "velocity": 85
+            },
+            {
+              "pitch": "hat",
+              "time": "3:0:2",
+              "duration": "16n",
+              "velocity": 60
+            },
+            {
+              "pitch": "hat",
+              "time": "3:1:2",
+              "duration": "16n",
+              "velocity": 52
+            },
+            {
+              "pitch": "hat",
+              "time": "3:2:2",
+              "duration": "16n",
+              "velocity": 58
+            },
+            {
+              "pitch": "hat",
+              "time": "3:3:2",
+              "duration": "16n",
+              "velocity": 50
+            }
+          ]
+        },
+        {
+          "instrumentId": "reese",
+          "notes": [
+            {
+              "pitch": "A2",
+              "time": "0:0:0",
+              "duration": "4n",
+              "velocity": 92
+            },
+            {
+              "pitch": "A2",
+              "time": "0:2:0",
+              "duration": "4n",
+              "velocity": 85
+            },
+            {
+              "pitch": "C2",
+              "time": "1:0:0",
+              "duration": "4n",
+              "velocity": 82
+            },
+            {
+              "pitch": "C2",
+              "time": "1:2:0",
+              "duration": "4n",
+              "velocity": 75
+            },
+            {
+              "pitch": "F2",
+              "time": "2:0:0",
+              "duration": "4n",
+              "velocity": 72
+            },
+            {
+              "pitch": "F2",
+              "time": "2:2:0",
+              "duration": "4n",
+              "velocity": 65
+            },
+            {
+              "pitch": "E2",
+              "time": "3:0:0",
+              "duration": "4n",
+              "velocity": 62
+            },
+            {
+              "pitch": "E2",
+              "time": "3:2:0",
+              "duration": "4n",
+              "velocity": 55
+            }
+          ]
+        },
+        {
+          "instrumentId": "sub",
+          "notes": [
+            {
+              "pitch": "A1",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 88
+            },
+            {
+              "pitch": "C1",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 82
+            },
+            {
+              "pitch": "F1",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 76
+            },
+            {
+              "pitch": "E1",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 70
+            },
+            {
+              "pitch": "A1",
+              "time": "4:0:0",
+              "duration": "1n+1n",
+              "velocity": 70
+            },
+            {
+              "pitch": "A1",
+              "time": "6:0:0",
+              "duration": "1n+1n",
+              "velocity": 52
+            }
+          ]
+        },
+        {
+          "instrumentId": "pad",
+          "notes": [
+            {
+              "pitch": "A3",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 52
+            },
+            {
+              "pitch": "C4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 52
+            },
+            {
+              "pitch": "E4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 52
+            },
+            {
+              "pitch": "A4",
+              "time": "0:0:0",
+              "duration": "1n",
+              "velocity": 52
+            },
+            {
+              "pitch": "C3",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 49
+            },
+            {
+              "pitch": "E3",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 49
+            },
+            {
+              "pitch": "G3",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 49
+            },
+            {
+              "pitch": "C4",
+              "time": "1:0:0",
+              "duration": "1n",
+              "velocity": 49
+            },
+            {
+              "pitch": "F3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 46
+            },
+            {
+              "pitch": "A3",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 46
+            },
+            {
+              "pitch": "C4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 46
+            },
+            {
+              "pitch": "F4",
+              "time": "2:0:0",
+              "duration": "1n",
+              "velocity": 46
+            },
+            {
+              "pitch": "E3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "G#3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "B3",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "E4",
+              "time": "3:0:0",
+              "duration": "1n",
+              "velocity": 43
+            },
+            {
+              "pitch": "A3",
+              "time": "4:0:0",
+              "duration": "1n+1n",
+              "velocity": 42
+            },
+            {
+              "pitch": "C4",
+              "time": "4:0:0",
+              "duration": "1n+1n",
+              "velocity": 38
+            },
+            {
+              "pitch": "E4",
+              "time": "4:0:0",
+              "duration": "1n+1n",
+              "velocity": 34
+            },
+            {
+              "pitch": "A4",
+              "time": "4:0:0",
+              "duration": "1n+1n",
+              "velocity": 30
+            },
+            {
+              "pitch": "A3",
+              "time": "6:0:0",
+              "duration": "1n+1n",
+              "velocity": 32
+            },
+            {
+              "pitch": "E4",
+              "time": "6:0:0",
+              "duration": "1n+1n",
+              "velocity": 26
+            },
+            {
+              "pitch": "A4",
+              "time": "6:0:0",
+              "duration": "1n+1n",
+              "velocity": 22
+            }
+          ]
+        },
+        {
+          "instrumentId": "fx",
+          "notes": [
+            {
+              "pitch": "impact",
+              "time": "0:0:0",
+              "duration": "2n",
+              "velocity": 88
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
