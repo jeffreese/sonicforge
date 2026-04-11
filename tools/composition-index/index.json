@@ -1,0 +1,1693 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-04-11T06:31:29.578Z",
+  "entries": {
+    "compositions/bass-trance-dnb-break.json": {
+      "path": "compositions/bass-trance-dnb-break.json",
+      "title": "Heavy Current",
+      "bpm": 138,
+      "key": "A minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 16,
+      "noteCount": 275,
+      "sections": [
+        {
+          "name": "intro",
+          "bars": 4
+        },
+        {
+          "name": "trance",
+          "bars": 4
+        },
+        {
+          "name": "dnb-break",
+          "bars": 4
+        },
+        {
+          "name": "return",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Trance/DnB Kit",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        },
+        {
+          "id": "reese",
+          "name": "Reese Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "reese_bass"
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "pad",
+          "name": "Organ Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "organ_pad"
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-10T20:35:49.583Z",
+      "progression": "- | - | - | - | A | F | C | G | A-E-A-G-A | A-C-E-A-G-F | F-C-F-A-C | E-G-A-C-E-A | A-E-A | F-C-F | C-G-C | G-D-G-A",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "reese": "F1-C2",
+        "sub": "F1-C2"
+      }
+    },
+    "compositions/blood-rave.json": {
+      "path": "compositions/blood-rave.json",
+      "title": "Blood Rave",
+      "bpm": 142,
+      "key": "D minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 28,
+      "noteCount": 671,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Buildup",
+          "bars": 4
+        },
+        {
+          "name": "Drop",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown",
+          "bars": 4
+        },
+        {
+          "name": "Final Drop",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "acid-bass",
+          "name": "Acid Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_2"
+        },
+        {
+          "id": "stab",
+          "name": "Synth Stab",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "acid-lead",
+          "name": "Acid Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_1_square"
+        },
+        {
+          "id": "dark-pad",
+          "name": "Dark Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_3_polysynth"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-16T07:39:23.141Z",
+      "progression": "- | - | - | - | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | - | - | - | - | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "acid-bass": "D1-C2",
+        "stab": "C5-A5",
+        "acid-lead": "A4-A5"
+      }
+    },
+    "compositions/dark-dubstep-drops.json": {
+      "path": "compositions/dark-dubstep-drops.json",
+      "title": "Dark Dubstep Drops",
+      "bpm": 140,
+      "key": "F minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 108,
+      "noteCount": 2077,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Buildup 1",
+          "bars": 16
+        },
+        {
+          "name": "Drop 1 — Wobble",
+          "bars": 24
+        },
+        {
+          "name": "Breakdown",
+          "bars": 16
+        },
+        {
+          "name": "Buildup 2",
+          "bars": 12
+        },
+        {
+          "name": "Drop 2 — Growl",
+          "bars": 24
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "wobble1",
+          "name": "Wobble 1 (Drop 1)",
+          "category": "bass",
+          "source": "synth",
+          "preset": null
+        },
+        {
+          "id": "wobble2",
+          "name": "Wobble 2 (Drop 2 Growl)",
+          "category": "bass",
+          "source": "synth",
+          "preset": null
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "bell",
+          "name": "FM Bell",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "fm_bell"
+        },
+        {
+          "id": "fx",
+          "name": "FX",
+          "category": "fx",
+          "source": "oneshot",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": true,
+      "hasLFOs": true,
+      "hasAutomation": true,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-11T05:56:03.556Z",
+      "progression": "F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Gb | F | Eb | F | Gb | F | Eb | F | Gb | F | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | F | F | F | F | F | F | F",
+      "drumPattern": "half-time",
+      "dominantRegisters": {
+        "sub": "C#1-F#1",
+        "wobble1": "C#1-F1",
+        "wobble2": "C#1-F#1",
+        "bell": "G#4-G#5"
+      }
+    },
+    "compositions/demo-ballad.json": {
+      "path": "compositions/demo-ballad.json",
+      "title": "Quiet Evening",
+      "bpm": 72,
+      "key": "C major",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 16,
+      "noteCount": 68,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Verse",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "piano",
+          "name": "Grand Piano",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "acoustic_grand_piano"
+        },
+        {
+          "id": "bass",
+          "name": "Acoustic Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "acoustic_bass"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-15T09:08:47.293Z",
+      "progression": "- | - | - | - | C | G | A | G | C | F | G | C | C | F | C | C",
+      "drumPattern": "none",
+      "dominantRegisters": {
+        "piano": "C4-E5",
+        "bass": "C2-A2"
+      }
+    },
+    "compositions/dreamwalker.json": {
+      "path": "compositions/dreamwalker.json",
+      "title": "Dreamwalker",
+      "bpm": 76,
+      "key": "F# minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 24,
+      "noteCount": 226,
+      "sections": [
+        {
+          "name": "intro",
+          "bars": 4
+        },
+        {
+          "name": "theme-a",
+          "bars": 8
+        },
+        {
+          "name": "theme-b",
+          "bars": 8
+        },
+        {
+          "name": "outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "bell",
+          "name": "FM Bell",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "fm_bell"
+        },
+        {
+          "id": "drone_pad",
+          "name": "Warm Pad Drone",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "lead",
+          "name": "Supersaw Lead",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "supersaw_lead"
+        },
+        {
+          "id": "acid",
+          "name": "Acid Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "acid_bass"
+        },
+        {
+          "id": "organ",
+          "name": "Organ Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "organ_pad"
+        },
+        {
+          "id": "stabs",
+          "name": "Stab Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "stab_pad"
+        }
+      ],
+      "masterEffectTypes": ["eq3", "reverb", "limiter"],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-10T14:16:49.345Z",
+      "progression": "F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | - | F# | -",
+      "drumPattern": "none",
+      "dominantRegisters": {
+        "bell": "F#4-D5",
+        "sub": "F#1-F#1",
+        "lead": "G#4-F#5",
+        "acid": "F#1-D2"
+      }
+    },
+    "compositions/eclipse-protocol.json": {
+      "path": "compositions/eclipse-protocol.json",
+      "title": "Eclipse Protocol",
+      "bpm": 130,
+      "key": "D minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 144,
+      "noteCount": 3108,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 16
+        },
+        {
+          "name": "Buildup 1",
+          "bars": 16
+        },
+        {
+          "name": "Drop 1",
+          "bars": 16
+        },
+        {
+          "name": "Breakdown",
+          "bars": 16
+        },
+        {
+          "name": "Buildup 2",
+          "bars": 16
+        },
+        {
+          "name": "Drop 2",
+          "bars": 16
+        },
+        {
+          "name": "Bridge",
+          "bars": 16
+        },
+        {
+          "name": "Final Drop",
+          "bars": 16
+        },
+        {
+          "name": "Outro",
+          "bars": 16
+        }
+      ],
+      "instruments": [
+        {
+          "id": "driving-bass",
+          "name": "Driving Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_1"
+        },
+        {
+          "id": "sub-bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_2"
+        },
+        {
+          "id": "saw-lead",
+          "name": "Sawtooth Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "square-arp",
+          "name": "Square Arp",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_1_square"
+        },
+        {
+          "id": "dark-pad",
+          "name": "Dark Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_3_polysynth"
+        },
+        {
+          "id": "warm-pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_2_warm"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-18T15:59:12.467Z",
+      "progression": "- | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | F-C-F | F-C-F | F-C-F | F-C-F | C-G-C | C-G-C | C-G-C | C-G-C | G-D-G | G-D-G | G-D-G | G-D-G | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | A-E-A | A-E-A | A-E-A | A-E-A | B-F#-B | B-F#-B | B-F#-B | B-F#-B | G-D-G | G-D-G | G-D-G | G-D-G | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "driving-bass": "G1-D2",
+        "sub-bass": "C1-A#1",
+        "saw-lead": "G4-F#5",
+        "square-arp": "D4-F#5"
+      }
+    },
+    "compositions/lucid-decay.json": {
+      "path": "compositions/lucid-decay.json",
+      "title": "Lucid Decay",
+      "bpm": 106,
+      "key": "D minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 64,
+      "noteCount": 873,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Verse 1",
+          "bars": 16
+        },
+        {
+          "name": "Chorus 1",
+          "bars": 8
+        },
+        {
+          "name": "Bridge",
+          "bars": 16
+        },
+        {
+          "name": "Final Chorus",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "bass",
+          "name": "Fretless Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "fretless_bass"
+        },
+        {
+          "id": "rhythm-guitar",
+          "name": "Rhythm Guitar",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "distortion_guitar"
+        },
+        {
+          "id": "lead-guitar",
+          "name": "Lead Guitar",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "overdriven_guitar"
+        },
+        {
+          "id": "pad",
+          "name": "Dark Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_2_warm"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-16T07:39:23.141Z",
+      "progression": "D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-D-C | Bb-A-D | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-D-Bb-A | Bb-D-C-Bb-A-Bb-G | A-C-Bb-A-D-C | D-F-E-D-C-D-A | D-F-D-Bb-A | D-F-E-D-C-D-A | D-F-D-Bb-A | Bb-D-Bb-A-Bb-G | A-C-A-D-C | D-F-D-C | D-F-D-A | Bb-C-D-A | D-E-F-A | D | F-C | D | Bb-A | D | F-C | Bb-A | D | D | - | D-Bb | - | C-A | - | D | - | D-F-E-D-C-D-A | D-F-D-Bb | Bb-D-C-A | A-C-D | D-F-E-D-C-D-A | D-F-D-A | Bb-C-D-E | F-E-D-A | D | F-C | D | Bb-A | D | F-C | Bb-A | D | D-F-E-D-C-D-A | D-F-D-Bb-A | D-F-D-C | D-F-D-Bb | D-F-D | D-F-D | D | D",
+      "drumPattern": "other",
+      "dominantRegisters": {
+        "bass": "A1-F2",
+        "rhythm-guitar": "A3-D5",
+        "lead-guitar": "G4-F5"
+      }
+    },
+    "compositions/nachtmusik-machine.json": {
+      "path": "compositions/nachtmusik-machine.json",
+      "title": "Nachtmusik Machine",
+      "bpm": 130,
+      "key": "D minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 44,
+      "noteCount": 886,
+      "sections": [
+        {
+          "name": "Intro — The Overture",
+          "bars": 8
+        },
+        {
+          "name": "Buildup — The Machine Awakens",
+          "bars": 8
+        },
+        {
+          "name": "Drop 1 — Eine Kleine Nachtclub",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown — The Cadenza",
+          "bars": 8
+        },
+        {
+          "name": "Drop 2 — The Requiem",
+          "bars": 8
+        },
+        {
+          "name": "Outro — Curtain Call",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "harpsichord",
+          "name": "Harpsichord Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "harpsichord"
+        },
+        {
+          "id": "sawtooth-lead",
+          "name": "Sawtooth Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "strings",
+          "name": "String Ensemble",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "string_ensemble_1"
+        },
+        {
+          "id": "bass",
+          "name": "Synth Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_1"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-10T02:29:35.504Z",
+      "progression": "- | - | - | - | - | - | - | - | - | - | - | - | D | Bb-C | A | D | D | D-F-E | Bb-C | A | D | D-F-E | Bb-C | A | - | - | - | - | - | - | - | - | D | D-F-E-D | Bb-C | A-Bb | D | D-F-E-D | Bb-C-Bb | A | - | - | - | -",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "harpsichord": "A4-G5",
+        "sawtooth-lead": "A4-F5",
+        "bass": "A1-E2"
+      }
+    },
+    "compositions/oneshot-house.json": {
+      "path": "compositions/oneshot-house.json",
+      "title": "Oneshot House",
+      "bpm": 124,
+      "key": "A minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 8,
+      "noteCount": 142,
+      "sections": [
+        {
+          "name": "groove",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "House Drum Kit",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        },
+        {
+          "id": "bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-10T17:37:29.914Z",
+      "progression": "A | A-E | F | G-E | A | A-E | F | G-A",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "bass": "F1-A1"
+      }
+    },
+    "compositions/shadow-protocol.json": {
+      "path": "compositions/shadow-protocol.json",
+      "title": "Shadow Protocol",
+      "bpm": 174,
+      "key": "D minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 48,
+      "noteCount": 675,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Buildup",
+          "bars": 8
+        },
+        {
+          "name": "Drop 1",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown",
+          "bars": 8
+        },
+        {
+          "name": "Drop 2",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Breakbeat Kit",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        },
+        {
+          "id": "bass",
+          "name": "Dark Synth Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_2"
+        },
+        {
+          "id": "pad",
+          "name": "Dark Atmosphere",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_7_halo"
+        },
+        {
+          "id": "lead",
+          "name": "Saw Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-15T10:27:34.831Z",
+      "progression": "- | - | - | - | - | - | - | - | D | - | D | - | Bb | - | C | - | D | Bb-A-Bb | C | D | D | Bb-A-Bb | C-D-C | D | - | - | - | - | - | - | - | - | D-E-D | Bb-A-Bb-A | C-D-C-Bb-C | D | D-E-D | Bb-C-Bb-A-Bb | C-D-C-Bb-C | D | D | D | D | D | D | - | - | -",
+      "drumPattern": "other",
+      "dominantRegisters": {
+        "bass": "D1-D2",
+        "lead": "G4-E5"
+      }
+    },
+    "compositions/southern-sun.json": {
+      "path": "compositions/southern-sun.json",
+      "title": "Southern Sun",
+      "bpm": 136,
+      "key": "A minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 32,
+      "noteCount": 735,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Buildup",
+          "bars": 4
+        },
+        {
+          "name": "Drop",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown",
+          "bars": 4
+        },
+        {
+          "name": "Final Drop",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_2_warm"
+        },
+        {
+          "id": "lead",
+          "name": "Trance Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "arp",
+          "name": "Arp Synth",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "electric_piano_1"
+        },
+        {
+          "id": "strings",
+          "name": "Strings",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "string_ensemble_1"
+        },
+        {
+          "id": "bass",
+          "name": "Trance Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_1"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-16T07:39:23.142Z",
+      "progression": "- | - | - | - | A | F | C | G | A | F | C | G | A | F | C | G | - | - | - | - | A | F | C | G | A | F | C | G | - | - | - | -",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "lead": "G4-E5",
+        "arp": "G4-E5",
+        "bass": "F1-C2"
+      }
+    },
+    "compositions/subterra.json": {
+      "path": "compositions/subterra.json",
+      "title": "Subterra",
+      "bpm": 126,
+      "key": "F minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 112,
+      "noteCount": 1953,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 16
+        },
+        {
+          "name": "Build 1",
+          "bars": 8
+        },
+        {
+          "name": "Drop 1",
+          "bars": 16
+        },
+        {
+          "name": "Break",
+          "bars": 16
+        },
+        {
+          "name": "Build 2",
+          "bars": 8
+        },
+        {
+          "name": "Drop 2",
+          "bars": 32
+        },
+        {
+          "name": "Outro",
+          "bars": 16
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        },
+        {
+          "id": "reese",
+          "name": "Reese Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "reese_bass"
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "stab",
+          "name": "Chord Stabs",
+          "category": "pad",
+          "source": "synth",
+          "preset": "stab_pad"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "fx",
+          "name": "FX",
+          "category": "fx",
+          "source": "oneshot",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": true,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-11T00:02:28.005Z",
+      "progression": "- | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | F | Db | Bb | Eb | F | Db | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db-Eb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db-F | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F | Db-Ab-Db | Bb-F-Bb | Eb-Bb-Eb | F-C-F | Db-Ab-Db | Bb-F-Bb | Eb-Bb-Eb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | - | - | - | - | - | - | - | -",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "reese": "C#2-F3",
+        "sub": "C#1-D#2"
+      }
+    },
+    "compositions/subterranean.json": {
+      "path": "compositions/subterranean.json",
+      "title": "Subterranean",
+      "bpm": 140,
+      "key": "F minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 44,
+      "noteCount": 436,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Buildup",
+          "bars": 4
+        },
+        {
+          "name": "Drop 1",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown",
+          "bars": 8
+        },
+        {
+          "name": "Buildup 2",
+          "bars": 4
+        },
+        {
+          "name": "Drop 2",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Halfstep Kit",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_2"
+        },
+        {
+          "id": "atmosphere",
+          "name": "Dark Atmosphere",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_7_halo"
+        },
+        {
+          "id": "lead",
+          "name": "Dread Lead",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "stab",
+          "name": "Brass Stab",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "synth_brass_1"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-15T17:54:18.184Z",
+      "progression": "- | - | - | - | - | - | - | - | F | Db | Eb | C | F | F-Ab-F | Db-Eb | C-Eb | F | F-Ab-F | Db-Eb | C | F | F | Db | Eb | F | Db | Eb | C | F | Db | Eb | C | F-Ab-F | F-Ab-F-C | Db-Eb-Db | C-Eb-C | F-Ab-F | F-Ab-F-C | Db-Eb-F | C | F | F | F | -",
+      "drumPattern": "half-time",
+      "dominantRegisters": {
+        "sub": "C1-F1",
+        "lead": "D#4-D#5",
+        "stab": "C#4-C5"
+      }
+    },
+    "compositions/sunshine-in-a-bag.json": {
+      "path": "compositions/sunshine-in-a-bag.json",
+      "title": "Sunshine in a Bag",
+      "bpm": 84,
+      "key": "E minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 32,
+      "noteCount": 625,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Verse 1",
+          "bars": 8
+        },
+        {
+          "name": "Chorus",
+          "bars": 8
+        },
+        {
+          "name": "Bridge",
+          "bars": 4
+        },
+        {
+          "name": "Final Chorus",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "keys",
+          "name": "Lo-fi Keys",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "electric_piano_1"
+        },
+        {
+          "id": "melody",
+          "name": "Melodica",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "recorder"
+        },
+        {
+          "id": "pad",
+          "name": "Dark Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_1_new_age"
+        },
+        {
+          "id": "bass",
+          "name": "Dub Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "electric_bass_finger"
+        },
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-03-16T07:39:23.142Z",
+      "progression": "- | - | - | - | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | C | D | E-G-E | B | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | E",
+      "drumPattern": "breakbeat",
+      "dominantRegisters": {
+        "keys": "E4-D5",
+        "melody": "E4-D5",
+        "bass": "D2-A2"
+      }
+    },
+    "compositions/sweepdrone.json": {
+      "path": "compositions/sweepdrone.json",
+      "title": "Sweepdrone",
+      "bpm": 120,
+      "key": "A minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 8,
+      "noteCount": 46,
+      "sections": [
+        {
+          "name": "drone",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "bass",
+          "name": "Reese Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "reese_bass"
+        },
+        {
+          "id": "lead",
+          "name": "Supersaw Lead",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "supersaw_lead"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": true,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-10T16:13:48.643Z",
+      "progression": "A | A | A | A | F | F | E | A",
+      "drumPattern": "none",
+      "dominantRegisters": {
+        "bass": "E1-A1",
+        "lead": "F4-C5"
+      }
+    },
+    "compositions/twinkle-breakbeat.json": {
+      "path": "compositions/twinkle-breakbeat.json",
+      "title": "Twinkle, Twinkle (Breakbeat Assault)",
+      "bpm": 170,
+      "key": "Am",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 32,
+      "noteCount": 446,
+      "sections": [
+        {
+          "name": "Intro — Tension",
+          "bars": 8
+        },
+        {
+          "name": "Drop 1 — Amen Fury",
+          "bars": 8
+        },
+        {
+          "name": "Breakdown — Half-time",
+          "bars": 4
+        },
+        {
+          "name": "Drop 2 — Maximum Chop",
+          "bars": 8
+        },
+        {
+          "name": "Outro — Signal Lost",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Breaks",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        },
+        {
+          "id": "reese",
+          "name": "Reese Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_1"
+        },
+        {
+          "id": "music-box",
+          "name": "Music Box",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "music_box"
+        },
+        {
+          "id": "stabs",
+          "name": "Saw Stabs",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "lead_2_sawtooth"
+        },
+        {
+          "id": "pad",
+          "name": "Dark Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_3_polysynth"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "progression": "- | - | - | - | - | - | A | A | A | F | D | E | C | F | A | E | A | - | E | A | A | F | D | E | C | F | A | E | A | - | - | -",
+      "drumPattern": "other",
+      "dominantRegisters": {
+        "reese": "F1-E2",
+        "music-box": "A4-A5",
+        "stabs": "E4-C5"
+      }
+    },
+    "compositions/twinkle-liquid-dnb.json": {
+      "path": "compositions/twinkle-liquid-dnb.json",
+      "title": "Twinkle, Twinkle (Liquid DnB)",
+      "bpm": 140,
+      "key": "Am",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 56,
+      "noteCount": 622,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Drop — Twinkle, Twinkle",
+          "bars": 16
+        },
+        {
+          "name": "Breakdown — How I Wonder",
+          "bars": 8
+        },
+        {
+          "name": "Drop 2 — Full Energy",
+          "bars": 16
+        },
+        {
+          "name": "Outro — Fading Star",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": "percussion"
+        },
+        {
+          "id": "sub-bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "synth_bass_2"
+        },
+        {
+          "id": "music-box",
+          "name": "Music Box",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "music_box"
+        },
+        {
+          "id": "piano",
+          "name": "Piano",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "acoustic_grand_piano"
+        },
+        {
+          "id": "strings",
+          "name": "String Ensemble",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "string_ensemble_1"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_2_warm"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "progression": "- | - | - | - | - | - | - | - | A | - | A | - | F | - | E | - | C | - | D | - | C | - | E | - | - | - | - | - | - | - | A | - | A | - | A | - | F | - | E | - | A | - | F | - | D | - | E | - | - | - | - | - | - | - | - | -",
+      "drumPattern": "breakbeat",
+      "dominantRegisters": {
+        "sub-bass": "F1-E2",
+        "music-box": "A4-A5",
+        "piano": "F3-E5"
+      }
+    },
+    "compositions/twinkle-minor-melancholy-deep-bass-house.json": {
+      "path": "compositions/twinkle-minor-melancholy-deep-bass-house.json",
+      "title": "Twinkle, Twinkle (Deep Bass House Remix)",
+      "bpm": 124,
+      "key": "Am",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 32,
+      "noteCount": 682,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Verse 1 — Twinkle, Twinkle",
+          "bars": 12
+        },
+        {
+          "name": "Bridge — How I Wonder",
+          "bars": 8
+        },
+        {
+          "name": "Outro — Fading Star",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "drums",
+          "name": "Deep Bass House Kit",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        },
+        {
+          "id": "reese",
+          "name": "Reese Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "reese_bass"
+        },
+        {
+          "id": "sub",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "stab",
+          "name": "Stab Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "stab_pad"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "lead",
+          "name": "Detuned Lead",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "detuned_lead"
+        },
+        {
+          "id": "fx",
+          "name": "FX Oneshots",
+          "category": "fx",
+          "source": "oneshot",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": ["eq3", "limiter"],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-11T01:24:51.343Z",
+      "progression": "- | - | - | - | A-E | F-E-B | D-C-G | E-A-E | C-G-D | F-E-B | C-G-D | F-E-B | A-E | F-E-B | D-C-G | E-A-E | - | - | - | - | D-C-G | A-E | D-E-B | A-E | A | C | F | E | - | - | - | -",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "reese": "D2-A3",
+        "sub": "C1-A1",
+        "lead": "E4-E5"
+      }
+    },
+    "compositions/twinkle-minor-melancholy.json": {
+      "path": "compositions/twinkle-minor-melancholy.json",
+      "title": "Twinkle, Twinkle (A Minor Lament)",
+      "bpm": 66,
+      "key": "Am",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 32,
+      "noteCount": 247,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Verse 1 — Twinkle, Twinkle",
+          "bars": 12
+        },
+        {
+          "name": "Bridge — How I Wonder",
+          "bars": 8
+        },
+        {
+          "name": "Outro — Fading Star",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "music-box",
+          "name": "Music Box",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "music_box"
+        },
+        {
+          "id": "piano",
+          "name": "Piano",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "acoustic_grand_piano"
+        },
+        {
+          "id": "cello",
+          "name": "Cello",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "cello"
+        },
+        {
+          "id": "strings",
+          "name": "String Ensemble",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "string_ensemble_1"
+        },
+        {
+          "id": "bass",
+          "name": "Contrabass",
+          "category": "bass",
+          "source": "sampled",
+          "preset": "contrabass"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": false,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": false,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "progression": "- | - | - | - | A | F | D | E-A | C | F | C | E | A | F | D | E-A | C | E | A | D-E | D | A | D-E | A | - | - | - | - | - | - | - | -",
+      "drumPattern": "none",
+      "dominantRegisters": {
+        "music-box": "A4-F5",
+        "piano": "C3-E5",
+        "cello": "A2-A3",
+        "bass": "A1-F2"
+      }
+    },
+    "compositions/wobblepump.json": {
+      "path": "compositions/wobblepump.json",
+      "title": "Wobblepump",
+      "bpm": 140,
+      "key": "E minor",
+      "timeSignature": [4, 4],
+      "genre": null,
+      "totalBars": 8,
+      "noteCount": 88,
+      "sections": [
+        {
+          "name": "groove",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "kick",
+          "name": "Kick",
+          "category": "drums",
+          "source": "drums",
+          "preset": null
+        },
+        {
+          "id": "bass",
+          "name": "Wobble Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": null
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "stab",
+          "name": "Supersaw Stab",
+          "category": "melodic",
+          "source": "synth",
+          "preset": "supersaw_lead"
+        }
+      ],
+      "masterEffectTypes": [],
+      "hasSidechain": true,
+      "hasLFOs": true,
+      "hasAutomation": false,
+      "hasMasterEffects": false,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": false,
+      "modifiedAt": "2026-04-10T16:55:24.237Z",
+      "progression": "E | E-G | D | C-B | E | E-G | D | C-B",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "bass": "C1-B1",
+        "stab": "C4-B4"
+      }
+    }
+  }
+}

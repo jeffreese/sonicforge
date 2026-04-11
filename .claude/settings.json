@@ -9,5 +9,18 @@
   },
   "enabledPlugins": {
     "forge@forge-marketplace": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/composition-index/dist/update.js"
+          }
+        ]
+      }
+    ]
   }
 }
