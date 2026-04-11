@@ -22,12 +22,27 @@
 
 import { existsSync, readFileSync } from 'node:fs'
 import { isAbsolute, join, relative, resolve } from 'node:path'
-import { INDEX_PATH, REPO_ROOT, build, indexOne, writeIndex } from './build.js'
+import {
+  INDEX_PATH,
+  REPO_ROOT,
+  build,
+  deriveSnapshotPath,
+  indexOne,
+  writeIndex,
+  writeSnapshot,
+} from './build.js'
 import type { CompositionIndex } from './types.js'
 
 export interface UpdateOptions {
   /** Index file path. Default: `<cwd>/tools/composition-index/index.json` */
   indexPath?: string
+  /**
+   * Rendered snapshot file path. Default: sibling of `indexPath` named
+   * `snapshot.txt`. This is the pre-rendered digest that `/compose`,
+   * `/remix`, and `/library-stats` read at skill startup — cheaper than
+   * parsing the full `index.json` for just the aggregates and gaps.
+   */
+  snapshotPath?: string
   /** Repo root for computing relative paths. Default: `process.cwd()` */
   repoRoot?: string
   /** Compositions dir, used during fallback full rebuild. Default: `<cwd>/compositions` */
@@ -53,6 +68,7 @@ export function update(
   opts: UpdateOptions = {},
 ): { action: 'updated' | 'rebuilt'; entryPath: string } {
   const indexPath = opts.indexPath ?? INDEX_PATH
+  const snapshotPath = opts.snapshotPath ?? deriveSnapshotPath(indexPath)
   const repoRoot = opts.repoRoot ?? REPO_ROOT
   const absPath = resolve(filePath)
   const relPath = relative(repoRoot, absPath).replace(/\\/g, '/')
@@ -62,6 +78,7 @@ export function update(
     // Index missing or corrupt — rebuild from scratch
     const fresh = build({ repoRoot, compositionsDir: opts.compositionsDir })
     writeIndex(fresh, indexPath)
+    writeSnapshot(fresh, snapshotPath)
     return { action: 'rebuilt', entryPath: relPath }
   }
 
@@ -69,6 +86,7 @@ export function update(
   existing.entries[entry.path] = entry
   existing.generatedAt = new Date().toISOString()
   writeIndex(existing, indexPath)
+  writeSnapshot(existing, snapshotPath)
   return { action: 'updated', entryPath: entry.path }
 }
 

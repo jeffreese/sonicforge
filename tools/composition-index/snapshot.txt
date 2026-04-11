@@ -1,0 +1,22 @@
+Composition library: 19 tracks
+
+Keys:          Am (7), Dm (5), Fm (3), C (1), Em (1), F (1), F#m (1)
+BPM:           66–174, median 130, IQR 115–140
+Time sigs:     4/4 (19)
+Primary genre: deep-bass-house (2), dubstep (2), ballad (1), classical (1), dark-techno (1), drum-and-bass (1), industrial-techno (1), jungle (1), liquid-dnb (1), melodic-techno (1), progressive-metal (1), progressive-trance (1), synthwave (1), techno (1), trance (1), trap (1), trip-hop (1)
+Drum patterns: 4-on-floor (8), none (3), other (3), breakbeat (2), half-time (2), trap (1)
+
+Top tags (all, including modifiers):
+  dark (9)  aggressive (3)  atmospheric (3)  drum-and-bass (3)  reese-bass (3)  remix (3)  sidechained (3)  sub-heavy (3)  acoustic (2)  bass-driven (2)  breakbeat (2)  cinematic (2)  classical (2)  deep-bass-house (2)  dreamy (2)
+
+Top instruments:
+  drums (16)  pad (11)  bass (9)  lead (6)  sub (6)  stab (5)  strings (5)  piano (4)  reese (4)  fx (3)
+
+EDM features:  sidechain (5)  LFOs (1)  automation (3)  synths (6)  oneshots (6)
+
+Library gaps (dimensions unexplored — opportunities for new work):
+  - No compositions in time signatures other than 4/4
+  - No compositions with primary genre: house, ambient, lo-fi, jazz
+  - No compositions under 16 bars
+
+(excluding 3 verification compositions tagged 'demo')

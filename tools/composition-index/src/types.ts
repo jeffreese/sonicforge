@@ -112,7 +112,17 @@ export type Gap = string
  * entry.
  */
 export interface LibrarySnapshot {
+  /**
+   * Number of "real" compositions the snapshot was computed from. Excludes
+   * any entries carrying the `demo` meta-tag — see `excludedDemoCount`.
+   */
   count: number
+  /**
+   * Number of entries filtered out because they carry the `demo` meta-tag
+   * (verification fixtures like `oneshot-house`, `sweepdrone`, `wobblepump`
+   * that are not artistic work). Zero when the library has no demo entries.
+   */
+  excludedDemoCount: number
   keyDistribution: Record<string, number>
   bpmStats: {
     min: number

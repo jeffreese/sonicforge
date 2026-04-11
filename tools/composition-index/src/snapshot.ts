@@ -9,9 +9,32 @@
  * their startup. The `gaps` list uses **positive framing** exclusively — it
  * describes what's missing from the library rather than what to avoid — to
  * counter transformer attention's tendency to activate negated tokens.
+ *
+ * ## Demo filtering
+ *
+ * Entries carrying the `demo` meta-tag (verification fixtures like
+ * `oneshot-house`, `sweepdrone`, `wobblepump`) are filtered out at the top
+ * of `snapshot()` and `computeGaps()`. They are not artistic work and they
+ * should not pull the library's shape toward their narrow coverage — e.g.
+ * `wobblepump` is a single-instrument stress test and would otherwise
+ * suggest the library is "mostly one-instrument tracks". The filter applies
+ * uniformly to every aggregate, distribution, and gap. See ADR-011 for the
+ * meta-tag convention and ADR-012 for the skill-integration rationale.
  */
 
 import type { CompositionIndex, Gap, IndexEntry, LibrarySnapshot } from './types.js'
+
+/** Meta-tag that marks verification/test compositions — filtered from snapshots. */
+const DEMO_TAG = 'demo'
+
+/**
+ * True when an entry represents a "real" composition (artistic work) rather
+ * than a verification fixture. Exported so other callers — tests, future
+ * tooling — can apply the same filter without reaching into snapshot internals.
+ */
+export function isRealComposition(entry: IndexEntry): boolean {
+  return !entry.tags.includes(DEMO_TAG)
+}
 
 // ─── Dimensions worth exploring ───
 // Hardcoded, opinionated, extensible. Gap detection compares the library's
@@ -51,8 +74,10 @@ const PRIMARY_GENRES_TO_CHECK = [
 // ─── Snapshot ───
 
 export function snapshot(index: CompositionIndex): LibrarySnapshot {
-  const entries = Object.values(index.entries)
+  const allEntries = Object.values(index.entries)
+  const entries = allEntries.filter(isRealComposition)
   const count = entries.length
+  const excludedDemoCount = allEntries.length - count
 
   const keyDistribution = distribution(entries, (e) => normalizeKey(e.key))
   const timeSignatureDistribution = distribution(entries, (e) => formatTimeSig(e.timeSignature))
@@ -77,6 +102,7 @@ export function snapshot(index: CompositionIndex): LibrarySnapshot {
 
   return {
     count,
+    excludedDemoCount,
     keyDistribution,
     bpmStats,
     timeSignatureDistribution,
@@ -102,47 +128,51 @@ function tagDistributionFromEntries(entries: IndexEntry[]): Record<string, numbe
 // ─── Gap analysis ───
 
 export function computeGaps(entries: IndexEntry[]): Gap[] {
+  // Apply the demo filter defensively — `snapshot()` already filters before
+  // delegating, but direct callers (tests, future tooling) should get the
+  // same treatment so no caller has to remember the rule.
+  const realEntries = entries.filter(isRealComposition)
   const gaps: Gap[] = []
 
-  if (entries.length === 0) {
+  if (realEntries.length === 0) {
     gaps.push('Library is empty — every dimension is unexplored')
     return gaps
   }
 
   // ─── Key: major vs minor ───
-  const hasMajor = entries.some((e) => isMajorKey(e.key))
-  const hasMinor = entries.some((e) => !isMajorKey(e.key))
+  const hasMajor = realEntries.some((e) => isMajorKey(e.key))
+  const hasMinor = realEntries.some((e) => !isMajorKey(e.key))
   if (!hasMajor) gaps.push('No compositions in major keys')
   if (!hasMinor) gaps.push('No compositions in minor keys')
 
   // ─── BPM brackets ───
   for (const bracket of BPM_BRACKETS) {
-    const inBracket = entries.some((e) => e.bpm >= bracket.min && e.bpm <= bracket.max)
+    const inBracket = realEntries.some((e) => e.bpm >= bracket.min && e.bpm <= bracket.max)
     if (!inBracket) {
       gaps.push(`No compositions ${bracket.label}`)
     }
   }
 
   // ─── Time signature ───
-  const hasNon44 = entries.some((e) => formatTimeSig(e.timeSignature) !== '4/4')
+  const hasNon44 = realEntries.some((e) => formatTimeSig(e.timeSignature) !== '4/4')
   if (!hasNon44) {
     gaps.push('No compositions in time signatures other than 4/4')
   }
 
   // ─── Drum patterns ───
-  const presentPatterns = new Set(entries.map((e) => e.drumPattern))
+  const presentPatterns = new Set(realEntries.map((e) => e.drumPattern))
   const missingDrumPatterns = DRUM_PATTERNS_TO_CHECK.filter((p) => !presentPatterns.has(p))
   if (missingDrumPatterns.length > 0) {
     gaps.push(`No compositions with ${missingDrumPatterns.join(' or ')} drums`)
   }
-  if (!presentPatterns.has('none') && entries.length >= 3) {
+  if (!presentPatterns.has('none') && realEntries.length >= 3) {
     gaps.push('No compositions without drums')
   }
 
   // ─── Tags / primary-genre coverage ───
   // Every untagged composition is a data gap — once the library is fully
   // tagged, this branch goes quiet.
-  const untagged = entries.filter((e) => e.tags.length === 0).length
+  const untagged = realEntries.filter((e) => e.tags.length === 0).length
   if (untagged > 0) {
     gaps.push(
       `${untagged} composition${untagged === 1 ? '' : 's'} without tags — backfill the tags field to surface genre coverage`,
@@ -152,7 +182,7 @@ export function computeGaps(entries: IndexEntry[]): Gap[] {
   // Flag well-known primary genres the library hasn't explored yet. Only
   // report a subset — if the list gets too long the signal is noise.
   const primaryTags = new Set(
-    entries.map((e) => e.primaryTag).filter((t): t is string => t !== null),
+    realEntries.map((e) => e.primaryTag).filter((t): t is string => t !== null),
   )
   const missingPrimary = PRIMARY_GENRES_TO_CHECK.filter((g) => !primaryTags.has(g))
   if (missingPrimary.length > 0 && missingPrimary.length <= 5) {
@@ -165,18 +195,20 @@ export function computeGaps(entries: IndexEntry[]): Gap[] {
   }
 
   // ─── Instrumentation ───
-  const allHaveSynths = entries.every((e) => e.hasSynths)
-  if (allHaveSynths && entries.length >= 3) {
+  const allHaveSynths = realEntries.every((e) => e.hasSynths)
+  if (allHaveSynths && realEntries.length >= 3) {
     gaps.push('No compositions without synths — all current tracks use at least one')
   }
-  const allHaveSampled = entries.every((e) => e.hasSampled)
-  if (allHaveSampled && entries.length >= 3) {
+  const allHaveSampled = realEntries.every((e) => e.hasSampled)
+  if (allHaveSampled && realEntries.length >= 3) {
     gaps.push('No compositions without sampled instruments')
   }
 
   // ─── Length ───
   for (const bracket of LENGTH_BRACKETS) {
-    const inBracket = entries.some((e) => e.totalBars >= bracket.min && e.totalBars <= bracket.max)
+    const inBracket = realEntries.some(
+      (e) => e.totalBars >= bracket.min && e.totalBars <= bracket.max,
+    )
     if (!inBracket) {
       gaps.push(`No compositions ${bracket.label}`)
     }
@@ -242,6 +274,13 @@ export function renderSnapshot(snap: LibrarySnapshot): string {
     }
   } else {
     lines.push('Library gaps: none — the library covers all tracked dimensions')
+  }
+
+  if (snap.excludedDemoCount > 0) {
+    lines.push('')
+    lines.push(
+      `(excluding ${snap.excludedDemoCount} verification composition${snap.excludedDemoCount === 1 ? '' : 's'} tagged 'demo')`,
+    )
   }
 
   return lines.join('\n')

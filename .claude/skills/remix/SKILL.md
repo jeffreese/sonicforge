@@ -28,7 +28,15 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
 
    This map is the invariant. Every structural choice in the remix should trace back to it.
 
-3. **Load target-genre reference.** Always read:
+3. **Consult the library snapshot — lightly.** Read `tools/composition-index/snapshot.txt` — the pre-rendered digest the PostToolUse hook keeps current. Remixes are inherently specified (source + target genre), so the snapshot's role here is narrower than in `/compose`:
+
+   - Look at the primary-genre distribution and top tags. Is the target genre already overrepresented in the library? If yes, consider a less-overused sub-variant — e.g. for a "trance" request with three trance tracks already, lean toward `progressive-trance`, `psy-trance`, or `uplifting-trance` rather than another generic four-on-the-floor.
+   - Glance at the `Library gaps` section. If the target genre itself shows up as a gap, that's a free signal to commit to the request without second-guessing — the library is actively missing it.
+   - Do not override the user's explicit target genre. The snapshot is for sub-variant flavor, not redirection.
+
+   Silent integration — do not verbalize the snapshot reasoning to the user in the final response. The snapshot already excludes verification fixtures tagged `demo`.
+
+4. **Load target-genre reference.** Always read:
    - `.claude/skills/compose/gm-samples.md` — for any sampled instruments
    - `.claude/skills/compose/genre-guide.md` — for target-genre conventions
 
@@ -41,19 +49,19 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
    - `.claude/skills/compose/modulation-patterns.md`
    - `.claude/skills/compose/oneshot-hits.md`
 
-4. **Plan the transformation.** Decide before writing any notes:
+5. **Plan the transformation.** Decide before writing any notes:
    - **Tempo.** Adopt the target genre's natural BPM unless the source is already in range. Document the change.
    - **Instrument swap table.** For each source instrument, pick a target-genre equivalent (role-preserving: bass→bass, pad→pad, lead→lead). Drop instruments that don't fit; add ones the genre requires (e.g., supersaw lead + arp pluck for trance).
    - **Drum rework.** Target genre's drum pattern, not the source's. Four-on-the-floor for house/trance; half-time for dubstep; breakbeat for DnB.
    - **Effects/modulation.** Master chain, sidechain routes, automation lanes — pulled from the genre template, not the source.
 
-5. **Preserve these exactly.**
+6. **Preserve these exactly.**
    - `metadata.key`
    - Section names, order, and bar counts
    - Chord progression per section (root + quality; voicings can change)
    - Overall energy arc (if source has a drop at section 4, the remix drops at section 4)
 
-6. **Rework these freely.**
+7. **Rework these freely.**
    - `metadata.bpm`, `metadata.title` (append `" (Genre Remix)"` or similar)
    - `metadata.tags` — new primary tag (target genre) first, followed by remix-relevant modifiers. Optionally include `"remix"` and a reference to the source genre as a modifier (e.g., `["trance", "remix", "dubstep-source", "uplifting"]`).
    - `instruments[]` — new list per the swap table
@@ -61,19 +69,19 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
    - Melodies: re-compose over the same changes in a genre-appropriate style. Don't transplant the source melody verbatim — a trance lead moves differently than a dubstep growl even over Fm–Db–Ab–Eb.
    - `masterEffects`, `automation`, `lfos`, `modulation`, `sidechain`
 
-7. **Generate the composition JSON.** Follow `composition-format` and `music-theory` rules. Every note written out — no placeholders. Vary velocity. Keep instruments in their natural registers (bass C1–G3, melody C4–C6, pads C3–G5).
+8. **Generate the composition JSON.** Follow `composition-format` and `music-theory` rules. Every note written out — no placeholders. Vary velocity. Keep instruments in their natural registers (bass C1–G3, melody C4–C6, pads C3–G5).
 
    **For long remixes or heavy genre reworks**, reach for the helper library at `tools/compose-helpers/` for repetitive scaffolding (drum grids, bass patterns, pad sustains, arpeggios, humanization). Write a throwaway scratch script that imports primitives, builds repetitive tracks, and leaves melodies and fills hand-written. Helper output is a starting point — hand-edit for expression. New helpers are encouraged if a primitive you need doesn't exist yet.
 
-8. **Rigidity pass.** Before finalizing, scan the generated remix for mechanical uniformity and adjust. Applies regardless of whether helpers were used:
+9. **Rigidity pass.** Before finalizing, scan the generated remix for mechanical uniformity and adjust. Applies regardless of whether helpers were used:
    - **Velocity uniformity:** if >60% of notes in a track share the same velocity, apply a natural velocity curve (emphasize downbeats, soften offbeats, ghost notes between hits).
    - **Bar-to-bar identicalness:** if 4+ consecutive bars are literal duplicates within a track, introduce one variation — a ghost note, a dropped hit, a velocity accent, a one-bar fill.
    - **Section contrast:** each section should have at least one distinguishing element from its neighbors (instrumentation, density, dynamics, register, drum variation).
    - **Transition markers:** every section boundary should have some audible marker — fill, crash, drop-out, sweep, automation point. Add one if none exist.
 
-9. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+10. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
-10. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
+11. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
 
 ## Quality Checklist
 

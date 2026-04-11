@@ -54,15 +54,23 @@ Shipped in the plan PR, not this implementation. Reference only:
 
 ## Phase 6: Skill integration
 
-- [ ] Update `/compose` skill: add "consult library snapshot" step after "parse the request", with specification-level detection and silent integration of gaps into generation
-- [ ] Update `/remix` skill: add the lighter snapshot step — check whether target genre is overrepresented, consider sub-variants
-- [ ] Create `/library-stats` skill at `.claude/skills/library-stats/SKILL.md` — reads index, renders snapshot, no generation
-- [ ] Update `CLAUDE.md`: brief pointer to the index under the Schema or Behavioral Notes section
+- [x] Update `/compose` skill: add "consult library snapshot" step after "parse the request", with specification-level detection and silent integration of gaps into generation. Reads `tools/composition-index/snapshot.txt` (pre-rendered digest) rather than `index.json` — see ADR-012 for the efficiency rationale.
+- [x] Update `/remix` skill: add the lighter snapshot step — check whether target genre is overrepresented, consider sub-variants. Same pre-rendered-snapshot pattern.
+- [x] Create `/library-stats` skill at `.claude/skills/library-stats/SKILL.md` — reads `snapshot.txt`, prints verbatim, no generation.
+- [x] Update `CLAUDE.md`: brief pointer under Behavioral Notes + file-organization entry for `tools/composition-index/`.
+- [x] **Emergent work:** pre-render the snapshot to `tools/composition-index/snapshot.txt` via new `writeSnapshot()` helper in `build.ts`, wired into both `build.ts` and `update.ts` so the hook maintains it automatically. Strictly more efficient than having each skill parse `index.json`.
+- [x] **Emergent work:** filter `demo`-tagged entries inside `snapshot()` and `computeGaps()` (not in skill prompts), so every aggregate and gap reflects only real compositions. Adds `isRealComposition()` helper, `LibrarySnapshot.excludedDemoCount` field, and a render footer.
+- [ ] **Emergent from dogfood:** guarantee the composition-index hook fires on every final composition write. Current rule accepts `cp` / "any atomic file operation," but the PostToolUse hook matcher is `Write` — `cp` and other shell writes bypass the hook entirely, and the snapshot/index go stale until someone runs `pnpm rebuild:index` manually. Observed during the `halflight` dogfood. **Nuance surfaced during the `hollow-machine` dogfood:** a naive "just require Claude's Write tool" fix doesn't work for large compositions — `hollow-machine.json` is 150KB, which would burn huge context to pipe through Write tool content. The fix needs to preserve the hook contract *without* forcing large files through the model's output channel. Target design:
+  - Add a `pnpm finalize-composition <slug>` helper script that does `cp /tmp/composition-draft-<slug>.json compositions/<slug>.json && node tools/composition-index/dist/update.js compositions/<slug>.json` in one atomic step. (Or a `scripts/finalize-composition.sh` wrapper if the pnpm-script entry point fights with shell args.)
+  - Update `.claude/rules/composition-drafts.md` to require this helper for the final step in `/compose`, `/remix`, `/iterate`, and the "Generator scripts" section — replacing the current "cp, Write, or equivalent" language with a single explicit command.
+  - Update the three skill SKILL.md files' draft-first step to reference the helper.
+  - Add a test for the helper script: given a draft file in `/tmp/`, the helper copies + updates the index in one invocation and exits cleanly.
+  - The helper makes the contract explicit (one command, one path), reusable across all three skills, and keeps the large-file case working.
 
 ## Phase 7: ADR + documentation
 
-- [ ] Capture decision record via `/forge:adr`: problem framing, the pattern-matching tendency, positive-framing principle (don't-think-of-an-elephant), hook-based architecture, tier structure, non-goals
-- [ ] Finalize `tools/composition-index/README.md` with current feature list and example snapshot output
+- [x] ADR-012 capturing the skill-integration decision: pre-rendered snapshot over direct index reads, demo filtering at the `snapshot()` boundary, specification-level detection heuristic, silent integration. See `docs/adrs/adr-012-composition-index-skill-integration.md`.
+- [x] Updated `tools/composition-index/README.md` with the `snapshot.txt` consumption path, the demo-filter rule, and the positive-framing invariant.
 
 ## Phase 8: Dogfood
 
