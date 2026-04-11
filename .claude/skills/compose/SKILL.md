@@ -55,7 +55,7 @@ allowed-tools: Read, Write, Glob
    - **Section contrast:** each section should have at least one distinguishing element from its neighbors (instrumentation, density, dynamics, register, drum variation).
    - **Transition markers:** every section boundary should have some audible marker — fill, crash, drop-out, sweep, automation point. Add one if none exist.
 
-7. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<slug>.json`. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+7. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<slug>.json` throughout generation. Validate against the schema. Then run `pnpm finalize-composition <slug>` as the final step — the helper copies the draft to `compositions/<slug>.json` and updates the composition index in one atomic operation. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
 8. **Briefly describe what you created** — title, key, BPM, instruments, section overview, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
 

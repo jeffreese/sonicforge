@@ -1,7 +1,7 @@
 {
   "current_plan": "composition-index",
-  "current_task": "Chunk B Phase 8 dogfood (user-owned manual verification)",
-  "branch": "feat/composition-index-skills",
+  "current_task": "finalize-composition helper — closes out the plan",
+  "branch": "fix/composition-finalize-helper",
   "status": "idle",
   "mode": "epic",
   "pending": null

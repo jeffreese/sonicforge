@@ -7,13 +7,14 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "biome check src/ tools/",
-    "format": "biome format --write src/ tools/",
+    "lint": "biome check src/ tools/ scripts/",
+    "format": "biome format --write src/ tools/ scripts/",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky",
     "build:index": "tsc -p tools/composition-index/tsconfig.json",
-    "rebuild:index": "pnpm build:index && node tools/composition-index/dist/build.js"
+    "rebuild:index": "pnpm build:index && node tools/composition-index/dist/build.js",
+    "finalize-composition": "bash scripts/finalize-composition.sh"
   },
   "dependencies": {
     "lit": "^3.2.0",
