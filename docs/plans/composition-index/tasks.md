@@ -11,43 +11,46 @@ Shipped in the plan PR, not this implementation. Reference only:
 
 ## Phase 1: Scaffolding
 
-- [ ] Create `tools/composition-index/` directory with `src/` subdirectory
-- [ ] Write `tools/composition-index/README.md` — what the index is, how to read `index.json`, how to trigger a manual rebuild, how to read the snapshot
-- [ ] Add `.gitignore` entry for `tools/composition-index/dist/`
-- [ ] Add `package.json` scripts: `build:index` (tsc compile), `rebuild:index` (run `dist/build.mjs`)
-- [ ] Verify the build pipeline produces working `.mjs` output that Node can invoke directly
-- [ ] Confirm `biome` + `vitest` configs pick up `tools/composition-index/src/**/*.ts`
+- [x] Create `tools/composition-index/` directory with `src/` subdirectory
+- [x] Write `tools/composition-index/README.md` — what the index is, how to read `index.json`, how to trigger a manual rebuild, how to read the snapshot
+- [x] Add `.gitignore` entry for `tools/composition-index/dist/` _(covered by existing root `dist/` pattern)_
+- [x] Add `package.json` scripts: `build:index` (tsc compile), `rebuild:index` (run `dist/build.js`) _(spec called for `.mjs`; actual output is `.js` ESM since root `package.json` has `"type": "module"` — simpler than `.mts` sources)_
+- [x] Verify the build pipeline produces working ESM output that Node can invoke directly
+- [x] Confirm `biome` + `vitest` configs pick up `tools/composition-index/src/**/*.ts`
 
 ## Phase 2: Feature extraction (Tier 1 + Tier 2)
 
-- [ ] `src/types.ts` — `IndexEntry`, `CompositionIndex`, `LibrarySnapshot`, `Gap` interfaces
-- [ ] `src/extract.ts` — Tier 1 extraction: metadata, section list, instrument list, EDM feature flags, note count, total bars
-- [ ] `src/extract.ts` — Tier 2 derived feature: simplified progression (bass-root-per-bar sequence from the `category: 'bass'` track). Graceful fallback to `null` when no bass track exists.
-- [ ] `src/extract.ts` — Tier 2 derived feature: drum pattern classification (4-on-floor / trap / half-time / breakbeat / other / none) from drums track kick/snare timing
-- [ ] `src/extract.ts` — Tier 2 derived feature: dominant register per melodic/bass track (MIDI note range covering >80% of notes)
-- [ ] Unit tests covering: a full EDM composition, a pure acoustic composition, a composition with no drums, a composition with multiple bass tracks, a composition with `genre` set, a composition without `genre`
+- [x] `src/types.ts` — `IndexEntry`, `CompositionIndex`, `LibrarySnapshot`, `Gap` interfaces
+- [x] `src/extract.ts` — Tier 1 extraction: metadata, section list, instrument list, EDM feature flags, note count, total bars
+- [x] `src/extract.ts` — Tier 2 derived feature: simplified progression (bass-root-per-bar sequence). Uses narrow local `IndexableComposition` types rather than importing from `src/schema/composition.ts` to avoid tsc rootDir constraint — decouples the indexer from full schema additions.
+- [x] `src/extract.ts` — Tier 2 derived feature: drum pattern classification with 50% threshold so fill kicks don't misclassify
+- [x] `src/extract.ts` — Tier 2 derived feature: dominant register per melodic/bass track (middle 80% trimming)
+- [x] Unit tests (33 passing) covering all extraction cases. `genre` is currently `null` for all entries — the composition schema doesn't have a `genre` field yet; indexer is ready to read one when added.
 
 ## Phase 3: Update + build entry points
 
-- [ ] `src/build.ts` — full rebuild: reads all `compositions/*.json`, runs `extract()` on each, writes `tools/composition-index/index.json`
-- [ ] `src/update.ts` — incremental update: reads one composition path from argv, extracts features, updates or inserts the entry in the existing `index.json`, writes back. Falls back to `build.ts` if `index.json` is missing or unparseable.
-- [ ] `dist/update.mjs` and `dist/build.mjs` compile and run correctly
-- [ ] Integration test: write a test composition, run `update.mjs` against it, verify the index contains the expected entry
+- [x] `src/build.ts` — full rebuild with parameterized `BuildOptions` (compositionsDir, repoRoot) so it's unit-testable
+- [x] `src/update.ts` — incremental update, parameterized, accepts argv path OR stdin JSON (PostToolUse hook payload with `tool_input.file_path`). Filters to `compositions/*.json` internally so it can run on every `Write`. Falls back to full rebuild on missing/corrupt/wrong-version index.
+- [x] `dist/build.js` and `dist/update.js` compile and run correctly (~30ms per hook fire)
+- [x] Integration tests (14 passing) with `mkdtempSync` temp directories covering: build from empty dir, build with multiple files, build with malformed file, update new entry, update existing entry, fallback on missing/corrupt/wrong-version index, path filtering via `isCompositionPath`
 
 ## Phase 4: Snapshot + gap analysis
 
-- [ ] `src/snapshot.ts` — aggregate `CompositionIndex` into a `LibrarySnapshot`: key/BPM/genre/drum/time-sig distributions, top instruments, EDM feature usage counts
-- [ ] `src/snapshot.ts` — compute `gaps[]` from snapshot: major keys, BPM brackets, time signatures, drum patterns, instrumentation, length. Hardcoded dimension list, extensible.
-- [ ] `src/snapshot.ts` — render snapshot as a human-readable report for `/library-stats`
-- [ ] Unit tests covering: empty library, single-composition library, library with obvious gaps, library with no gaps
+- [x] `src/snapshot.ts` — aggregate `CompositionIndex` into a `LibrarySnapshot` with key/BPM/time-sig/genre/drum distributions, top 10 instruments, EDM feature usage counts
+- [x] `src/snapshot.ts` — `computeGaps()` with hardcoded dimension list: major vs minor keys, 4 BPM brackets, non-4/4 time signatures, 4 drum patterns, instrumentation (synths, sampled), 2 length brackets
+- [x] `src/snapshot.ts` — `renderSnapshot()` produces a plain-text report for `/library-stats` (Chunk B) and CLI use
+- [x] Unit tests (29 passing) covering empty library, key classification, BPM stats, drum pattern distributions, top instruments cap, every gap category, positive-framing assertion (no gap contains "don't", "avoid", "never")
 
 ## Phase 5: Hook configuration
 
-- [ ] Add `PostToolUse` hook entry in `.claude/settings.json` matching `Write` on `compositions/*.json`
-- [ ] Verify exact env var name for file path in current Claude Code version (`$CLAUDE_FILE_PATH` / `$TOOL_INPUT_FILE_PATH` / stdin)
-- [ ] Manual test: write a composition via `/compose`, verify the hook fires once and updates the index
-- [ ] Manual test: draft a composition at `/tmp/composition-draft-test.json`, verify the hook does NOT fire
-- [ ] Manual test: edit `src/engine/Engine.ts`, verify the hook does NOT fire
+- [x] Add `PostToolUse` hook entry in `.claude/settings.json` with `matcher: "Write"`
+- [x] Verified hook payload mechanism: Claude Code pipes tool call metadata as JSON to stdin; `tool_input.file_path` is the written file. `update.ts` reads stdin and parses the payload.
+- [x] `PostToolUse` matcher filters on tool name only — no native path pattern. `update.ts` filters via `isCompositionPath()` internally and exits silently on non-composition writes (source files, drafts, the index itself).
+- [x] Manual test — composition path → index updates (verified with mock stdin payload against `dark-dubstep-drops.json`)
+- [x] Manual test — draft path `/tmp/composition-draft-test.json` → hook exits silently
+- [x] Manual test — source file path `src/engine/Engine.ts` → hook exits silently
+- [x] Latency: ~30ms end-to-end per hook fire (well under the 200ms target)
+- [ ] End-to-end test: do a real `/compose` run after merge and confirm the hook fires once against the real tool-call flow (deferred to user verification)
 
 ## Phase 6: Skill integration
 
