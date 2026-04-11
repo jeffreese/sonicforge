@@ -60,12 +60,7 @@ Shipped in the plan PR, not this implementation. Reference only:
 - [x] Update `CLAUDE.md`: brief pointer under Behavioral Notes + file-organization entry for `tools/composition-index/`.
 - [x] **Emergent work:** pre-render the snapshot to `tools/composition-index/snapshot.txt` via new `writeSnapshot()` helper in `build.ts`, wired into both `build.ts` and `update.ts` so the hook maintains it automatically. Strictly more efficient than having each skill parse `index.json`.
 - [x] **Emergent work:** filter `demo`-tagged entries inside `snapshot()` and `computeGaps()` (not in skill prompts), so every aggregate and gap reflects only real compositions. Adds `isRealComposition()` helper, `LibrarySnapshot.excludedDemoCount` field, and a render footer.
-- [ ] **Emergent from dogfood:** guarantee the composition-index hook fires on every final composition write. Current rule accepts `cp` / "any atomic file operation," but the PostToolUse hook matcher is `Write` — `cp` and other shell writes bypass the hook entirely, and the snapshot/index go stale until someone runs `pnpm rebuild:index` manually. Observed during the `halflight` dogfood. **Nuance surfaced during the `hollow-machine` dogfood:** a naive "just require Claude's Write tool" fix doesn't work for large compositions — `hollow-machine.json` is 150KB, which would burn huge context to pipe through Write tool content. The fix needs to preserve the hook contract *without* forcing large files through the model's output channel. Target design:
-  - Add a `pnpm finalize-composition <slug>` helper script that does `cp /tmp/composition-draft-<slug>.json compositions/<slug>.json && node tools/composition-index/dist/update.js compositions/<slug>.json` in one atomic step. (Or a `scripts/finalize-composition.sh` wrapper if the pnpm-script entry point fights with shell args.)
-  - Update `.claude/rules/composition-drafts.md` to require this helper for the final step in `/compose`, `/remix`, `/iterate`, and the "Generator scripts" section — replacing the current "cp, Write, or equivalent" language with a single explicit command.
-  - Update the three skill SKILL.md files' draft-first step to reference the helper.
-  - Add a test for the helper script: given a draft file in `/tmp/`, the helper copies + updates the index in one invocation and exits cleanly.
-  - The helper makes the contract explicit (one command, one path), reusable across all three skills, and keeps the large-file case working.
+- [x] **Emergent from dogfood:** guarantee the composition-index hook fires on every final composition write via new `scripts/finalize-composition.sh` shell helper wired as `pnpm finalize-composition <slug>`. Resolves the matcher gap (hook only caught Claude `Write`; shell writes bypassed it) AND the large-file wrinkle (150KB compositions can't reasonably be piped through the `Write` tool). Updated `.claude/rules/composition-drafts.md` to prescribe the helper as the single final step across `/compose`, `/remix`, `/iterate`, and generator scripts. Updated all three skill SKILL.md files' draft-first steps to reference the helper. Added 9 tests in `scripts/finalize-composition.test.ts` covering static wiring checks, argument error paths, and one end-to-end happy-path integration with a demo-tagged test slug + aggressive cleanup.
 
 ## Phase 7: ADR + documentation
 
@@ -74,12 +69,14 @@ Shipped in the plan PR, not this implementation. Reference only:
 
 ## Phase 8: Dogfood
 
-- [ ] Run `rebuild:index` to populate the initial index from existing compositions
-- [ ] Invoke `/library-stats` and verify the report is informative
-- [ ] Invoke `/compose` with an underspecified request ("compose me a track") and observe whether the gaps list meaningfully influences the generation
-- [ ] Invoke `/compose` with a specific request (genre + key + BPM) and verify the snapshot injection is silent / doesn't override specification
-- [ ] Write a short retro note: did the gaps list help? Was the snapshot injection distracting? Did the hook misfire?
-- [ ] Iterate on the snapshot format or gap framing if the first dogfood round shows friction
+Completed during the PR #53 session (see `phase-8-dogfood-notes.md` for the full retro).
+
+- [x] Run `rebuild:index` to populate the initial index from existing compositions — done multiple times during the PR #53 session, index and snapshot current.
+- [x] Invoke `/library-stats` and verify the report is informative — rendered cleanly in a fenced code block, 17 real tracks + 3 demos filtered, gaps listed.
+- [x] Invoke `/compose` with an underspecified request ("compose me a track") — `halflight.json` landed (melodic trap, F major, 142 BPM). Hit trap primary + trap drums + major-key gaps simultaneously. Silent integration held.
+- [x] Invoke `/compose` with a specific request (genre + key + BPM) — `hollow-machine.json` landed (brooding minimal techno, A minor, 130 BPM). All four explicit constraints preserved; snapshot used for authorial distinctness only, not direction override.
+- [x] Write a short retro note — `docs/plans/composition-index/phase-8-dogfood-notes.md` captures findings across all three runs with follow-ups routed to `tasks.md` (this file), `backlog.md` (`composition-index-polish` Queued entry), and `.forge/friction.md`.
+- [x] Iterate on the snapshot format or gap framing if the first dogfood round shows friction — observations captured and routed; rather than patch in-place, findings go to the polish backlog entry (subgenre-aware genre matching, mood-dominance detection, cross-dimension gap marking) and friction log (top-tags scannability, truncation wording, length bracket boundary). The "iterate" decision was to route over patch in-place.
 
 ## Phase 9 (stretch / deferred)
 

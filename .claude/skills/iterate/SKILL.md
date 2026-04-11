@@ -18,7 +18,7 @@ allowed-tools: Read, Write, Glob
 
 4. **Make targeted changes** while preserving everything else. Be surgical — don't alter parts the user didn't ask about.
 
-5. **Write the modified JSON — draft-first.** Author modifications at `/tmp/composition-draft-<slug>.json` rather than editing the original in place. Validate against the schema. Then perform a single final Write back to the original `compositions/<slug>.json`, overwriting it. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+5. **Write the modified JSON — draft-first.** Author modifications at `/tmp/composition-draft-<slug>.json` rather than editing the original in place. Validate against the schema. Then run `pnpm finalize-composition <slug>` as the final step — the helper overwrites `compositions/<slug>.json` with the modified draft and updates the composition index in one atomic operation. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
 6. **Briefly describe what changed.** A few sentences max.
 

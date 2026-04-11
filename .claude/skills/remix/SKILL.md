@@ -79,7 +79,7 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
    - **Section contrast:** each section should have at least one distinguishing element from its neighbors (instrumentation, density, dynamics, register, drum variation).
    - **Transition markers:** every section boundary should have some audible marker — fill, crash, drop-out, sweep, automation point. Add one if none exist.
 
-10. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<source-stem>-<genre-slug>.json` (e.g., `subterra-trance.json`). Do not overwrite the source. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+10. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<source-stem>-<genre-slug>.json` throughout generation. Validate against the schema. Then run `pnpm finalize-composition <source-stem>-<genre-slug>` as the final step (e.g., `pnpm finalize-composition subterra-trance`) — the helper copies the draft to `compositions/<source-stem>-<genre-slug>.json` and updates the composition index in one atomic operation. Do not overwrite the source composition. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
 
 11. **Describe the remix briefly.** New title, new BPM, instrument swap summary, what was preserved, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
 
