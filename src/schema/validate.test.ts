@@ -406,3 +406,83 @@ describe('validate — sidechain', () => {
     expect(() => validate(comp)).toThrow('amount must be a number 0–1')
   })
 })
+
+describe('validate — metadata.tags', () => {
+  const withTags = (tags: unknown) => ({
+    ...validComposition,
+    metadata: { ...validComposition.metadata, tags },
+  })
+
+  it('accepts compositions with no tags field (backwards compatible)', () => {
+    expect(() => validate(validComposition)).not.toThrow()
+  })
+
+  it('accepts a single valid lowercase-hyphenated tag', () => {
+    expect(() => validate(withTags(['dubstep']))).not.toThrow()
+  })
+
+  it('accepts multi-word hyphenated tags', () => {
+    expect(() => validate(withTags(['dark-dubstep', 'lo-fi', '4-on-the-floor']))).not.toThrow()
+  })
+
+  it('accepts tags with digits', () => {
+    expect(() => validate(withTags(['808', 'trap', 'drum-and-bass']))).not.toThrow()
+  })
+
+  it('rejects tags that is not an array', () => {
+    expect(() => validate(withTags('dubstep'))).toThrow('metadata.tags must be an array')
+  })
+
+  it('rejects an empty tags array', () => {
+    expect(() => validate(withTags([]))).toThrow('at least one tag')
+  })
+
+  it('rejects non-string tag entries', () => {
+    expect(() => validate(withTags(['dubstep', 42]))).toThrow('must be a string')
+  })
+
+  it('rejects uppercase tags', () => {
+    expect(() => validate(withTags(['Dubstep']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects tags with spaces', () => {
+    expect(() => validate(withTags(['dark dubstep']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects tags with underscores', () => {
+    expect(() => validate(withTags(['dark_dubstep']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects tags with leading hyphens', () => {
+    expect(() => validate(withTags(['-dubstep']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects tags with trailing hyphens', () => {
+    expect(() => validate(withTags(['dubstep-']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects tags with double hyphens', () => {
+    expect(() => validate(withTags(['dark--dubstep']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects empty string tags', () => {
+    expect(() => validate(withTags(['']))).toThrow('lowercase-hyphenated')
+  })
+
+  it('rejects duplicate tags', () => {
+    expect(() => validate(withTags(['dubstep', 'dark', 'dubstep']))).toThrow('duplicate')
+  })
+
+  it('reports multiple tag errors at once', () => {
+    try {
+      validate(withTags(['Good', 'valid', 'BAD_TAG']))
+      expect.fail('should have thrown')
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        expect(err.errors.length).toBeGreaterThanOrEqual(2)
+      } else {
+        throw err
+      }
+    }
+  })
+})

@@ -55,6 +55,7 @@ export interface IndexableComposition {
     bpm: number
     timeSignature: [number, number]
     key: string
+    tags?: string[]
   }
   instruments: IndexableInstrument[]
   sections: IndexableSection[]
@@ -76,16 +77,16 @@ export function extract(
   path: string,
   modifiedAt: string,
 ): IndexEntry {
+  const tags = Array.isArray(composition.metadata.tags) ? [...composition.metadata.tags] : []
+  const primaryTag = tags[0] ?? null
   return {
     path,
     title: composition.metadata.title,
     bpm: composition.metadata.bpm,
     key: composition.metadata.key,
     timeSignature: composition.metadata.timeSignature,
-    // The current schema does not define a genre field on Metadata. When it
-    // gets added, this will pick it up automatically. Until then, the
-    // indexer records null for every entry.
-    genre: null,
+    tags,
+    primaryTag,
     totalBars: sumBars(composition.sections),
     noteCount: countNotes(composition.sections),
     sections: composition.sections.map((s) => ({ name: s.name, bars: s.bars })),

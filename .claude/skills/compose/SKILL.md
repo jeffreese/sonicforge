@@ -31,6 +31,7 @@ allowed-tools: Read, Write, Glob
    - Build energy across sections (add instruments, raise dynamics)
    - Keep instruments in their natural registers
    - Ensure harmonic consistency across simultaneous instruments
+   - **Always emit `metadata.tags`.** Use the seed vocabulary in `genre-guide.md`. First tag is the primary genre, remaining tags are modifiers/moods/structural hints. Most compositions warrant 3–5 tags. Lowercase-hyphenated format enforced by the validator.
 
    **For compositions over ~32 bars or expected to exceed ~200 notes,** reach for the helper library at `tools/compose-helpers/` for repetitive scaffolding (drum grids, bass patterns, pad sustains, arpeggios, humanization). Write a throwaway scratch script (in `/tmp/`), import primitives you need, build repetitive tracks with them, and hand-write melodies, fills, and transitions on top. Helper output is a starting point — hand-edit for expression before finalizing. See `tools/compose-helpers/README.md` for the inventory and conventions. **New helpers are encouraged** — if a primitive you need doesn't exist yet, add it rather than reinventing ad-hoc code.
 

@@ -37,9 +37,11 @@ describe('extract — Tier 1', () => {
     expect(entry.timeSignature).toEqual([4, 4])
   })
 
-  it('returns null genre (schema has no genre field yet)', () => {
+  it('omits the deprecated genre field — tags is the new source of truth', () => {
     const entry = extract(makeComposition(), PATH, MTIME)
-    expect(entry.genre).toBeNull()
+    // genre field no longer exists on IndexEntry; tags array handles genre
+    expect(entry.tags).toEqual([])
+    expect(entry.primaryTag).toBeNull()
   })
 
   it('sums totalBars across sections', () => {
@@ -748,5 +750,68 @@ describe('extract — edge cases', () => {
     const entry = extract(makeComposition(), 'compositions/foo.json', '2026-01-02T03:04:05Z')
     expect(entry.path).toBe('compositions/foo.json')
     expect(entry.modifiedAt).toBe('2026-01-02T03:04:05Z')
+  })
+})
+
+// ─── Tags ───
+
+describe('extract — tags', () => {
+  it('defaults to empty tags array when the field is missing', () => {
+    const entry = extract(makeComposition(), PATH, MTIME)
+    expect(entry.tags).toEqual([])
+    expect(entry.primaryTag).toBeNull()
+  })
+
+  it('reads the tags array verbatim from metadata', () => {
+    const entry = extract(
+      makeComposition({
+        metadata: {
+          title: 'T',
+          bpm: 140,
+          timeSignature: [4, 4],
+          key: 'Fm',
+          tags: ['dubstep', 'dark', 'horror'],
+        },
+      }),
+      PATH,
+      MTIME,
+    )
+    expect(entry.tags).toEqual(['dubstep', 'dark', 'horror'])
+  })
+
+  it('sets primaryTag to the first tag', () => {
+    const entry = extract(
+      makeComposition({
+        metadata: {
+          title: 'T',
+          bpm: 140,
+          timeSignature: [4, 4],
+          key: 'Fm',
+          tags: ['dubstep', 'dark'],
+        },
+      }),
+      PATH,
+      MTIME,
+    )
+    expect(entry.primaryTag).toBe('dubstep')
+  })
+
+  it('returns a defensive copy — mutating the entry does not affect the source', () => {
+    const sourceTags = ['dubstep', 'dark']
+    const entry = extract(
+      makeComposition({
+        metadata: {
+          title: 'T',
+          bpm: 140,
+          timeSignature: [4, 4],
+          key: 'Fm',
+          tags: sourceTags,
+        },
+      }),
+      PATH,
+      MTIME,
+    )
+    entry.tags.push('mutated')
+    expect(sourceTags).toEqual(['dubstep', 'dark'])
   })
 })

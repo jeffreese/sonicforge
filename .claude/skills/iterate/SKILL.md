@@ -34,6 +34,8 @@ allowed-tools: Read, Write, Glob
 
 **Swapping instruments:** Update `sample` and `name` fields. Adjust note ranges for the new instrument if needed.
 
+**Tags:** Preserve `metadata.tags` by default. Only update tags when the iteration changes the composition's genre or character — e.g., adding horror motifs could add `"horror"` to the tag list; reducing intensity could add `"ambient"` or replace `"aggressive"` with `"melancholic"`. Never remove the primary (first) tag unless the iteration is large enough to fundamentally re-genre the piece.
+
 ## Do Not
 
 - Change parts the user didn't ask about

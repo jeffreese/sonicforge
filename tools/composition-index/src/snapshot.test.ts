@@ -11,7 +11,8 @@ function makeEntry(overrides: Partial<IndexEntry> = {}): IndexEntry {
     bpm: 120,
     key: 'Am',
     timeSignature: [4, 4],
-    genre: null,
+    tags: [],
+    primaryTag: null,
     totalBars: 32,
     noteCount: 200,
     sections: [{ name: 'intro', bars: 32 }],
@@ -290,6 +291,109 @@ describe('computeGaps', () => {
       expect(gap.toLowerCase()).not.toContain('avoid')
       expect(gap.toLowerCase()).not.toContain('never')
     }
+  })
+
+  it('flags untagged compositions as a backfill gap', () => {
+    const gaps = computeGaps([
+      makeEntry({ tags: [], primaryTag: null }),
+      makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+    ])
+    const untagGap = gaps.find((g) => g.includes('without tags'))
+    expect(untagGap).toBeDefined()
+    expect(untagGap).toContain('1 composition')
+  })
+
+  it('does not flag untagged gap when every composition has tags', () => {
+    const gaps = computeGaps([
+      makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+      makeEntry({ tags: ['house'], primaryTag: 'house' }),
+    ])
+    expect(gaps.some((g) => g.includes('without tags'))).toBe(false)
+  })
+
+  it('flags missing primary genres from the checked list', () => {
+    const gaps = computeGaps([
+      makeEntry({ tags: ['dubstep'], primaryTag: 'dubstep' }),
+      makeEntry({ tags: ['house'], primaryTag: 'house' }),
+    ])
+    const genreGap = gaps.find((g) => g.includes('primary genre'))
+    expect(genreGap).toBeDefined()
+    // trance, techno, etc. should be in the missing list
+    expect(genreGap).toMatch(/trance|techno|ambient|jazz|trap/)
+  })
+
+  it('does not flag primary-genre gap when all checked genres are covered', () => {
+    const allCovered = [
+      'house',
+      'techno',
+      'trance',
+      'dubstep',
+      'drum-and-bass',
+      'trap',
+      'ambient',
+      'lo-fi',
+      'jazz',
+      'classical',
+    ]
+    const entries = allCovered.map((g) => makeEntry({ tags: [g], primaryTag: g }))
+    const gaps = computeGaps(entries)
+    expect(gaps.some((g) => g.includes('primary genre'))).toBe(false)
+  })
+})
+
+describe('snapshot — tags', () => {
+  it('aggregates tagDistribution across all tags in all entries', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ tags: ['dubstep', 'dark', 'horror'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['dubstep', 'melodic'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['house', 'dark'], primaryTag: 'house' }),
+      ]),
+    )
+    expect(snap.tagDistribution).toEqual({
+      dubstep: 2,
+      dark: 2,
+      horror: 1,
+      melodic: 1,
+      house: 1,
+    })
+  })
+
+  it('aggregates primaryTagDistribution from only the first tag per entry', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ tags: ['dubstep', 'dark'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['dubstep', 'melodic'], primaryTag: 'dubstep' }),
+        makeEntry({ tags: ['house', 'dark'], primaryTag: 'house' }),
+      ]),
+    )
+    expect(snap.primaryTagDistribution).toEqual({ dubstep: 2, house: 1 })
+  })
+
+  it('omits untagged entries from primaryTagDistribution', () => {
+    const snap = snapshot(
+      makeIndex([
+        makeEntry({ tags: [], primaryTag: null }),
+        makeEntry({ tags: ['house'], primaryTag: 'house' }),
+      ]),
+    )
+    expect(snap.primaryTagDistribution).toEqual({ house: 1 })
+  })
+
+  it('renders the primary-genre and top-tags lines when data is present', () => {
+    const report = renderSnapshot(
+      snapshot(
+        makeIndex([
+          makeEntry({ tags: ['dubstep', 'dark'], primaryTag: 'dubstep' }),
+          makeEntry({ tags: ['house', 'uplifting'], primaryTag: 'house' }),
+        ]),
+      ),
+    )
+    expect(report).toContain('Primary genre:')
+    expect(report).toContain('dubstep (1)')
+    expect(report).toContain('house (1)')
+    expect(report).toContain('Top tags')
+    expect(report).toContain('dark (1)')
   })
 })
 

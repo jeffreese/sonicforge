@@ -42,6 +42,8 @@ export function validate(data: unknown): SonicForgeComposition {
   return data as SonicForgeComposition
 }
 
+const TAG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
 function validateMetadata(meta: unknown, errors: string[]): void {
   if (!meta || typeof meta !== 'object') {
     errors.push('metadata is required')
@@ -56,6 +58,40 @@ function validateMetadata(meta: unknown, errors: string[]): void {
     errors.push('metadata.timeSignature must be [number, number]')
   }
   if (typeof m.key !== 'string') errors.push('metadata.key must be a string')
+  validateTags(m.tags, errors)
+}
+
+function validateTags(tags: unknown, errors: string[]): void {
+  if (tags === undefined) return // optional
+  if (!Array.isArray(tags)) {
+    errors.push('metadata.tags must be an array of lowercase-hyphenated strings when present')
+    return
+  }
+  if (tags.length === 0) {
+    errors.push(
+      'metadata.tags must contain at least one tag when present (omit the field entirely otherwise)',
+    )
+    return
+  }
+  const seen = new Set<string>()
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i]
+    if (typeof tag !== 'string') {
+      errors.push(`metadata.tags[${i}] must be a string`)
+      continue
+    }
+    if (!TAG_PATTERN.test(tag)) {
+      errors.push(
+        `metadata.tags[${i}] "${tag}" must be lowercase-hyphenated (e.g. "dubstep", "dark-dubstep", "lo-fi")`,
+      )
+      continue
+    }
+    if (seen.has(tag)) {
+      errors.push(`metadata.tags[${i}] "${tag}" is a duplicate`)
+      continue
+    }
+    seen.add(tag)
+  }
 }
 
 function validateInstruments(instruments: unknown, errors: string[]): Set<string> {

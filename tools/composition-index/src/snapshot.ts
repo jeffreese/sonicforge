@@ -31,6 +31,23 @@ const LENGTH_BRACKETS = [
 
 const DRUM_PATTERNS_TO_CHECK = ['4-on-floor', 'trap', 'half-time', 'breakbeat'] as const
 
+/**
+ * Well-known primary genres to probe the library for coverage. Intentionally
+ * short — a kitchen-sink list would flag noise. Expand with discretion.
+ */
+const PRIMARY_GENRES_TO_CHECK = [
+  'house',
+  'techno',
+  'trance',
+  'dubstep',
+  'drum-and-bass',
+  'trap',
+  'ambient',
+  'lo-fi',
+  'jazz',
+  'classical',
+] as const
+
 // ─── Snapshot ───
 
 export function snapshot(index: CompositionIndex): LibrarySnapshot {
@@ -39,9 +56,10 @@ export function snapshot(index: CompositionIndex): LibrarySnapshot {
 
   const keyDistribution = distribution(entries, (e) => normalizeKey(e.key))
   const timeSignatureDistribution = distribution(entries, (e) => formatTimeSig(e.timeSignature))
-  const genreDistribution = distribution(
-    entries.filter((e) => e.genre !== null),
-    (e) => e.genre as string,
+  const tagDistribution = tagDistributionFromEntries(entries)
+  const primaryTagDistribution = distribution(
+    entries.filter((e) => e.primaryTag !== null),
+    (e) => e.primaryTag as string,
   )
   const drumPatternDistribution = distribution(entries, (e) => e.drumPattern)
 
@@ -62,12 +80,23 @@ export function snapshot(index: CompositionIndex): LibrarySnapshot {
     keyDistribution,
     bpmStats,
     timeSignatureDistribution,
-    genreDistribution,
+    tagDistribution,
+    primaryTagDistribution,
     drumPatternDistribution,
     topInstruments,
     edmFeatureUsage,
     gaps,
   }
+}
+
+function tagDistributionFromEntries(entries: IndexEntry[]): Record<string, number> {
+  const counts: Record<string, number> = {}
+  for (const entry of entries) {
+    for (const tag of entry.tags) {
+      counts[tag] = (counts[tag] ?? 0) + 1
+    }
+  }
+  return counts
 }
 
 // ─── Gap analysis ───
@@ -108,6 +137,31 @@ export function computeGaps(entries: IndexEntry[]): Gap[] {
   }
   if (!presentPatterns.has('none') && entries.length >= 3) {
     gaps.push('No compositions without drums')
+  }
+
+  // ─── Tags / primary-genre coverage ───
+  // Every untagged composition is a data gap — once the library is fully
+  // tagged, this branch goes quiet.
+  const untagged = entries.filter((e) => e.tags.length === 0).length
+  if (untagged > 0) {
+    gaps.push(
+      `${untagged} composition${untagged === 1 ? '' : 's'} without tags — backfill the tags field to surface genre coverage`,
+    )
+  }
+
+  // Flag well-known primary genres the library hasn't explored yet. Only
+  // report a subset — if the list gets too long the signal is noise.
+  const primaryTags = new Set(
+    entries.map((e) => e.primaryTag).filter((t): t is string => t !== null),
+  )
+  const missingPrimary = PRIMARY_GENRES_TO_CHECK.filter((g) => !primaryTags.has(g))
+  if (missingPrimary.length > 0 && missingPrimary.length <= 5) {
+    gaps.push(`No compositions with primary genre: ${missingPrimary.join(', ')}`)
+  } else if (missingPrimary.length > 5) {
+    const preview = missingPrimary.slice(0, 5).join(', ')
+    gaps.push(
+      `No compositions with primary genre: ${preview}, and ${missingPrimary.length - 5} more`,
+    )
   }
 
   // ─── Instrumentation ───
@@ -152,11 +206,21 @@ export function renderSnapshot(snap: LibrarySnapshot): string {
     `BPM:           ${snap.bpmStats.min}–${snap.bpmStats.max}, median ${snap.bpmStats.median}, IQR ${snap.bpmStats.iqr[0]}–${snap.bpmStats.iqr[1]}`,
   )
   lines.push(`Time sigs:     ${formatDistribution(snap.timeSignatureDistribution)}`)
-  if (Object.keys(snap.genreDistribution).length > 0) {
-    lines.push(`Genres:        ${formatDistribution(snap.genreDistribution)}`)
+  if (Object.keys(snap.primaryTagDistribution).length > 0) {
+    lines.push(`Primary genre: ${formatDistribution(snap.primaryTagDistribution)}`)
   }
   lines.push(`Drum patterns: ${formatDistribution(snap.drumPatternDistribution)}`)
   lines.push('')
+
+  if (Object.keys(snap.tagDistribution).length > 0) {
+    lines.push('Top tags (all, including modifiers):')
+    const topTags = Object.entries(snap.tagDistribution)
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, 15)
+    const tagLine = topTags.map(([tag, count]) => `${tag} (${count})`).join('  ')
+    lines.push(`  ${tagLine}`)
+    lines.push('')
+  }
 
   if (snap.topInstruments.length > 0) {
     lines.push('Top instruments:')

@@ -68,6 +68,7 @@ Lit Components → Reactive Stores → Engine Layer → Tone.js / WebAudio
 
 ### Schema
 - Composition JSON schema is defined in `src/schema/composition.ts` — this is the single source of truth. Claude skills, validation, and the engine all reference this file. When generating or modifying composition JSON, read this file for the current structure.
+- **Tags.** `metadata.tags` is an optional `string[]` capturing genre + modifiers + mood as lowercase-hyphenated strings. First entry is the primary genre by convention. Always emit tags when authoring. See `.claude/rules/composition-format.md` for the spec and ADR-011 for the design rationale.
 - **Instrument sources** dispatch via `InstrumentDef.source`: `'sampled'` (default, GM samples), `'synth'` (Tone.js synth via preset name or inline `SynthPatch`), `'oneshot'` (fixed-pitch percussion/FX via hit name → URL map), `'drums'` (synthesized `DrumKit`). Engine routes each type through its own `InstrumentSource` class. See ADR-009 for the design rationale.
 - **Composition-level EDM fields** (all optional, backwards-compatible): `masterEffects[]`, `automation[]`, `lfos[]` + `modulation[]`, `sidechain[]`. Reference docs for Claude generation live at `.claude/skills/compose/{synth-presets,effects-reference,modulation-patterns,oneshot-hits}.md`.
 
