@@ -25,7 +25,8 @@
       "Skill(forge:capture-feedback)",
       "Skill(forge:forge-status)",
       "Bash(npm run:*)",
-      "Skill(reset-to-main)"
+      "Skill(reset-to-main)",
+      "Bash(ffprobe /Users/jeffreese/Code/sonicforge/public/samples/acoustic_grand_piano/C4_v90.ogg)"
     ]
   }
 }
