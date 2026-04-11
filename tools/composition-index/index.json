@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-04-11T06:31:29.578Z",
+  "generatedAt": "2026-04-11T14:03:18.699Z",
   "entries": {
     "compositions/bass-trance-dnb-break.json": {
       "path": "compositions/bass-trance-dnb-break.json",
@@ -8,7 +8,8 @@
       "bpm": 138,
       "key": "A minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["trance", "drum-and-bass", "bass-driven", "reese-bass", "sidechained", "hybrid"],
+      "primaryTag": "trance",
       "totalBars": 16,
       "noteCount": 275,
       "sections": [
@@ -67,7 +68,7 @@
       "hasSynths": true,
       "hasOneshots": true,
       "hasSampled": false,
-      "modifiedAt": "2026-04-10T20:35:49.583Z",
+      "modifiedAt": "2026-04-11T14:03:03.640Z",
       "progression": "- | - | - | - | A | F | C | G | A-E-A-G-A | A-C-E-A-G-F | F-C-F-A-C | E-G-A-C-E-A | A-E-A | F-C-F | C-G-C | G-D-G-A",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -81,7 +82,8 @@
       "bpm": 142,
       "key": "D minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["industrial-techno", "dark", "menacing", "aggressive", "acid-bass", "relentless"],
+      "primaryTag": "industrial-techno",
       "totalBars": 28,
       "noteCount": 671,
       "sections": [
@@ -151,7 +153,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-16T07:39:23.141Z",
+      "modifiedAt": "2026-04-11T14:03:03.643Z",
       "progression": "- | - | - | - | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | - | - | - | - | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D-F-D-C-Bb-A-G-A | D-F-D-A-D | D-C-A-Bb-A | D-F-D-G-F-A-D | D",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -166,7 +168,8 @@
       "bpm": 140,
       "key": "F minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["dubstep", "dark", "horror", "two-drops", "cinematic", "wobble-bass"],
+      "primaryTag": "dubstep",
       "totalBars": 108,
       "noteCount": 2077,
       "sections": [
@@ -258,7 +261,7 @@
       "hasSynths": true,
       "hasOneshots": true,
       "hasSampled": false,
-      "modifiedAt": "2026-04-11T05:56:03.556Z",
+      "modifiedAt": "2026-04-11T14:03:03.645Z",
       "progression": "F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | F | Db | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Db | Bb | Eb | F | Gb | F | Eb | F | Gb | F | Eb | F | Gb | F | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | Gb | Db | Eb | F | F | F | F | F | F | F | F",
       "drumPattern": "half-time",
       "dominantRegisters": {
@@ -274,7 +277,8 @@
       "bpm": 72,
       "key": "C major",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["ballad", "piano", "acoustic", "serene", "low-energy", "sparse"],
+      "primaryTag": "ballad",
       "totalBars": 16,
       "noteCount": 68,
       "sections": [
@@ -315,7 +319,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-15T09:08:47.293Z",
+      "modifiedAt": "2026-04-11T14:03:03.647Z",
       "progression": "- | - | - | - | C | G | A | G | C | F | G | C | C | F | C | C",
       "drumPattern": "none",
       "dominantRegisters": {
@@ -329,7 +333,8 @@
       "bpm": 76,
       "key": "F# minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["synthwave", "horror", "cinematic", "atmospheric", "dark", "80s"],
+      "primaryTag": "synthwave",
       "totalBars": 24,
       "noteCount": 226,
       "sections": [
@@ -409,7 +414,7 @@
       "hasSynths": true,
       "hasOneshots": false,
       "hasSampled": false,
-      "modifiedAt": "2026-04-10T14:16:49.345Z",
+      "modifiedAt": "2026-04-11T14:03:03.648Z",
       "progression": "F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | F# | - | F# | -",
       "drumPattern": "none",
       "dominantRegisters": {
@@ -425,7 +430,8 @@
       "bpm": 130,
       "key": "D minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["melodic-techno", "festival", "euphoric", "bass-driven", "driving", "key-shift"],
+      "primaryTag": "melodic-techno",
       "totalBars": 144,
       "noteCount": 3108,
       "sections": [
@@ -525,7 +531,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-18T15:59:12.467Z",
+      "modifiedAt": "2026-04-11T14:03:03.650Z",
       "progression": "- | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | Bb-F-Bb | C-G-C | C-G-C | C-G-C | C-G-C | D-A-D | D-A-D | D-A-D | D-A-D | F-C-F | F-C-F | F-C-F | F-C-F | C-G-C | C-G-C | C-G-C | C-G-C | G-D-G | G-D-G | G-D-G | G-D-G | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | D-A-D | D-A-D | D-A-D | D-A-D | A-E-A | A-E-A | A-E-A | A-E-A | B-F#-B | B-F#-B | B-F#-B | B-F#-B | G-D-G | G-D-G | G-D-G | G-D-G | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | -",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -541,7 +547,8 @@
       "bpm": 106,
       "key": "D minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["progressive-metal", "tool-inspired", "dark", "moody", "heavy", "dynamic"],
+      "primaryTag": "progressive-metal",
       "totalBars": 64,
       "noteCount": 873,
       "sections": [
@@ -615,7 +622,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-16T07:39:23.141Z",
+      "modifiedAt": "2026-04-11T14:03:03.652Z",
       "progression": "D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-D-C | Bb-A-D | D-F-E-D-C-D-A | D-F-E-D-Bb-A | D-F-E-D-C-D-A | D-F-D-Bb-A | Bb-D-C-Bb-A-Bb-G | A-C-Bb-A-D-C | D-F-E-D-C-D-A | D-F-D-Bb-A | D-F-E-D-C-D-A | D-F-D-Bb-A | Bb-D-Bb-A-Bb-G | A-C-A-D-C | D-F-D-C | D-F-D-A | Bb-C-D-A | D-E-F-A | D | F-C | D | Bb-A | D | F-C | Bb-A | D | D | - | D-Bb | - | C-A | - | D | - | D-F-E-D-C-D-A | D-F-D-Bb | Bb-D-C-A | A-C-D | D-F-E-D-C-D-A | D-F-D-A | Bb-C-D-E | F-E-D-A | D | F-C | D | Bb-A | D | F-C | Bb-A | D | D-F-E-D-C-D-A | D-F-D-Bb-A | D-F-D-C | D-F-D-Bb | D-F-D | D-F-D | D | D",
       "drumPattern": "other",
       "dominantRegisters": {
@@ -630,7 +637,8 @@
       "bpm": 130,
       "key": "D minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["dark-techno", "classical", "baroque", "harpsichord-driven", "hybrid", "dense"],
+      "primaryTag": "dark-techno",
       "totalBars": 44,
       "noteCount": 886,
       "sections": [
@@ -704,7 +712,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-04-10T02:29:35.504Z",
+      "modifiedAt": "2026-04-11T14:03:03.654Z",
       "progression": "- | - | - | - | - | - | - | - | - | - | - | - | D | Bb-C | A | D | D | D-F-E | Bb-C | A | D | D-F-E | Bb-C | A | - | - | - | - | - | - | - | - | D | D-F-E-D | Bb-C | A-Bb | D | D-F-E-D | Bb-C-Bb | A | - | - | - | -",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -719,7 +727,8 @@
       "bpm": 124,
       "key": "A minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["deep-house", "demo", "sidechained", "medium-energy", "sub-heavy"],
+      "primaryTag": "deep-house",
       "totalBars": 8,
       "noteCount": 142,
       "sections": [
@@ -759,7 +768,7 @@
       "hasSynths": true,
       "hasOneshots": true,
       "hasSampled": false,
-      "modifiedAt": "2026-04-10T17:37:29.914Z",
+      "modifiedAt": "2026-04-11T14:03:03.654Z",
       "progression": "A | A-E | F | G-E | A | A-E | F | G-A",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -772,7 +781,8 @@
       "bpm": 174,
       "key": "D minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["drum-and-bass", "dark", "aggressive", "breakbeat", "haunting", "high-energy"],
+      "primaryTag": "drum-and-bass",
       "totalBars": 48,
       "noteCount": 675,
       "sections": [
@@ -839,7 +849,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-15T10:27:34.831Z",
+      "modifiedAt": "2026-04-11T14:03:03.656Z",
       "progression": "- | - | - | - | - | - | - | - | D | - | D | - | Bb | - | C | - | D | Bb-A-Bb | C | D | D | Bb-A-Bb | C-D-C | D | - | - | - | - | - | - | - | - | D-E-D | Bb-A-Bb-A | C-D-C-Bb-C | D | D-E-D | Bb-C-Bb-A-Bb | C-D-C-Bb-C | D | D | D | D | D | D | - | - | -",
       "drumPattern": "other",
       "dominantRegisters": {
@@ -853,7 +863,15 @@
       "bpm": 136,
       "key": "A minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": [
+        "progressive-trance",
+        "uplifting",
+        "dreamy",
+        "arpeggiated",
+        "long-breakdown",
+        "oakenfold-inspired"
+      ],
+      "primaryTag": "progressive-trance",
       "totalBars": 32,
       "noteCount": 735,
       "sections": [
@@ -934,7 +952,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-16T07:39:23.142Z",
+      "modifiedAt": "2026-04-11T14:03:03.657Z",
       "progression": "- | - | - | - | A | F | C | G | A | F | C | G | A | F | C | G | - | - | - | - | A | F | C | G | A | F | C | G | - | - | - | -",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -949,7 +967,8 @@
       "bpm": 126,
       "key": "F minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["deep-bass-house", "dark", "sub-heavy", "sidechained", "minor-key", "driving"],
+      "primaryTag": "deep-bass-house",
       "totalBars": 112,
       "noteCount": 1953,
       "sections": [
@@ -1034,7 +1053,7 @@
       "hasSynths": true,
       "hasOneshots": true,
       "hasSampled": false,
-      "modifiedAt": "2026-04-11T00:02:28.005Z",
+      "modifiedAt": "2026-04-11T14:03:03.659Z",
       "progression": "- | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | F | Db | Bb | Eb | F | Db | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db-Eb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Db-F | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | - | - | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F | Db-Ab-Db | Bb-F-Bb | Eb-Bb-Eb | F-C-F | Db-Ab-Db | Bb-F-Bb | Eb-Bb-Eb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | F-C-F-C | Db-Ab-Db-Ab | Bb-F-Bb-F | Eb-Bb-Eb-Bb | - | - | - | - | - | - | - | -",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -1048,7 +1067,8 @@
       "bpm": 140,
       "key": "F minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["dubstep", "deep-dubstep", "dark", "sub-heavy", "half-time", "atmospheric"],
+      "primaryTag": "dubstep",
       "totalBars": 44,
       "noteCount": 436,
       "sections": [
@@ -1126,7 +1146,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-15T17:54:18.184Z",
+      "modifiedAt": "2026-04-11T14:03:03.660Z",
       "progression": "- | - | - | - | - | - | - | - | F | Db | Eb | C | F | F-Ab-F | Db-Eb | C-Eb | F | F-Ab-F | Db-Eb | C | F | F | Db | Eb | F | Db | Eb | C | F | Db | Eb | C | F-Ab-F | F-Ab-F-C | Db-Eb-Db | C-Eb-C | F-Ab-F | F-Ab-F-C | Db-Eb-F | C | F | F | F | -",
       "drumPattern": "half-time",
       "dominantRegisters": {
@@ -1141,7 +1161,8 @@
       "bpm": 84,
       "key": "E minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["trip-hop", "dark", "lo-fi", "dub-influenced", "eerie", "chill"],
+      "primaryTag": "trip-hop",
       "totalBars": 32,
       "noteCount": 625,
       "sections": [
@@ -1211,7 +1232,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-03-16T07:39:23.142Z",
+      "modifiedAt": "2026-04-11T14:03:03.661Z",
       "progression": "- | - | - | - | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | A-G-E | C | D | E-G-E | B | E-G-E | E-D-E | G-A-G | A-G-E | E-G-E | E-D-E | G-A-G | E",
       "drumPattern": "breakbeat",
       "dominantRegisters": {
@@ -1226,7 +1247,8 @@
       "bpm": 120,
       "key": "A minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["ambient", "drone", "demo", "automation-heavy", "minimalist"],
+      "primaryTag": "ambient",
       "totalBars": 8,
       "noteCount": 46,
       "sections": [
@@ -1266,7 +1288,7 @@
       "hasSynths": true,
       "hasOneshots": false,
       "hasSampled": false,
-      "modifiedAt": "2026-04-10T16:13:48.643Z",
+      "modifiedAt": "2026-04-11T14:03:03.662Z",
       "progression": "A | A | A | A | F | F | E | A",
       "drumPattern": "none",
       "dominantRegisters": {
@@ -1280,7 +1302,16 @@
       "bpm": 170,
       "key": "Am",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": [
+        "jungle",
+        "breakbeat",
+        "aggressive",
+        "reese-bass",
+        "distorted",
+        "amen-break",
+        "remix"
+      ],
+      "primaryTag": "jungle",
       "totalBars": 32,
       "noteCount": 446,
       "sections": [
@@ -1350,7 +1381,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "modifiedAt": "2026-04-11T14:03:03.663Z",
       "progression": "- | - | - | - | - | - | A | A | A | F | D | E | C | F | A | E | A | - | E | A | A | F | D | E | C | F | A | E | A | - | - | -",
       "drumPattern": "other",
       "dominantRegisters": {
@@ -1365,7 +1396,16 @@
       "bpm": 140,
       "key": "Am",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": [
+        "liquid-dnb",
+        "drum-and-bass",
+        "melodic",
+        "atmospheric",
+        "dreamy",
+        "sub-heavy",
+        "remix"
+      ],
+      "primaryTag": "liquid-dnb",
       "totalBars": 56,
       "noteCount": 622,
       "sections": [
@@ -1442,7 +1482,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "modifiedAt": "2026-04-11T14:03:03.665Z",
       "progression": "- | - | - | - | - | - | - | - | A | - | A | - | F | - | E | - | C | - | D | - | C | - | E | - | - | - | - | - | - | - | A | - | A | - | A | - | F | - | E | - | A | - | F | - | D | - | E | - | - | - | - | - | - | - | - | -",
       "drumPattern": "breakbeat",
       "dominantRegisters": {
@@ -1457,7 +1497,8 @@
       "bpm": 124,
       "key": "Am",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["deep-bass-house", "dark", "melancholic", "reese-bass", "sidechained", "remix"],
+      "primaryTag": "deep-bass-house",
       "totalBars": 32,
       "noteCount": 682,
       "sections": [
@@ -1537,7 +1578,7 @@
       "hasSynths": true,
       "hasOneshots": true,
       "hasSampled": false,
-      "modifiedAt": "2026-04-11T01:24:51.343Z",
+      "modifiedAt": "2026-04-11T14:03:03.666Z",
       "progression": "- | - | - | - | A-E | F-E-B | D-C-G | E-A-E | C-G-D | F-E-B | C-G-D | F-E-B | A-E | F-E-B | D-C-G | E-A-E | - | - | - | - | D-C-G | A-E | D-E-B | A-E | A | C | F | E | - | - | - | -",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {
@@ -1552,7 +1593,8 @@
       "bpm": 66,
       "key": "Am",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["classical", "chamber", "melancholic", "acoustic", "sparse", "minor-key"],
+      "primaryTag": "classical",
       "totalBars": 32,
       "noteCount": 247,
       "sections": [
@@ -1618,7 +1660,7 @@
       "hasSynths": false,
       "hasOneshots": false,
       "hasSampled": true,
-      "modifiedAt": "2026-04-07T14:56:58.677Z",
+      "modifiedAt": "2026-04-11T14:03:03.667Z",
       "progression": "- | - | - | - | A | F | D | E-A | C | F | C | E | A | F | D | E-A | C | E | A | D-E | D | A | D-E | A | - | - | - | - | - | - | - | -",
       "drumPattern": "none",
       "dominantRegisters": {
@@ -1634,7 +1676,8 @@
       "bpm": 140,
       "key": "E minor",
       "timeSignature": [4, 4],
-      "genre": null,
+      "tags": ["dubstep", "demo", "wobble-bass", "sidechained", "minimal"],
+      "primaryTag": "dubstep",
       "totalBars": 8,
       "noteCount": 88,
       "sections": [
@@ -1681,7 +1724,7 @@
       "hasSynths": true,
       "hasOneshots": false,
       "hasSampled": false,
-      "modifiedAt": "2026-04-10T16:55:24.237Z",
+      "modifiedAt": "2026-04-11T14:03:03.668Z",
       "progression": "E | E-G | D | C-B | E | E-G | D | C-B",
       "drumPattern": "4-on-floor",
       "dominantRegisters": {

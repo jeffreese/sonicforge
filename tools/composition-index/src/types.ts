@@ -46,7 +46,17 @@ export interface IndexEntry {
   bpm: number
   key: string
   timeSignature: [number, number]
-  genre: string | null
+  /**
+   * Flat tag list from `metadata.tags`. First entry is the primary genre by
+   * convention. Empty array when the composition has no tags field.
+   */
+  tags: string[]
+  /**
+   * Convenience alias for `tags[0]` — the primary genre. `null` when the
+   * composition has no tags. Pre-computed so consumers don't have to handle
+   * the empty-array edge case.
+   */
+  primaryTag: string | null
   totalBars: number
   noteCount: number
   sections: IndexSection[]
@@ -111,7 +121,16 @@ export interface LibrarySnapshot {
     iqr: [number, number]
   }
   timeSignatureDistribution: Record<string, number>
-  genreDistribution: Record<string, number>
+  /**
+   * All tags counted across the library, sorted by frequency in the render
+   * step. Captures both primary genres (from `tags[0]`) and modifiers.
+   */
+  tagDistribution: Record<string, number>
+  /**
+   * Primary-tag-only distribution — counts each composition's first tag.
+   * Useful for "what genres are represented?" queries that ignore modifiers.
+   */
+  primaryTagDistribution: Record<string, number>
   drumPatternDistribution: Record<string, number>
   /** Top 10 instruments by frequency across the library */
   topInstruments: { id: string; count: number }[]

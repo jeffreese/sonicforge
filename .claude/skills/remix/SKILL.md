@@ -20,7 +20,7 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
 1. **Resolve the source.** If no path given, glob `compositions/*.json` and pick the most recently modified. If ambiguous or the user clearly meant a different file, ask.
 
 2. **Read and map the source.** Extract and write down (for yourself) before touching anything:
-   - `metadata.key`, original `bpm`, original `genre`
+   - `metadata.key`, original `bpm`, original `tags` (first tag is the source's primary genre)
    - Section names, bar counts, and order
    - The chord progression per section (derive it from the pad/keys/bass tracks if not annotated)
    - The energy arc — which sections are builds, drops, breakdowns, outros
@@ -54,7 +54,8 @@ Produce a genre variant of an existing composition that keeps the harmonic skele
    - Overall energy arc (if source has a drop at section 4, the remix drops at section 4)
 
 6. **Rework these freely.**
-   - `metadata.bpm`, `metadata.genre`, `metadata.title` (append `" (Genre Remix)"` or similar)
+   - `metadata.bpm`, `metadata.title` (append `" (Genre Remix)"` or similar)
+   - `metadata.tags` — new primary tag (target genre) first, followed by remix-relevant modifiers. Optionally include `"remix"` and a reference to the source genre as a modifier (e.g., `["trance", "remix", "dubstep-source", "uplifting"]`).
    - `instruments[]` — new list per the swap table
    - Every track's notes — re-voiced for the new instruments, re-rhythmed for the new genre, but constrained to the preserved chords
    - Melodies: re-compose over the same changes in a genre-appropriate style. Don't transplant the source melody verbatim — a trance lead moves differently than a dubstep growl even over Fm–Db–Ab–Eb.

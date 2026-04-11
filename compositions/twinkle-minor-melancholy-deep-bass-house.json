@@ -9,7 +9,15 @@
     ],
     "key": "Am",
     "genre": "deep bass house",
-    "description": "A deep bass house remix of Twinkle Twinkle (A Minor Lament). Preserves the Am lament progression and the original four-section structure; swaps music-box/piano/cello/strings/contrabass for a reese bass, sub, stab pad, warm pad, and detuned lead over a four-on-the-floor deep bass house kit."
+    "description": "A deep bass house remix of Twinkle Twinkle (A Minor Lament). Preserves the Am lament progression and the original four-section structure; swaps music-box/piano/cello/strings/contrabass for a reese bass, sub, stab pad, warm pad, and detuned lead over a four-on-the-floor deep bass house kit.",
+    "tags": [
+      "deep-bass-house",
+      "dark",
+      "melancholic",
+      "reese-bass",
+      "sidechained",
+      "remix"
+    ]
   },
   "instruments": [
     {
@@ -339,7 +347,7 @@
     },
     {
       "id": "verse-1",
-      "name": "Verse 1 \u2014 Twinkle, Twinkle",
+      "name": "Verse 1 — Twinkle, Twinkle",
       "bars": 12,
       "tracks": [
         {
@@ -2859,7 +2867,7 @@
     },
     {
       "id": "bridge",
-      "name": "Bridge \u2014 How I Wonder",
+      "name": "Bridge — How I Wonder",
       "bars": 8,
       "tracks": [
         {
@@ -4017,7 +4025,7 @@
     },
     {
       "id": "outro",
-      "name": "Outro \u2014 Fading Star",
+      "name": "Outro — Fading Star",
       "bars": 8,
       "tracks": [
         {

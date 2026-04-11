@@ -74,3 +74,48 @@ BPM: 60–80 (or unpitched, no transport) | No drums or sparse single hits | `wa
 
 **Major:** C neutral | G bright | D triumphant | F pastoral | Bb mellow | Eb heroic | A joyful | E brilliant
 **Minor:** A melancholy | E introspective | D serious | B lonely | G tragic | C dramatic
+
+## Tag Vocabulary
+
+`metadata.tags` is a flat array of lowercase-hyphenated tokens. The **first tag is the primary genre** by convention; the rest are modifiers, moods, energy markers, and structural hints in no particular order. Most compositions warrant 3–5 tags total.
+
+The vocabulary below is a seed list — not exhaustive, not prescriptive. Invent new tags when none fit, but prefer existing ones for consistency so the index can aggregate cleanly.
+
+### Primary genre (pick one, goes first)
+
+**EDM family:** `house`, `deep-house`, `tech-house`, `bass-house`, `big-room-house`, `progressive-house`, `techno`, `minimal-techno`, `industrial-techno`, `trance`, `psytrance`, `hardstyle`, `dubstep`, `brostep`, `drum-and-bass`, `liquid-dnb`, `neurofunk`, `jungle`, `breakbeat`, `future-bass`, `trap`, `phonk`, `hardcore`, `uk-garage`, `2-step`
+
+**Other electronic:** `ambient`, `downtempo`, `idm`, `glitch`, `chiptune`, `synthwave`, `vaporwave`, `lo-fi`, `chillhop`, `lounge`
+
+**Non-electronic:** `pop`, `rock`, `indie-rock`, `metal`, `punk`, `folk`, `country`, `jazz`, `blues`, `funk`, `soul`, `rnb`, `hip-hop`, `classical`, `orchestral`, `cinematic`, `film-score`, `game-music`
+
+**Fusion or uncertain:** combine with a hyphen, e.g. `dark-dubstep`, `liquid-dnb`, `deep-bass-house`, or use a descriptive compound like `melancholic-lament`.
+
+### Mood
+
+`dark`, `melancholic`, `moody`, `wistful`, `nostalgic`, `hopeful`, `uplifting`, `triumphant`, `euphoric`, `dreamy`, `introspective`, `aggressive`, `menacing`, `ominous`, `horror`, `creepy`, `playful`, `whimsical`, `quirky`, `romantic`, `sensual`, `serene`, `meditative`, `chaotic`, `frantic`, `driving`, `relentless`, `tense`, `suspenseful`, `hypnotic`, `psychedelic`, `grim`, `triumphant`
+
+### Energy
+
+`low-energy`, `medium-energy`, `high-energy`, `building`, `slow-burn`, `frantic`, `languid`, `sparse`, `dense`, `minimalist`, `maximalist`
+
+### Structure / form
+
+`two-drops`, `one-drop`, `no-drop`, `long-breakdown`, `short-intro`, `radio-edit`, `extended-mix`, `loop`, `through-composed`, `verse-chorus`, `aaba`, `drone`, `call-and-response`
+
+### Sound design / production
+
+`sidechained`, `wobble-bass`, `reese-bass`, `sub-heavy`, `808-heavy`, `supersaw`, `arpeggiated`, `pad-driven`, `lead-driven`, `bass-driven`, `acoustic`, `sampled`, `synthesized`, `hybrid`, `reverb-wash`, `dry`, `distorted`, `bitcrushed`, `filter-swept`, `auto-filtered`, `humanized`, `mechanical`
+
+### Era / reference
+
+`80s`, `90s`, `2000s`, `modern`, `retro`, `vintage`, `jauz-style`, `skrillex-style`, `flume-style`, `burial-style`, `aphex-style` (only when the reference is clear and intentional)
+
+### Examples
+
+- `["dubstep", "dark", "horror", "two-drops", "cinematic"]`
+- `["deep-house", "atmospheric", "minor-key", "sidechained", "medium-energy"]`
+- `["trance", "uplifting", "long-breakdown", "supersaw", "building"]`
+- `["ambient", "drone", "melancholic", "minimalist", "slow-burn"]`
+- `["trap", "808-heavy", "menacing", "half-time", "sparse"]`
+- `["melancholic-lament", "piano", "dry", "acoustic", "aaba"]`

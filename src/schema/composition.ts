@@ -16,6 +16,24 @@ export interface Metadata {
   timeSignature: [number, number]
   key: string
   description?: string
+  /**
+   * Multi-valued tag list capturing genre, style modifiers, mood, and
+   * descriptors in one flat array. By convention the **first tag is the
+   * primary genre**; the remaining entries are modifiers or influences in
+   * no particular order.
+   *
+   * Each tag must be lowercase-hyphenated: `^[a-z0-9]+(-[a-z0-9]+)*$`.
+   * Examples: `"dubstep"`, `"dark-dubstep"`, `"lo-fi"`, `"808"`, `"4-on-the-floor"`.
+   *
+   * Examples of complete tag arrays:
+   * - `["dubstep", "dark", "horror", "cinematic"]`
+   * - `["deep-house", "atmospheric", "minor-key"]`
+   * - `["trance", "uplifting", "long-breakdown"]`
+   *
+   * Optional for backwards compatibility — existing compositions without
+   * tags still validate. See ADR-011 for the full rationale.
+   */
+  tags?: string[]
 }
 
 export type InstrumentSourceKind = 'sampled' | 'synth' | 'oneshot' | 'drums'

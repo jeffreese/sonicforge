@@ -13,6 +13,32 @@ When generating or modifying SonicForge composition JSON:
 
 `version` must be `"1.0"`. Top-level keys: `metadata`, `instruments[]`, `sections[]`.
 
+## Metadata
+
+`metadata` requires `title`, `bpm`, `timeSignature`, `key`. Optional: `description`, `tags`.
+
+### Tags (optional, multi-valued)
+
+`metadata.tags` is an optional `string[]` capturing genre, style modifiers, mood, and descriptors in one flat array. **The first tag is the primary genre** by convention; the remaining entries are modifiers, moods, or structural hints in no particular order.
+
+Each tag must match `^[a-z0-9]+(-[a-z0-9]+)*$` — lowercase letters, digits, and single hyphens between segments. Valid: `"dubstep"`, `"dark-dubstep"`, `"lo-fi"`, `"808"`, `"4-on-the-floor"`, `"drum-and-bass"`. Invalid: `"Dubstep"`, `"dark dubstep"`, `"dark_dubstep"`, `"-dubstep"`, `"dubstep-"`.
+
+**Example:**
+
+```json
+"metadata": {
+  "title": "Dark Dubstep Drops",
+  "bpm": 140,
+  "timeSignature": [4, 4],
+  "key": "F minor",
+  "tags": ["dubstep", "dark", "horror", "two-drops", "cinematic"]
+}
+```
+
+The first tag (`dubstep`) identifies the track's primary genre. The rest describe modifiers and characteristics that the composition index and skills read for library analysis and diversification.
+
+**When you write a composition, always emit tags.** At minimum include the primary genre; most compositions warrant 3–5 tags total. See `.claude/skills/compose/genre-guide.md` for the seed vocabulary.
+
 ## Notation
 
 - **Pitch:** scientific notation — `"C4"`, `"F#5"`, `"Bb3"`. Drums use named hits: `"kick"`, `"snare"`, `"hihat"`, `"hihat-open"`, `"ride"`, `"crash"`, `"tom-high"`, `"tom-mid"`, `"tom-low"`.
@@ -66,5 +92,6 @@ Optional `effects[]`: 12 types — `reverb`, `delay`, `pingpong`, `chorus`, `pha
 7. LFO ids must be unique across the composition
 8. Modulation route `source` must reference an existing LFO id
 9. Sidechain `source`/`target` must reference existing instrument ids
+10. Each `metadata.tags` entry must match `^[a-z0-9]+(-[a-z0-9]+)*$`. No duplicates. Omit the field entirely if no tags — an empty array is rejected.
 
 See `src/schema/composition.ts` for full TypeScript interfaces.

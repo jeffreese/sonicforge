@@ -8,7 +8,15 @@
       4
     ],
     "key": "D minor",
-    "description": "A festival techno journey from dark driving energy to euphoric resolution. Heavy bass, melodic leads, and a dramatic key shift from D minor to D major."
+    "description": "A festival techno journey from dark driving energy to euphoric resolution. Heavy bass, melodic leads, and a dramatic key shift from D minor to D major.",
+    "tags": [
+      "melodic-techno",
+      "festival",
+      "euphoric",
+      "bass-driven",
+      "driving",
+      "key-shift"
+    ]
   },
   "instruments": [
     {
@@ -85,7 +93,7 @@
         {
           "type": "reverb",
           "params": {
-            "decay": 2.0,
+            "decay": 2,
             "wet": 0.25
           }
         }
@@ -101,7 +109,7 @@
         {
           "type": "reverb",
           "params": {
-            "decay": 6.0,
+            "decay": 6,
             "wet": 0.65
           }
         }
@@ -117,7 +125,7 @@
         {
           "type": "reverb",
           "params": {
-            "decay": 5.0,
+            "decay": 5,
             "wet": 0.55
           }
         },
