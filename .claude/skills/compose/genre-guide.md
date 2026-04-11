@@ -36,6 +36,8 @@ BPM: 60–120 | 12-bar form | Blue notes: b3, b5, b7 over major chords | Guitar 
 
 See `synth-presets.md`, `effects-reference.md`, `modulation-patterns.md`, and `oneshot-hits.md` for the specific presets, effects, and modulation patterns referenced below. Use `source: 'synth'` with the suggested preset + `source: 'oneshot'` drum kits for the canonical sound.
 
+For a ready-to-customize starting kit (instruments + master chain + sidechain JSON), see the optional `genre-templates.md` — opt-in shortcut for house, bass house, dubstep, drum & bass, future bass, and trance.
+
 ### House
 BPM: 120–128 | 4-on-the-floor kick | Open hat on off-beats (2&, 4&) | Sidechain kick → pad pumping (amount 0.7–0.9, release 0.1) | Instruments: `reese_bass` or `acid_bass`, `warm_pad` or `stab_pad`, `detuned_lead` for hooks | Song form: intro → buildup → drop → breakdown → drop → outro
 

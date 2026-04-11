@@ -20,6 +20,9 @@ allowed-tools: Read, Write, Glob
    - `.claude/skills/compose/modulation-patterns.md` — wobble bass, sidechain pumping, filter sweeps, drops
    - `.claude/skills/compose/oneshot-hits.md` — bundled CC0 drum/FX samples available via `source: 'oneshot'`
 
+   **Optional starter templates:** if the request names a specific genre that has a starter kit and you want a base to adapt rather than building from scratch, also read:
+   - `.claude/skills/compose/genre-templates.md` — opt-in starter kits for house, bass house, dubstep, drum & bass, future bass, and trance. Templates are starting points, **not** prescriptions — you're free to deviate, swap instruments, change progressions, or ignore them entirely. Skip this file for non-listed genres (lofi, trap, ambient, classical, etc.) or when the request is genre-agnostic.
+
 3. **Ask clarifying questions only if the request is very vague** (e.g., bare "/compose"). If there's enough to work with, generate directly.
 
 4. **Generate the composition JSON.** Follow the `composition-format` and `music-theory` rules. Key principles:
