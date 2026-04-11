@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { offbeatPump, rootOctaveBounce, subSustain } from './bass'
+import { gatedBass, offbeatPump, rootOctaveBounce, subSustain } from './bass'
 
 describe('subSustain', () => {
   it('produces one whole-note root per single-chord bar', () => {
@@ -89,5 +89,96 @@ describe('offbeatPump', () => {
 
   it('returns empty for 0 bars', () => {
     expect(offbeatPump({ progression: [['Am']], bars: 0 })).toEqual([])
+  })
+})
+
+describe('gatedBass', () => {
+  const wobblePattern = [
+    { beat: 0, duration: '2n', velocity: 115 },
+    { beat: 2, duration: '4n', velocity: 108 },
+    { beat: 3, sixteenth: 2, duration: '8n', velocity: 95 },
+  ]
+
+  it('applies the same gate pattern to every bar with the chord root', () => {
+    const notes = gatedBass({
+      progression: [['Fm'], ['Db']],
+      bars: 2,
+      pattern: wobblePattern,
+    })
+    expect(notes).toHaveLength(6)
+    // Bar 0 — Fm root
+    expect(notes[0]).toMatchObject({ pitch: 'F1', time: '0:0:0', duration: '2n', velocity: 115 })
+    expect(notes[1]).toMatchObject({ pitch: 'F1', time: '0:2:0', duration: '4n', velocity: 108 })
+    expect(notes[2]).toMatchObject({ pitch: 'F1', time: '0:3:2', duration: '8n', velocity: 95 })
+    // Bar 1 — Db root
+    expect(notes[3]).toMatchObject({ pitch: 'Db1', time: '1:0:0', duration: '2n' })
+    expect(notes[4]).toMatchObject({ pitch: 'Db1', time: '1:2:0', duration: '4n' })
+  })
+
+  it('loops the progression across extra bars', () => {
+    const notes = gatedBass({
+      progression: [['Fm'], ['Eb']],
+      bars: 4,
+      pattern: [{ beat: 0, duration: '1n' }],
+    })
+    expect(notes.map((n) => n.pitch)).toEqual(['F1', 'Eb1', 'F1', 'Eb1'])
+  })
+
+  it('honors octave and octaveOffset', () => {
+    const notes = gatedBass({
+      progression: [['Fm']],
+      bars: 1,
+      octave: 2,
+      pattern: [
+        { beat: 0, duration: '4n' },
+        { beat: 2, duration: '4n', octaveOffset: 1 },
+      ],
+    })
+    expect(notes[0].pitch).toBe('F2')
+    expect(notes[1].pitch).toBe('F3')
+  })
+
+  it('honors startBar offset', () => {
+    const notes = gatedBass({
+      progression: [['Fm']],
+      bars: 1,
+      startBar: 7,
+      pattern: [{ beat: 0, duration: '4n' }],
+    })
+    expect(notes[0].time).toBe('7:0:0')
+  })
+
+  it('uses the first chord for multi-chord bars', () => {
+    const notes = gatedBass({
+      progression: [['Fm', 'Db']],
+      bars: 1,
+      pattern: [{ beat: 0, duration: '1n' }],
+    })
+    expect(notes).toHaveLength(1)
+    expect(notes[0].pitch).toBe('F1')
+  })
+
+  it('defaults sixteenth to 0 and velocity to 100', () => {
+    const notes = gatedBass({
+      progression: [['Am']],
+      bars: 1,
+      pattern: [{ beat: 1, duration: '4n' }],
+    })
+    expect(notes[0].time).toBe('0:1:0')
+    expect(notes[0].velocity).toBe(100)
+  })
+
+  it('returns empty for 0 bars', () => {
+    expect(
+      gatedBass({
+        progression: [['Am']],
+        bars: 0,
+        pattern: [{ beat: 0, duration: '4n' }],
+      }),
+    ).toEqual([])
+  })
+
+  it('throws on empty pattern', () => {
+    expect(() => gatedBass({ progression: [['Am']], bars: 1, pattern: [] })).toThrow(/pattern/)
   })
 })

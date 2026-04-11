@@ -4,7 +4,7 @@ All composition-writing skills (`/compose`, `/remix`, `/iterate`) must author to
 
 ## Why
 
-The composition-index hook fires on every `Write` to `compositions/*.json`. Authoring directly to the final location causes the index to update repeatedly during iteration — once per Write call. Draft-first authoring ensures the hook fires exactly once per completed composition, regardless of how many intermediate steps it took to get there.
+The composition-index hook fires on every file write to `compositions/*.json`. Authoring directly to the final location causes the index to update repeatedly during iteration — once per write. Draft-first authoring ensures the hook fires exactly once per completed composition, regardless of how many intermediate steps it took to get there.
 
 Secondary benefits that fall out of the same pattern:
 
@@ -16,21 +16,21 @@ Secondary benefits that fall out of the same pattern:
 
 ### `/compose`
 
-1. Author the composition at `/tmp/composition-draft-<slug>.json` throughout generation — all initial Writes, all iterative Edits, all rigidity-pass adjustments happen against the draft path.
+1. Author the composition at `/tmp/composition-draft-<slug>.json` throughout generation — all initial writes, all iterative edits, all rigidity-pass adjustments happen against the draft path.
 2. Run the schema validator against the draft (`npx tsx -e "import { validate } from './src/schema/validate.ts'; ..."` or equivalent).
-3. Write the validated content to `compositions/<slug>.json` — this is the one and only Write to the final location.
-4. (Optional) Delete the `/tmp` draft after the final Write. `macOS /tmp` auto-cleans on reboot anyway.
+3. Perform a single atomic write of the validated content to `compositions/<slug>.json`. `cp`, a `Write` tool call, or an equivalent single-operation file write all satisfy the rule — the constraint is one touch of the final path, not a specific tool.
+4. (Optional) Delete the `/tmp` draft after the final write. `macOS /tmp` auto-cleans on reboot anyway.
 
 ### `/remix`
 
-Same pattern: author at `/tmp/composition-draft-<source-stem>-<genre-slug>.json`, validate, then Write once to `compositions/<source-stem>-<genre-slug>.json`.
+Same pattern: author at `/tmp/composition-draft-<source-stem>-<genre-slug>.json`, validate, then a single atomic write to `compositions/<source-stem>-<genre-slug>.json`.
 
 ### `/iterate`
 
 1. Read the original from `compositions/<slug>.json`.
 2. Author modifications at `/tmp/composition-draft-<slug>.json` — don't modify the original in place.
 3. Validate the draft.
-4. Write the modified content back to `compositions/<slug>.json` (overwriting the original) — a single Write.
+4. Single atomic write back to `compositions/<slug>.json` (overwriting the original).
 
 ## Scope
 

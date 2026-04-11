@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { breakbeat, fourOnFloor, halfTime, trap } from './drums'
+import { breakbeat, fourOnFloor, halfTime, hatRoll, snareRoll, trap } from './drums'
 
 describe('fourOnFloor', () => {
   it('produces 4 kicks per bar', () => {
@@ -104,6 +104,141 @@ describe('breakbeat', () => {
     const notes = breakbeat({ bars: 1, includeGhosts: false })
     const ghosts = notes.filter((n) => n.articulation === 'ghost')
     expect(ghosts).toHaveLength(0)
+  })
+})
+
+describe('snareRoll', () => {
+  it('produces 16 hits per bar at 16n subdivision', () => {
+    const notes = snareRoll({ bars: 2, subdivision: '16n' })
+    expect(notes).toHaveLength(32)
+  })
+
+  it('produces 8 hits per bar at 8n subdivision', () => {
+    const notes = snareRoll({ bars: 2, subdivision: '8n' })
+    expect(notes).toHaveLength(16)
+  })
+
+  it('uses the single default hit name when no hits are provided', () => {
+    const notes = snareRoll({ bars: 1 })
+    expect(notes.every((n) => n.pitch === 'snare')).toBe(true)
+  })
+
+  it('round-robins through multiple hit names in order', () => {
+    const notes = snareRoll({
+      bars: 1,
+      subdivision: '8n',
+      hits: ['snare-a', 'snare-b', 'snare-c'],
+    })
+    const pitches = notes.map((n) => n.pitch)
+    expect(pitches).toEqual([
+      'snare-a',
+      'snare-b',
+      'snare-c',
+      'snare-a',
+      'snare-b',
+      'snare-c',
+      'snare-a',
+      'snare-b',
+    ])
+  })
+
+  it('linearly ramps velocity from startVelocity to endVelocity', () => {
+    const notes = snareRoll({
+      bars: 1,
+      subdivision: '8n',
+      startVelocity: 60,
+      endVelocity: 120,
+    })
+    expect(notes[0].velocity).toBe(60)
+    expect(notes[notes.length - 1].velocity).toBe(120)
+    // Midpoint hit should be roughly (60+120)/2 = 90
+    expect(notes[Math.floor(notes.length / 2)].velocity).toBeGreaterThan(80)
+    expect(notes[Math.floor(notes.length / 2)].velocity).toBeLessThan(100)
+  })
+
+  it('honors startBar offset', () => {
+    const notes = snareRoll({ bars: 1, subdivision: '8n', startBar: 12 })
+    expect(notes[0].time).toBe('12:0:0')
+    expect(notes[notes.length - 1].time).toBe('12:3:2')
+  })
+
+  it('returns empty for 0 bars', () => {
+    expect(snareRoll({ bars: 0 })).toEqual([])
+  })
+
+  it('throws on empty hits list', () => {
+    expect(() => snareRoll({ bars: 1, hits: [] })).toThrow(/hits/)
+  })
+})
+
+describe('hatRoll', () => {
+  it('produces 16 hits per bar at 16n with default single hit name', () => {
+    const notes = hatRoll({ bars: 2, subdivision: '16n' })
+    expect(notes).toHaveLength(32)
+    expect(notes.every((n) => n.pitch === 'hat')).toBe(true)
+  })
+
+  it('ramps velocity linearly across all hits', () => {
+    const notes = hatRoll({ bars: 1, subdivision: '8n', startVelocity: 40, endVelocity: 100 })
+    expect(notes[0].velocity).toBe(40)
+    expect(notes[notes.length - 1].velocity).toBe(100)
+  })
+
+  it('accepts a custom single hit name', () => {
+    const notes = hatRoll({ bars: 1, hits: ['hat-open'], subdivision: '8n' })
+    expect(notes.every((n) => n.pitch === 'hat-open')).toBe(true)
+  })
+
+  it('round-robins through multiple hit names in order', () => {
+    const notes = hatRoll({
+      bars: 1,
+      subdivision: '8n',
+      hits: ['hat-a', 'hat-b'],
+    })
+    expect(notes.map((n) => n.pitch)).toEqual([
+      'hat-a',
+      'hat-b',
+      'hat-a',
+      'hat-b',
+      'hat-a',
+      'hat-b',
+      'hat-a',
+      'hat-b',
+    ])
+  })
+
+  it('throws on empty hits list', () => {
+    expect(() => hatRoll({ bars: 1, hits: [] })).toThrow(/hits/)
+  })
+
+  it('applies accentPattern as velocity offsets on top of the crescendo', () => {
+    const notes = hatRoll({
+      bars: 1,
+      subdivision: '8n',
+      startVelocity: 70,
+      endVelocity: 70, // flat crescendo so we can see the pattern clearly
+      accentPattern: [20, -10, 5, -10],
+    })
+    // Pattern cycles through 8 hits: 20, -10, 5, -10, 20, -10, 5, -10
+    expect(notes.map((n) => n.velocity)).toEqual([90, 60, 75, 60, 90, 60, 75, 60])
+  })
+
+  it('clamps accented velocities to the 1-127 range', () => {
+    const notes = hatRoll({
+      bars: 1,
+      subdivision: '8n',
+      startVelocity: 120,
+      endVelocity: 120,
+      accentPattern: [30, -150],
+    })
+    // First hit: 120 + 30 = 150 → clamped to 127
+    // Second hit: 120 - 150 = -30 → clamped to 1
+    expect(notes[0].velocity).toBe(127)
+    expect(notes[1].velocity).toBe(1)
+  })
+
+  it('returns empty for 0 bars', () => {
+    expect(hatRoll({ bars: 0 })).toEqual([])
   })
 })
 
