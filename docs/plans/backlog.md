@@ -8,14 +8,15 @@ _No active plan. Pick the top queued item._
 
 ## Queued
 
-1. **[dynamic-marks](dynamic-marks/)** — Wire the existing `DynamicMark` schema (pp/mf/ff, crescendo, decrescendo) into the engine as velocity envelopes. Small scope, data model already exists, high expressive payoff for every composition.
-2. **[sampled-drums](sampled-drums/)** + **[round-robin-samples](round-robin-samples/)** — Bundle. Replace `DrumKit.ts` synth oscillators with GM soundfont samples, and extract multiple takes per note/velocity at the same time to eliminate the machine-gun repetition effect. Shared extraction pipeline, single sample re-build.
-3. **[effects-mix-polish](effects-mix-polish/)** — Master bus chain (EQ → compressor → limiter), shared reverb send, per-track EQ and send levels. The "glue" layer that separates a demo from a produced track. Touches every instrument, so sequence after drums are in their final sampled form.
-4. **[edm-macro-ui](edm-macro-ui/)** — Phase C of EDM production: per-instrument inspector panel, 8–12 macro knobs mapped to musically meaningful parameter combinations, preset save/load. First UI work for EDM sound design — unblocks the full editor.
-5. **[edm-full-editor](edm-full-editor/)** — Phase B of EDM production: full synth parameter editors, automation lane drawing in the piano roll, effect chain editor, routing matrix, sample browser. Largest scope in the repo. Depends on `edm-macro-ui`.
-6. **undo-redo** — Command pattern with reversible commands, undo/redo stacks (spec after timeline ships).
-7. **note-editing** — Draw/select/erase/move/resize notes in the piano roll (spec after undo/redo ships).
-8. **audio-export** — WAV + OGG export via `Tone.Offline()`, stem export as stretch goal (spec when ready).
+1. **[compose-helpers](compose-helpers/)** — TypeScript helper library at `tools/compose-helpers/` for long-form composition. Primitives (drum grids, bass patterns, pad sustains, arpeggios, humanization) that Claude imports during `/compose` and `/remix` to handle mechanical stenography while keeping musical choices hand-written. Includes a "rigidity pass" step added to both skills that scans for velocity uniformity, bar-to-bar identicalness, section contrast, and transition markers — applies whether helpers were used or not.
+2. **[dynamic-marks](dynamic-marks/)** — Wire the existing `DynamicMark` schema (pp/mf/ff, crescendo, decrescendo) into the engine as velocity envelopes. Small scope, data model already exists, high expressive payoff for every composition.
+3. **[sampled-drums](sampled-drums/)** + **[round-robin-samples](round-robin-samples/)** — Bundle. Replace `DrumKit.ts` synth oscillators with GM soundfont samples, and extract multiple takes per note/velocity at the same time to eliminate the machine-gun repetition effect. Shared extraction pipeline, single sample re-build.
+4. **[effects-mix-polish](effects-mix-polish/)** — Master bus chain (EQ → compressor → limiter), shared reverb send, per-track EQ and send levels. The "glue" layer that separates a demo from a produced track. Touches every instrument, so sequence after drums are in their final sampled form.
+5. **[edm-macro-ui](edm-macro-ui/)** — Phase C of EDM production: per-instrument inspector panel, 8–12 macro knobs mapped to musically meaningful parameter combinations, preset save/load. First UI work for EDM sound design — unblocks the full editor.
+6. **[edm-full-editor](edm-full-editor/)** — Phase B of EDM production: full synth parameter editors, automation lane drawing in the piano roll, effect chain editor, routing matrix, sample browser. Largest scope in the repo. Depends on `edm-macro-ui`.
+7. **undo-redo** — Command pattern with reversible commands, undo/redo stacks (spec after timeline ships).
+8. **note-editing** — Draw/select/erase/move/resize notes in the piano roll (spec after undo/redo ships).
+9. **audio-export** — WAV + OGG export via `Tone.Offline()`, stem export as stretch goal (spec when ready).
 
 _Note: `edm-sound-design-schema/` remains as an architectural umbrella reference — its `spec.md` is the canonical source for type definitions and design rationale for all six EDM Phase A sub-epics, all of which are now shipped._
 
