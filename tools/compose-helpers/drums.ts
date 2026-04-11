@@ -228,6 +228,186 @@ export function breakbeat(opts: BreakbeatOptions): Note[] {
   return notes
 }
 
+// ─── Snare roll ───
+
+export interface SnareRollOptions extends DrumPatternBase {
+  /**
+   * Round-robin hit names. The helper cycles through this list, producing a
+   * different pitch on each successive strike. Pass a single-entry list (e.g.
+   * `['snare']`) for a classic single-sample roll, or multiple names
+   * (`['snare-a', 'snare-b', 'snare-c']`) to simulate round-robin sample
+   * rotation — the caller must map those names to distinct samples in the
+   * instrument's `oneshots` map. Default `['snare']`.
+   */
+  hits?: string[]
+  /**
+   * Rhythmic subdivision for the roll. `'8n'` = 8 hits per bar, `'16n'` = 16.
+   * Default `'16n'`.
+   */
+  subdivision?: '8n' | '16n'
+  /** Velocity of the first hit. Default 60. */
+  startVelocity?: Velocity
+  /** Velocity of the final hit. Default 115. Linear ramp between start and end. */
+  endVelocity?: Velocity
+}
+
+/**
+ * Generate a snare roll across N bars with a velocity crescendo and optional
+ * round-robin sample rotation.
+ *
+ * Single-sample rolls sound mechanical when a sample is triggered in rapid
+ * succession — the identical transients stack into a machine-gun texture.
+ * Round-robin (passing multiple hit names) breaks this up by routing
+ * successive hits to different samples so each strike has a slightly different
+ * character.
+ *
+ * The velocity ramp is linear across all hits in the roll, regardless of bar
+ * boundaries — the last hit of the roll hits `endVelocity` exactly.
+ */
+export function snareRoll(opts: SnareRollOptions): Note[] {
+  const {
+    bars,
+    startBar = 0,
+    hits = ['snare'],
+    subdivision = '16n',
+    startVelocity = 60,
+    endVelocity = 115,
+  } = opts
+  if (bars <= 0) return []
+  if (hits.length === 0) {
+    throw new Error('snareRoll: hits must contain at least one hit name')
+  }
+
+  const hitsPerBar = subdivision === '16n' ? 16 : 8
+  const total = bars * hitsPerBar
+  const notes: Note[] = []
+  let hitIndex = 0
+  for (let i = 0; i < bars; i++) {
+    const bar = startBar + i
+    for (let beat = 0; beat < 4; beat++) {
+      if (subdivision === '16n') {
+        for (let sub = 0; sub < 4; sub++) {
+          const fraction = total === 1 ? 1 : hitIndex / (total - 1)
+          const velocity = Math.round(startVelocity + fraction * (endVelocity - startVelocity))
+          notes.push({
+            pitch: hits[hitIndex % hits.length],
+            time: `${bar}:${beat}:${sub}`,
+            duration: '16n',
+            velocity,
+          })
+          hitIndex++
+        }
+      } else {
+        for (const sub of [0, 2] as const) {
+          const fraction = total === 1 ? 1 : hitIndex / (total - 1)
+          const velocity = Math.round(startVelocity + fraction * (endVelocity - startVelocity))
+          notes.push({
+            pitch: hits[hitIndex % hits.length],
+            time: `${bar}:${beat}:${sub}`,
+            duration: '8n',
+            velocity,
+          })
+          hitIndex++
+        }
+      }
+    }
+  }
+  return notes
+}
+
+// ─── Hat roll ───
+
+export interface HatRollOptions extends DrumPatternBase {
+  /**
+   * Round-robin hit names. The helper cycles through this list, producing a
+   * different pitch on each successive hit. Pass a single-entry list (e.g.
+   * `['hat']`) for a classic single-sample roll, or multiple names
+   * (`['hat-a', 'hat-b', 'hat-c']`) to rotate across distinct samples in the
+   * instrument's `oneshots` map. Default `['hat']`.
+   */
+  hits?: string[]
+  /** Rhythmic subdivision. Default `'16n'`. */
+  subdivision?: '8n' | '16n'
+  /** Starting velocity. Default 55. */
+  startVelocity?: Velocity
+  /** Ending velocity. Default 85. Linear ramp across all hits. */
+  endVelocity?: Velocity
+  /**
+   * Optional velocity offset pattern cycled per hit, added on top of the
+   * linear crescendo. Use to superimpose a groove accent pattern onto an
+   * otherwise mechanical roll — e.g. `[12, -6, 4, -6]` accents every first
+   * of four hits and softens the surrounding ones, giving the roll a
+   * "riding" feel rather than machine-gun stutter. Default `[]` (no accents).
+   */
+  accentPattern?: number[]
+}
+
+/**
+ * Generate a straight hat pattern across N bars with a velocity crescendo and
+ * optional round-robin sample rotation. Used for buildup atmospherics,
+ * breakdown tension ramps, or wherever a "hats fill the space" gesture is
+ * needed without the rest of a drum pattern.
+ *
+ * Single-sample hat rolls sound mechanical when a sample is triggered rapidly
+ * — the identical transients stack into machine-gun stutter. Passing multiple
+ * hit names routes successive hits to different samples so each strike has a
+ * slightly different character.
+ */
+export function hatRoll(opts: HatRollOptions): Note[] {
+  const {
+    bars,
+    startBar = 0,
+    hits = ['hat'],
+    subdivision = '16n',
+    startVelocity = 55,
+    endVelocity = 85,
+    accentPattern = [],
+  } = opts
+  if (bars <= 0) return []
+  if (hits.length === 0) {
+    throw new Error('hatRoll: hits must contain at least one hit name')
+  }
+
+  const hitsPerBar = subdivision === '16n' ? 16 : 8
+  const total = bars * hitsPerBar
+  const notes: Note[] = []
+  const clamp = (v: number): number => Math.max(1, Math.min(127, Math.round(v)))
+  let idx = 0
+  for (let i = 0; i < bars; i++) {
+    const bar = startBar + i
+    for (let beat = 0; beat < 4; beat++) {
+      if (subdivision === '16n') {
+        for (let sub = 0; sub < 4; sub++) {
+          const fraction = total === 1 ? 1 : idx / (total - 1)
+          const base = startVelocity + fraction * (endVelocity - startVelocity)
+          const accent = accentPattern.length > 0 ? accentPattern[idx % accentPattern.length] : 0
+          notes.push({
+            pitch: hits[idx % hits.length],
+            time: `${bar}:${beat}:${sub}`,
+            duration: '16n',
+            velocity: clamp(base + accent),
+          })
+          idx++
+        }
+      } else {
+        for (const sub of [0, 2] as const) {
+          const fraction = total === 1 ? 1 : idx / (total - 1)
+          const base = startVelocity + fraction * (endVelocity - startVelocity)
+          const accent = accentPattern.length > 0 ? accentPattern[idx % accentPattern.length] : 0
+          notes.push({
+            pitch: hits[idx % hits.length],
+            time: `${bar}:${beat}:${sub}`,
+            duration: '16n',
+            velocity: clamp(base + accent),
+          })
+          idx++
+        }
+      }
+    }
+  }
+  return notes
+}
+
 // ─── Trap ───
 
 export interface TrapOptions extends DrumPatternBase {

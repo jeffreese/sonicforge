@@ -260,6 +260,75 @@ export function offbeatPump(opts: OffbeatPumpOptions): Note[] {
   return notes
 }
 
+// ─── Gated bass ───
+
+export interface GateHit {
+  /** Beat position within the bar, 0-3. */
+  beat: number
+  /** Sixteenth offset within the beat, 0-3. Default 0. */
+  sixteenth?: number
+  /** Note duration in Tone.js notation (e.g. `"2n"`, `"4n"`, `"8n"`, `"16n"`, `"4n."`). */
+  duration: string
+  /** Velocity. Default 100. */
+  velocity?: Velocity
+  /**
+   * Octave offset from the base `octave` option. `0` plays at the root octave,
+   * `1` plays an octave higher, `-1` an octave lower. Default 0.
+   */
+  octaveOffset?: number
+}
+
+export interface GatedBassOptions extends BassPatternBase {
+  /**
+   * Per-bar gate pattern — a list of hits, each describing when the note fires,
+   * how long it sustains, its velocity, and its octave offset from the root.
+   * The same pattern is applied to every bar, pitched to the root of whichever
+   * chord the bar is on.
+   */
+  pattern: GateHit[]
+}
+
+/**
+ * Sustained bass with a per-bar gate pattern. The defining feature of
+ * dubstep wobble bass, neuro-funk chops, and drum-&-bass reese lines — the
+ * note on/off rhythm is fixed per-bar while the root pitch follows the chord
+ * progression.
+ *
+ * The pitches come from the chord roots; the rhythm comes from `pattern`. For
+ * multi-chord bars, only the first chord is used (the helper doesn't split
+ * gate patterns across mid-bar chord changes — that's a caller concern).
+ *
+ * Pair with an LFO on the synth's filter for the classic wobble sound — the
+ * LFO creates the in-note expression while this helper creates the hit pattern.
+ */
+export function gatedBass(opts: GatedBassOptions): Note[] {
+  const { progression, bars, startBar = 0, octave = 1, pattern } = opts
+  if (bars <= 0) return []
+  if (pattern.length === 0) {
+    throw new Error('gatedBass: pattern must contain at least one hit')
+  }
+
+  const notes: Note[] = []
+  for (let i = 0; i < bars; i++) {
+    const bar = startBar + i
+    const chords = chordsForBar(progression, i)
+    // Gate patterns apply to a single root per bar; use the first chord.
+    const chord = chords[0]
+    const { root } = parseChordName(chord)
+    for (const hit of pattern) {
+      const hitOctave = octave + (hit.octaveOffset ?? 0)
+      const sixteenth = hit.sixteenth ?? 0
+      notes.push({
+        pitch: `${root}${hitOctave}`,
+        time: `${bar}:${hit.beat}:${sixteenth}`,
+        duration: hit.duration,
+        velocity: hit.velocity ?? 100,
+      })
+    }
+  }
+  return notes
+}
+
 // ─── Internal: chromatic transpose by semitones ───
 
 const CHROMATIC = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']

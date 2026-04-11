@@ -12,7 +12,9 @@ See [`docs/plans/compose-helpers/spec.md`](../../docs/plans/compose-helpers/spec
 
 ## How to use them
 
-Helpers are plain TypeScript functions that take a parameter object and return `Note[]`. Write a throwaway scratch script (typically in `/tmp/`), import what you need, build up note arrays, merge with hand-written tracks, and emit the final composition JSON.
+Helpers are plain TypeScript functions that take a parameter object and return `Note[]`. Write a throwaway scratch script, import what you need, build up note arrays, merge with hand-written tracks, and emit the final composition JSON to `/tmp/composition-draft-<slug>.json` per the draft-first rule.
+
+**Scratch script location.** Putting the scratch script itself in `/tmp/` forces awkward relative imports back into the repo (`../Users/.../src/schema/...`) and breaks TS module resolution. A cleaner convention is to place the scratch script inside `tools/compose-helpers/` with a `__scratch_*.ts` prefix (double underscore sorts them away from the library files) so imports are clean local paths. Delete the file after the final composition JSON lands in `compositions/`. The draft-first rule governs the JSON draft location — not the author script that produces it.
 
 ```typescript
 import { fourOnFloor } from '../../tools/compose-helpers/drums'
@@ -66,12 +68,15 @@ Follow these rules when extending the library. New helpers are **explicitly enco
 - `halfTime(opts)` — half-time pattern (dubstep, future bass, trap)
 - `breakbeat(opts)` — amen-break-style syncopated pattern (drum & bass)
 - `trap(opts)` — trap hi-hat roll pattern with kick/snare
+- `snareRoll(opts)` — N-bar snare roll with velocity crescendo and optional round-robin sample rotation (buildups, fills)
+- `hatRoll(opts)` — N-bar straight hat pattern with velocity crescendo (breakdown ramps, buildup atmospherics)
 
 ### `bass.ts`
 
 - `subSustain(opts)` — whole or half-note root sustains per chord (dubstep sub, deep house foundation)
 - `rootOctaveBounce(opts)` — root on beats, octave on offbeats (bass house, tech house)
 - `offbeatPump(opts)` — bass on all offbeats (trance driving bass)
+- `gatedBass(opts)` — sustained bass with a per-bar gate pattern (dubstep wobble, neuro chop, reese hooks)
 
 ### `harmony.ts`
 
