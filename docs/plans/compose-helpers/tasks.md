@@ -2,39 +2,43 @@
 
 ## Phase 1: Foundation
 
-- [ ] Create `tools/compose-helpers/` directory
-- [ ] Write `tools/compose-helpers/README.md` with conventions (return `Note[]`, pure, single-param object, ~5 params max, no genre logic, library growth encouraged) and an empty function inventory
-- [ ] Add `tools/compose-helpers/index.ts` barrel exports
-- [ ] Verify `biome` and `vitest` configs pick up `tools/**/*.ts` and `tools/**/*.test.ts` — extend globs if not
-- [ ] Confirm `Note` / `Track` / `Instrument` types import cleanly from `src/schema/composition.ts` across the `tools/` boundary
-- [ ] Add a top-level pointer to `tools/compose-helpers/README.md` in `CLAUDE.md`
+- [x] Create `tools/compose-helpers/` directory
+- [x] Write `tools/compose-helpers/README.md` with conventions (return `Note[]`, pure, single-param object, ~5 params max, no genre logic, library growth encouraged) and an empty function inventory
+- [x] Add `tools/compose-helpers/index.ts` barrel exports
+- [x] Verify `biome` and `vitest` configs pick up `tools/**/*.ts` and `tools/**/*.test.ts` — extend globs if not
+- [x] Confirm `Note` / `Track` / `Instrument` types import cleanly from `src/schema/composition.ts` across the `tools/` boundary
+- [x] Add a top-level pointer to `tools/compose-helpers/README.md` in `CLAUDE.md`
 
 ## Phase 2: Core helper modules
 
 Extract primitives from the ad-hoc scripts used for the Subterra composition and the deep-bass-house remix. Start minimal; grow as needed.
 
-- [ ] `time.ts` — `bar()`, `beat()`, `time()` string builders; bar-offset math; section-bar conversion
-- [ ] `chords.ts` — `CHORD_TONES` dict for common triads/sevenths; `voicing()` helper (close, open, root-position, inversions); `progression()` parser (string like `"Am | F–E | Dm–C | E–Am"` → structured array)
-- [ ] `drums.ts` — `fourOnFloor()`, `halfTime()`, `breakbeat()`, `trap()`. Each parameterized on bars, velocity curves, open-hat cadence.
-- [ ] `bass.ts` — `subSustain()` (root whole/half notes per chord), `rootOctaveBounce()` (root on beats, octave on offbeats), `offbeatPump()` (trance-style all-offbeats bass)
-- [ ] `harmony.ts` — `padSustain()` (hold chord tones over N bars), `stabOnBeats()` (rhythmic chord hits on specified beats), `arpeggio()` (rotate chord tones up/down/up-down at a subdivision)
-- [ ] `humanize.ts` — `velocityCurve()` (apply a shape to existing notes: natural, crescendo, decrescendo), `timingJitter()` (micro-offset notes for non-mechanical feel)
-- [ ] Co-located vitest tests per module: happy path, one edge case, output shape validation
+- [x] `time.ts` — `beatTime()`, `beatsToTime()`, `parseBeatTime()`, `offsetBars()`; time arithmetic
+- [x] `chords.ts` — `CHORD_TONES` via `chordTones()`; `voicing()` (close/open/drop2); `parseProgression()` string parser
+- [x] `drums.ts` — `fourOnFloor()`, `halfTime()`, `breakbeat()`, `trap()`. Each parameterized on bars, velocity curves, open-hat cadence.
+- [x] `bass.ts` — `subSustain()`, `rootOctaveBounce()`, `offbeatPump()`
+- [x] `harmony.ts` — `padSustain()`, `stabOnBeats()`, `arpeggio()` (up / down / up-down)
+- [x] `humanize.ts` — `velocityCurve()` (natural / crescendo / decrescendo / accented-downbeats / subtle), `timingJitter()` with seeded PRNG
+- [x] Co-located vitest tests per module: 79 new tests covering happy paths, edge cases, and output shape
 
 ## Phase 3: Skill integration
 
-- [ ] Update `/compose` skill (`.claude/skills/compose/SKILL.md`) — add the "when to reach for helpers" step with the ~32-bar / ~200-note threshold
-- [ ] Update `/compose` skill — add the rigidity-pass step with the four checks (velocity uniformity, bar-to-bar identicalness, section contrast, transition markers)
-- [ ] Update `/remix` skill (`.claude/skills/remix/SKILL.md`) — add the same rigidity-pass step
-- [ ] Verify skill descriptions still fit under 30 tokens (per `standards-skills.md`)
+- [x] Update `/compose` skill — "when to reach for helpers" step with the ~32-bar / ~200-note threshold and library-growth encouragement
+- [x] Update `/compose` skill — rigidity-pass step with the four checks (velocity uniformity, bar-to-bar identicalness, section contrast, transition markers)
+- [x] Update `/remix` skill — same rigidity-pass step and helpers-reach pointer
+- [x] Update `/compose` and `/remix` describe steps to report what the rigidity pass adjusted (observability fix)
+- [x] Create standalone `/rigidity-check` skill at `.claude/skills/rigidity-check/SKILL.md` for on-demand auditing of existing compositions — canonical home for the four checks
+- [x] Verify skill descriptions still fit under 30 tokens (per `standards-skills.md`)
 
 ## Phase 4: ADR + documentation
 
-- [ ] Capture decision record via `/forge:adr`: problem framing, alternatives considered (helper library vs schema pattern directives vs status quo ad-hoc scripts; TS vs Python), creativity guardrails, success metrics
-- [ ] Update `tools/compose-helpers/README.md` with the final function inventory once Phase 2 is complete
-- [ ] Brief mention in relevant `CLAUDE.md` section (Schema or Behavioral Notes) that long compositions should use helpers
+- [x] Capture decision record: `docs/adrs/adr-010-compose-helpers-tooling.md` covers problem framing, alternatives (status quo / schema directives / JSON snippets / Python), creativity guardrails, consequences
+- [x] `tools/compose-helpers/README.md` includes the full Phase 2 function inventory
+- [x] `CLAUDE.md` File Organization section points to `tools/` and `tools/compose-helpers/`
 
 ## Phase 5: Dogfood
+
+Runs as a separate follow-up session, after this PR merges. The helpers need to exist on main before dogfooding makes sense.
 
 - [ ] Pick a long composition as the first real test. Candidates: a progressive house track (~4 min, 6+ sections) or a dubstep remix of an existing composition with a complex drop section.
 - [ ] Generate using helpers as scaffolding, hand-write the expressive tracks (leads, fills, transitions)
@@ -48,6 +52,5 @@ Extract primitives from the ad-hoc scripts used for the Subterra composition and
 
 ## Phase 6 (deferred / optional)
 
-- [ ] Extract a `tools/compose-helpers/rigidity.ts` analysis function if the manual pass proves useful enough to automate
-- [ ] Consider a `/rigidity-check` standalone skill for auditing existing compositions
-- [ ] Revisit cross-song similarity tracking if drift becomes noticeable after several compositions
+- [ ] Extract a `tools/compose-helpers/rigidity.ts` analysis function if the manual pass in `/rigidity-check` proves useful enough to automate programmatically
+- [ ] Revisit cross-song similarity tracking if drift becomes noticeable after several compositions (this is now its own plan at `docs/plans/composition-index/`)

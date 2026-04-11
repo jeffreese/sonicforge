@@ -32,9 +32,17 @@ allowed-tools: Read, Write, Glob
    - Keep instruments in their natural registers
    - Ensure harmonic consistency across simultaneous instruments
 
-5. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<slug>.json`. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+   **For compositions over ~32 bars or expected to exceed ~200 notes,** reach for the helper library at `tools/compose-helpers/` for repetitive scaffolding (drum grids, bass patterns, pad sustains, arpeggios, humanization). Write a throwaway scratch script (in `/tmp/`), import primitives you need, build repetitive tracks with them, and hand-write melodies, fills, and transitions on top. Helper output is a starting point — hand-edit for expression before finalizing. See `tools/compose-helpers/README.md` for the inventory and conventions. **New helpers are encouraged** — if a primitive you need doesn't exist yet, add it rather than reinventing ad-hoc code.
 
-6. **Briefly describe what you created** — title, key, BPM, instruments, section overview. A few sentences max.
+5. **Rigidity pass.** Before finalizing, scan the generated composition for mechanical uniformity and adjust. Applies regardless of whether helpers were used:
+   - **Velocity uniformity:** if >60% of notes in a track share the same velocity, apply a natural velocity curve (emphasize downbeats, soften offbeats, ghost notes between hits).
+   - **Bar-to-bar identicalness:** if 4+ consecutive bars are literal duplicates within a track, introduce one variation — a ghost note, a dropped hit, a velocity accent, a one-bar fill.
+   - **Section contrast:** each section should have at least one distinguishing element from its neighbors (instrumentation, density, dynamics, register, drum variation).
+   - **Transition markers:** every section boundary should have some audible marker — fill, crash, drop-out, sweep, automation point. Add one if none exist.
+
+6. **Write the JSON — draft-first.** Author to `/tmp/composition-draft-<slug>.json` throughout generation. Validate against the schema. Then perform a single final Write to `compositions/<slug>.json`. See `.claude/rules/composition-drafts.md` for the full convention and rationale.
+
+7. **Briefly describe what you created** — title, key, BPM, instruments, section overview, and what the rigidity pass adjusted (or "rigidity pass clean" if no adjustments were needed). A few sentences max.
 
 ## Quality Checklist
 
