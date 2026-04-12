@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-04-11T17:18:41.294Z",
+  "generatedAt": "2026-04-12T17:56:17.108Z",
   "entries": {
     "compositions/bass-trance-dnb-break.json": {
       "path": "compositions/bass-trance-dnb-break.json",
@@ -2131,6 +2131,190 @@
       "dominantRegisters": {
         "bass": "C1-B1",
         "stab": "C4-B4"
+      }
+    },
+    "compositions/goldberg-aria-dnb.json": {
+      "path": "compositions/goldberg-aria-dnb.json",
+      "title": "Goldberg Aria (DnB)",
+      "bpm": 174,
+      "key": "G major",
+      "timeSignature": [
+        3,
+        4
+      ],
+      "tags": [
+        "drum-and-bass",
+        "classical",
+        "baroque",
+        "liquid-dnb",
+        "3-4-time",
+        "reese-bass"
+      ],
+      "primaryTag": "drum-and-bass",
+      "totalBars": 56,
+      "noteCount": 741,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Aria A",
+          "bars": 16
+        },
+        {
+          "name": "Break",
+          "bars": 8
+        },
+        {
+          "name": "Aria B",
+          "bars": 16
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "harpsichord",
+          "name": "Piano",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "acoustic_grand_piano"
+        },
+        {
+          "id": "pad",
+          "name": "Warm Pad",
+          "category": "pad",
+          "source": "synth",
+          "preset": "warm_pad"
+        },
+        {
+          "id": "bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "drums",
+          "name": "DnB Breakbeat",
+          "category": "drums",
+          "source": "oneshot",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": [
+        "eq3",
+        "compressor",
+        "limiter"
+      ],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": true,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-12T17:30:02.595Z",
+      "progression": "G | F# | E | D | G | F# | E | D | G | F# | E | D | B | C | D | G | G | F# | E | D | B | C | D | G | D | C | B | A | D | C | B | A | D | C | B | A | G | A | B | G | D | C | B | A | G | A | B | G | G | D | G | G | G | D | G | G",
+      "drumPattern": "other",
+      "dominantRegisters": {
+        "harpsichord": "D4-C5",
+        "bass": "D2-G3"
+      }
+    },
+    "compositions/goldberg-aria-dnb-bass-techno.json": {
+      "path": "compositions/goldberg-aria-dnb-bass-techno.json",
+      "title": "Goldberg Aria (Bass Techno)",
+      "bpm": 130,
+      "key": "G major",
+      "timeSignature": [
+        4,
+        4
+      ],
+      "tags": [
+        "techno",
+        "bass-techno",
+        "classical",
+        "baroque",
+        "sub-heavy",
+        "driving"
+      ],
+      "primaryTag": "techno",
+      "totalBars": 56,
+      "noteCount": 1377,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 8
+        },
+        {
+          "name": "Aria A",
+          "bars": 16
+        },
+        {
+          "name": "Break",
+          "bars": 8
+        },
+        {
+          "name": "Aria B",
+          "bars": 16
+        },
+        {
+          "name": "Outro",
+          "bars": 8
+        }
+      ],
+      "instruments": [
+        {
+          "id": "piano",
+          "name": "Piano",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "acoustic_grand_piano"
+        },
+        {
+          "id": "stab",
+          "name": "Techno Stab",
+          "category": "pad",
+          "source": "synth",
+          "preset": "stab_pad"
+        },
+        {
+          "id": "bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "drums",
+          "name": "Techno Drums",
+          "category": "drums",
+          "source": "drums",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": [
+        "eq3",
+        "compressor",
+        "limiter"
+      ],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": true,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-12T17:56:17.108Z",
+      "progression": "G | F# | E | D | B | C | D | G | G | F# | E | D | B | C | D | G | G | F# | E | D | B | C | D | G | D | C | B | A | D | C | B | A | D | C | B | A | G | A | B | G | D | C | B | A | G | A | B | G | G | D | G | G | G | G | G | G",
+      "drumPattern": "4-on-floor",
+      "dominantRegisters": {
+        "piano": "E4-C5",
+        "bass": "C2-C3"
       }
     }
   }
