@@ -5,6 +5,7 @@ import { durationToSeconds } from '../util/timing'
 import type { LoadedInstrument } from './InstrumentLoader'
 import { getDrumNote } from './InstrumentLoader'
 import type { SectionOffset } from './Transport'
+import { buildDynamicEnvelope } from './dynamics'
 import { type HumanizeConfig, humanizeNote } from './humanize'
 
 function applyArticulation(
@@ -61,6 +62,12 @@ export class TrackPlayer {
     const beatDuration = 60 / bpm
     const baseBeatDuration = beatDuration * (4 / this.metadata.timeSignature[1])
 
+    // Build the dynamic envelope once per track — a function from section-
+    // relative beat position to velocity multiplier. Returns constant 1.0
+    // for tracks without dynamic marks, so existing compositions are
+    // byte-identical.
+    const dynamicEnvelope = buildDynamicEnvelope(track.dynamics, beatsPerBar)
+
     for (let rep = 0; rep < repeats; rep++) {
       const repBarOffset = startBar + rep * section.bars
 
@@ -74,6 +81,10 @@ export class TrackPlayer {
         const noteBeat = timeParts[1] ?? 0
         const noteSixteenth = timeParts[2] ?? 0
 
+        // Section-relative beat position (for dynamic envelope query)
+        const sectionRelativeBeats =
+          (timeParts[0] ?? 0) * beatsPerBar + noteBeat + noteSixteenth / 4
+
         const timeInSeconds =
           (noteBar * beatsPerBar + noteBeat + noteSixteenth / 4) * baseBeatDuration
 
@@ -81,6 +92,9 @@ export class TrackPlayer {
         const baseVelocity = (note.velocity ?? 80) / 127
 
         const { duration, velocity } = applyArticulation(note, baseDuration, baseVelocity)
+
+        // Apply dynamic marks multiplier (phrase-level macro dynamics)
+        const dynamicVelocity = velocity * dynamicEnvelope.multiplierAt(sectionRelativeBeats)
 
         // Apply humanization
         const offsets = humanizeNote(
@@ -93,7 +107,7 @@ export class TrackPlayer {
         const humanizedTime = Math.max(0, timeInSeconds + offsets.timingOffset)
         const humanizedVelocity = Math.max(
           1 / 127,
-          Math.min(1, velocity * offsets.velocityMultiplier),
+          Math.min(1, dynamicVelocity * offsets.velocityMultiplier),
         )
 
         // Determine the pitch to play based on instrument mode.
