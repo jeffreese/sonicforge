@@ -6,6 +6,11 @@ Ordered by priority. `/forge:next` reads this to determine what to work on.
 
 **[dynamic-marks](dynamic-marks/)** — Wire the existing `DynamicMark` schema (pp/mf/ff, crescendo, decrescendo) into the engine as velocity envelopes. Small scope, data model already exists, high expressive payoff for every composition in the library (including the 21 already shipped). Different layer of the stack than the recent composition-index + skill integration work, which keeps the engineering view broad.
 
+Progress:
+
+- **Engine + Testing shipped in this PR** — new `src/engine/dynamics.ts` module with `levelToMultiplier()` (MIDI Standard Level 2 mapping ÷ 80), `buildDynamicEnvelope()` (compiles DynamicMark[] into a queryable section-relative envelope), and `DynamicEnvelope.multiplierAt()`. Wired into `TrackPlayer.scheduleTrack()` between articulation and humanization. Tracks without dynamics get constant 1.0 — existing compositions play identically. 19 new tests. `mf` = 1.0 baseline ensures strict superset behavior.
+- **Remaining** — playback verification with existing compositions (user-owned); Integration tasks: verify `/compose` + `/iterate` emit dynamic marks and update skill instructions if they don't (currently they don't — they rely on per-note velocity only).
+
 ## Queued
 
 1. **composition-index-polish** — Small follow-up scope that emerged from Chunk B dogfood. No plan directory yet; spec when we pick it up. Candidates to scope:

@@ -1,7 +1,7 @@
 {
   "current_plan": "dynamic-marks",
-  "current_task": "hygiene: index.json content-derived generatedAt + lint-staged scripts/ extension",
-  "branch": "fix/index-generated-at-stable",
+  "current_task": "Engine + Testing tasks — dynamic envelope implementation",
+  "branch": "feat/dynamic-marks-engine",
   "status": "idle",
   "mode": "epic",
   "pending": null
