@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-04-12T17:56:17.108Z",
+  "generatedAt": "2026-04-13T06:51:42.985Z",
   "entries": {
     "compositions/bass-trance-dnb-break.json": {
       "path": "compositions/bass-trance-dnb-break.json",
@@ -2315,6 +2315,203 @@
       "dominantRegisters": {
         "piano": "E4-C5",
         "bass": "C2-C3"
+      }
+    },
+    "compositions/happy-birthday-dnb.json": {
+      "path": "compositions/happy-birthday-dnb.json",
+      "title": "Happy Birthday (DnB)",
+      "bpm": 174,
+      "key": "D major",
+      "timeSignature": [
+        4,
+        4
+      ],
+      "tags": [
+        "drum-and-bass",
+        "happy",
+        "uplifting",
+        "celebratory",
+        "playful"
+      ],
+      "primaryTag": "drum-and-bass",
+      "totalBars": 32,
+      "noteCount": 768,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Happy Birthday (Gentle)",
+          "bars": 8
+        },
+        {
+          "name": "Happy Birthday (Full)",
+          "bars": 8
+        },
+        {
+          "name": "Happy Birthday (Celebration!)",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "melody",
+          "name": "Music Box",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "music_box"
+        },
+        {
+          "id": "arp",
+          "name": "Glockenspiel",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "glockenspiel"
+        },
+        {
+          "id": "pad",
+          "name": "Bright Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_7_halo"
+        },
+        {
+          "id": "bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "drums",
+          "name": "DnB Kit",
+          "category": "drums",
+          "source": "drums",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": [
+        "eq3",
+        "limiter"
+      ],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-13T01:20:00.012Z",
+      "progression": "D | A | G | D | D | A | G | D | G | A | D | D | D | A | G | D | G | A | D | D | D | A | G | D | G | A | D | D | D | A | G | D",
+      "drumPattern": "breakbeat",
+      "dominantRegisters": {
+        "melody": "A4-D6",
+        "arp": "D6-A6",
+        "bass": "A1-G2"
+      }
+    },
+    "compositions/happy-birthday-jungle-dnb.json": {
+      "path": "compositions/happy-birthday-jungle-dnb.json",
+      "title": "Happy Birthday (Jungle DnB)",
+      "bpm": 174,
+      "key": "D major",
+      "timeSignature": [
+        4,
+        4
+      ],
+      "tags": [
+        "drum-and-bass",
+        "jungle",
+        "happy",
+        "uplifting",
+        "breakbeat",
+        "celebratory"
+      ],
+      "primaryTag": "drum-and-bass",
+      "totalBars": 32,
+      "noteCount": 857,
+      "sections": [
+        {
+          "name": "Intro",
+          "bars": 4
+        },
+        {
+          "name": "Happy Birthday (Gentle)",
+          "bars": 8
+        },
+        {
+          "name": "Happy Birthday (Full)",
+          "bars": 8
+        },
+        {
+          "name": "Happy Birthday (Celebration!)",
+          "bars": 8
+        },
+        {
+          "name": "Outro",
+          "bars": 4
+        }
+      ],
+      "instruments": [
+        {
+          "id": "melody",
+          "name": "Music Box",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "music_box"
+        },
+        {
+          "id": "arp",
+          "name": "Glockenspiel",
+          "category": "melodic",
+          "source": "sampled",
+          "preset": "glockenspiel"
+        },
+        {
+          "id": "pad",
+          "name": "Bright Pad",
+          "category": "pad",
+          "source": "sampled",
+          "preset": "pad_7_halo"
+        },
+        {
+          "id": "bass",
+          "name": "Sub Bass",
+          "category": "bass",
+          "source": "synth",
+          "preset": "sub_bass"
+        },
+        {
+          "id": "drums",
+          "name": "DnB Kit",
+          "category": "drums",
+          "source": "drums",
+          "preset": null
+        }
+      ],
+      "masterEffectTypes": [
+        "eq3",
+        "limiter"
+      ],
+      "hasSidechain": true,
+      "hasLFOs": false,
+      "hasAutomation": false,
+      "hasMasterEffects": true,
+      "hasSynths": true,
+      "hasOneshots": false,
+      "hasSampled": true,
+      "modifiedAt": "2026-04-13T06:51:42.985Z",
+      "progression": "D | A | G | D | D | A | G | D | G | A | D | D | D | A | G | D | G | A | D | D | D | A | G | D | G | A | D | D | D | A | G | D",
+      "drumPattern": "other",
+      "dominantRegisters": {
+        "melody": "A4-D6",
+        "arp": "D6-A6",
+        "bass": "A1-G2"
       }
     }
   }
