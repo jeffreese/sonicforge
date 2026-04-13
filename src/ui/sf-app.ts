@@ -88,6 +88,9 @@ export class SfApp extends LitElement {
       } else if (engine.state === 'ready' || engine.state === 'paused') {
         engine.play()
       }
+    } else if (e.code === 'KeyE' && !engine.isExporting) {
+      e.preventDefault()
+      this.handleCompositionExport()
     } else if (e.code === 'KeyF') {
       const arr = this.querySelector('sf-arrangement') as SfArrangement | null
       arr?.scrollToPlayhead()
@@ -159,6 +162,18 @@ export class SfApp extends LitElement {
     engine.setLoopSection(e.detail.sectionIndex)
   }
 
+  private async handleCompositionExport(): Promise<void> {
+    const tb = this.querySelector('sf-transport-bar') as SfTransportBar | null
+    tb?.setExporting(true)
+    try {
+      await engine.exportAudio()
+    } catch (err) {
+      console.error('[export]', err instanceof Error ? err.message : err)
+    } finally {
+      tb?.setExporting(false)
+    }
+  }
+
   private handleSampleSelect(e: CustomEvent<{ instrumentId: string; sample: string }>): void {
     engine.swapSample(e.detail.instrumentId, e.detail.sample)
   }
@@ -183,6 +198,7 @@ export class SfApp extends LitElement {
         @arrangement-loop=${this.handleLoop}
         @sample-select=${this.handleSampleSelect}
         @sample-preview=${this.handleSamplePreview}
+        @composition-export=${this.handleCompositionExport}
         @transport-follow-toggle=${this.handleFollowToggle}
       >
         <div class="${app.header}">
@@ -215,6 +231,7 @@ export class SfApp extends LitElement {
         <span><span class="${key}">⇧+scroll</span> zoom pitch</span>
         <span><span class="${key}">Click</span> seek</span>
         <span><span class="${key}">Dbl-click</span> loop section</span>
+        <span><span class="${key}">E</span> export audio</span>
         <span><span class="${key}">F</span> go to playhead</span>
       </div>
     `

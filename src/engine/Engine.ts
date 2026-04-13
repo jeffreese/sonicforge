@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import { expandChords } from '../schema/chords'
 import type { SonicForgeComposition } from '../schema/composition'
 import { validate } from '../schema/validate'
+import { AudioExporter, downloadBlob } from './AudioExporter'
 import { AutomationEngine } from './AutomationEngine'
 import { EffectsChain } from './EffectsChain'
 import { type InstrumentSource, type LoadedInstrument, loadInstruments } from './InstrumentLoader'
@@ -41,6 +42,8 @@ export class Engine {
   private automationEngine = new AutomationEngine()
   private sidechainRouter = new SidechainRouter()
   private modulationEngine = new ModulationEngine()
+  private audioExporter = new AudioExporter()
+  private _exporting = false
 
   get state(): EngineState {
     return this._state
@@ -316,6 +319,72 @@ export class Engine {
     instDef.sample = newSample
   }
 
+  get isExporting(): boolean {
+    return this._exporting
+  }
+
+  /**
+   * Export the current composition as an audio file. Plays the composition
+   * from the beginning while recording the audio output via Tone.Recorder.
+   * Returns when playback completes and triggers a browser download of the
+   * recorded audio.
+   *
+   * The user hears the audio during export — this is intentional as a
+   * natural progress indicator. The composition plays at normal speed.
+   *
+   * @param filename — base name without extension (e.g., "my-track").
+   *   The file extension is determined by the browser's MediaRecorder
+   *   output format (typically .webm on Chrome, .ogg on Firefox).
+   */
+  async exportAudio(filename?: string): Promise<Blob> {
+    if (!this.composition) throw new Error('No composition loaded')
+    if (this._exporting) throw new Error('Export already in progress')
+
+    const baseName = filename ?? this.composition.metadata.title.toLowerCase().replace(/\s+/g, '-')
+
+    this._exporting = true
+
+    try {
+      // If currently playing, stop first
+      if (this._state === 'playing' || this._state === 'paused') {
+        this.stop()
+      }
+
+      // Start recording via Tone.Recorder
+      await this.audioExporter.startRecording()
+
+      // Seek to the beginning and play
+      this.transport.seekToBeat(0)
+      await this.play()
+
+      // Wait for the composition to finish (transport auto-stops at the end)
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        const originalOnStop = this.callbacks.onStop
+
+        // Intercept the stop callback to know when playback ends
+        const onExportStop = async () => {
+          try {
+            const wavBlob = await this.audioExporter.stopRecording()
+            resolve(wavBlob)
+          } catch (err) {
+            reject(err instanceof Error ? err : new Error(String(err)))
+          }
+          // Restore the original callback
+          this.callbacks.onStop = originalOnStop
+        }
+
+        this.callbacks.onStop = onExportStop
+      })
+
+      // Trigger download as WAV
+      downloadBlob(blob, `${baseName}.wav`)
+
+      return blob
+    } finally {
+      this._exporting = false
+    }
+  }
+
   dispose(): void {
     for (const player of this.trackPlayers) {
       player.dispose()
@@ -345,6 +414,7 @@ export class Engine {
 
     this.mixBus.dispose()
 
+    this.audioExporter.dispose()
     this.transport.dispose()
     this.composition = null
     this.setState('empty')
