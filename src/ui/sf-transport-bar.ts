@@ -22,6 +22,7 @@ export class SfTransportBar extends LitElement {
   @state() private bpm = 120
   @state() private sectionName: string | null = null
   @state() private follow = true
+  @state() private exporting = false
 
   private unsubscribe?: Unsubscribe
 
@@ -64,6 +65,15 @@ export class SfTransportBar extends LitElement {
     engine.stop()
   }
 
+  private handleExport(): void {
+    this.dispatchEvent(new CustomEvent('composition-export', { bubbles: true }))
+  }
+
+  /** Called by parent when export state changes. */
+  setExporting(value: boolean): void {
+    this.exporting = value
+  }
+
   private handleFollowToggle(): void {
     this.dispatchEvent(new CustomEvent('transport-follow-toggle', { bubbles: true }))
   }
@@ -83,6 +93,7 @@ export class SfTransportBar extends LitElement {
     const playDisabled = s !== 'ready' && s !== 'paused'
     const pauseDisabled = s !== 'playing'
     const stopDisabled = s !== 'playing' && s !== 'paused'
+    const exportDisabled = s !== 'ready' || this.exporting
 
     return html`
       <div class="${transport.bar}">
@@ -105,6 +116,13 @@ export class SfTransportBar extends LitElement {
             @click=${this.handleStop}
             aria-label="Stop"
           >⏹</button>
+          <button
+            class="${btn.icon}"
+            ?disabled=${exportDisabled}
+            @click=${this.handleExport}
+            aria-label="Export audio"
+            title="${this.exporting ? 'Exporting…' : 'Export to audio file'}"
+          >${this.exporting ? '⏳' : '⬇'}</button>
           <button
             class="${btn.icon}"
             @click=${this.handleFollowToggle}
